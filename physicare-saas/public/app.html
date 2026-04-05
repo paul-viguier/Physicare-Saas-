@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PHYSICARE® — Santé Comportementale</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Barlow+Condensed:ital,wght@1,800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#F5F3FF;color:#1E1B4B;min-height:100vh;overflow-x:hidden;}
+:root{
+  --pu:#6D28D9;--pl:#8B5CF6;--pll:#C4B5FD;--pd:#4C1D95;--pb:#EDE9FE;--pb2:#F5F3FF;
+  --ok:#059669;--okb:#ECFDF5;--okt:#065F46;--okb2:#A7F3D0;
+  --wn:#D97706;--wnb:#FFFBEB;--wnt:#78350F;--wnb2:#FDE68A;
+  --ko:#DC2626;--kob:#FEF2F2;--kot:#7F1D1D;--kob2:#FECACA;
+  --te:#0D9488;--teb:#CCFBF1;
+  --w:#fff;--g1:#F9FAFB;--g2:#F3F4F6;--g3:#E5E7EB;--g4:#D1D5DB;--g5:#9CA3AF;--g7:#374151;--g9:#111827;
+  --sh:0 2px 12px rgba(109,40,217,.1);--shm:0 6px 24px rgba(109,40,217,.14);--shl:0 12px 48px rgba(109,40,217,.18);
+  --r:10px;--rl:18px;--rx:26px;--rf:9999px;
+}
+
+/* SCREENS */
+.screen{display:none;min-height:100vh;}
+.screen.on{display:block;animation:sIn .38s ease;}
+@keyframes sIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* TOPBAR */
+.tb{background:#fff;border-bottom:2px solid var(--pb);padding:0 22px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;box-shadow:0 2px 8px rgba(109,40,217,.08);}
+.logo-t{font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:800;font-size:28px;letter-spacing:-.3px;background:linear-gradient(135deg,#4C1D95,#7C3AED,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.logo-r{font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:800;font-size:13px;vertical-align:super;-webkit-text-fill-color:#A855F7;background:none;}
+.tb-pill{background:var(--pb);color:var(--pu);font-size:11px;font-weight:800;padding:4px 14px;border-radius:var(--rf);border:2px solid var(--pll);}
+.tb-user{font-size:12px;color:var(--g5);font-weight:600;}
+.tb-r{display:flex;align-items:center;gap:9px;}
+
+/* LAYOUT */
+.pw{max-width:700px;margin:0 auto;padding:26px 18px 96px;}
+.pw-w{max-width:1080px;margin:0 auto;padding:22px 20px 72px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;}
+.mb{margin-bottom:16px;}
+.mb2{margin-bottom:24px;}
+
+/* CARD */
+.card{background:#fff;border-radius:var(--rl);border:2px solid var(--g3);padding:20px 22px;box-shadow:var(--sh);}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#4C1D95,#6D28D9,#A855F7);border-radius:var(--rx);padding:38px 32px;margin-bottom:18px;text-align:center;position:relative;overflow:hidden;box-shadow:var(--shl);}
+.hero::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06);}
+.hero-ic{width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;position:relative;z-index:1;}
+.hero h1{font-size:23px;font-weight:900;color:#fff;margin-bottom:11px;line-height:1.25;position:relative;z-index:1;letter-spacing:-.3px;}
+.hero p{font-size:14px;color:rgba(255,255,255,.85);line-height:1.7;position:relative;z-index:1;max-width:480px;margin:0 auto;font-weight:600;}
+.hchips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:16px;position:relative;z-index:1;}
+.hchip{background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.25);border-radius:var(--rf);padding:4px 13px;font-size:12px;color:#fff;font-weight:700;}
+
+/* FORM */
+.icard{background:#fff;border:2px solid var(--g3);border-radius:var(--rl);padding:22px;margin-bottom:15px;}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px;}
+.fl{font-size:12px;font-weight:800;color:var(--g7);margin-bottom:5px;display:block;}
+.fi{width:100%;padding:11px 14px;border:2px solid var(--g3);border-radius:var(--r);font-size:14px;color:var(--g9);font-family:'Nunito',sans-serif;font-weight:600;background:#fff;outline:none;transition:all .2s;}
+.fi:focus{border-color:var(--pu);background:var(--pb2);}
+.fi::placeholder{color:var(--g4);}
+.ibox{background:var(--pb2);border:2px solid var(--pll);border-radius:var(--r);padding:13px 17px;margin-bottom:15px;font-size:13px;color:var(--pd);line-height:1.7;font-weight:600;}
+.ibox strong{color:var(--pu);}
+
+/* BTN */
+.btn{padding:12px 26px;border-radius:var(--rl);font-size:15px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .22s;border:none;}
+.bp{background:linear-gradient(135deg,var(--pu),var(--pl));color:#fff;box-shadow:0 4px 18px rgba(109,40,217,.3);}
+.bp:hover{transform:translateY(-2px);box-shadow:0 7px 26px rgba(109,40,217,.42);}
+.bp:disabled{opacity:.36;cursor:default;transform:none;}
+.bg{background:#fff;border:2px solid var(--pll);color:var(--pu);font-size:13px;font-weight:800;padding:10px 20px;}
+.bg:hover{background:var(--pb);}
+
+/* BOTTOM NAV */
+.bot{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid var(--g3);padding:11px 22px;display:flex;align-items:center;justify-content:space-between;z-index:200;box-shadow:0 -2px 10px rgba(109,40,217,.06);}
+
+/* XP */
+.xp-wrap{display:flex;align-items:center;gap:9px;margin-bottom:15px;background:#fff;border-radius:var(--rf);padding:8px 15px;border:2px solid var(--g3);box-shadow:var(--sh);}
+.xp-ic{font-size:17px;}
+.xp-t{flex:1;height:10px;background:var(--g2);border-radius:var(--rf);overflow:hidden;}
+.xp-f{height:100%;background:linear-gradient(90deg,#F59E0B,#FCD34D);border-radius:var(--rf);transition:width .8s cubic-bezier(.34,1.56,.64,1);}
+.xp-l{font-size:13px;font-weight:800;color:#D97706;min-width:52px;text-align:right;}
+
+/* STREAKS */
+.sks{display:flex;gap:7px;margin-bottom:16px;}
+.sk{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 7px;background:#fff;border-radius:var(--r);border:2px solid var(--g3);}
+.sk.on{border-color:#FDE68A;background:#FFFBEB;}
+.sk-ic{font-size:20px;}
+.sk-l{font-size:10px;color:var(--g5);font-weight:800;text-align:center;}
+.sk.on .sk-l{color:#D97706;}
+
+/* PROG */
+.prog-w{margin-bottom:20px;}
+.prog-t{height:7px;background:var(--g2);border-radius:var(--rf);overflow:hidden;margin-bottom:9px;}
+.prog-f{height:100%;background:linear-gradient(90deg,var(--pu),var(--pl),#A855F7);border-radius:var(--rf);transition:width .55s ease;}
+.prog-m{display:flex;align-items:center;justify-content:space-between;}
+.prog-l{font-size:12px;color:var(--g5);font-weight:700;}
+.dpills{display:flex;gap:5px;flex-wrap:wrap;}
+.dp{font-size:10px;font-weight:800;padding:3px 10px;border-radius:var(--rf);border:2px solid;}
+
+/* DIM HEADER */
+.dh{background:#fff;border:2px solid var(--g3);border-radius:var(--rl);padding:17px 20px;margin-bottom:13px;display:flex;align-items:flex-start;gap:13px;}
+.dic{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid;}
+.dname{font-size:15px;font-weight:800;color:var(--g9);margin-bottom:3px;}
+.dvulga{font-size:13px;color:var(--g5);line-height:1.6;margin-bottom:3px;}
+.dref{font-size:11px;color:var(--pu);font-weight:700;font-style:italic;}
+
+/* Q CARD */
+.qc{background:#fff;border:2px solid var(--g3);border-radius:var(--rl);padding:19px 21px;margin-bottom:11px;transition:border-color .2s;}
+.qc.answered{border-color:var(--pll);}
+.qnum{font-size:10px;font-weight:800;color:var(--pu);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px;}
+.qtxt{font-size:15px;font-weight:700;color:var(--g9);line-height:1.5;margin-bottom:4px;}
+.qv{font-size:12px;color:var(--g5);font-style:italic;line-height:1.5;margin-bottom:15px;}
+.lik{display:flex;align-items:center;gap:7px;}
+.ll{font-size:11px;color:var(--g4);font-weight:700;min-width:58px;}
+.lbtns{display:flex;gap:7px;flex:1;justify-content:center;}
+.lb{width:47px;height:47px;border-radius:50%;border:2px solid var(--g3);background:#fff;cursor:pointer;font-size:15px;font-weight:800;color:var(--g5);transition:all .2s;font-family:'Nunito',sans-serif;display:flex;align-items:center;justify-content:center;}
+.lb:hover{border-color:var(--pu);background:var(--pb2);color:var(--pu);transform:scale(1.07);}
+.lb.sel{background:linear-gradient(135deg,var(--pu),var(--pl));border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(109,40,217,.3);transform:scale(1.1);}
+.slbl{display:flex;justify-content:space-between;font-size:10px;color:var(--g4);font-weight:700;margin-top:5px;padding:0 65px;}
+
+/* MOD HERO */
+.mh{background:linear-gradient(135deg,#4C1D95,#6D28D9,#A855F7);border-radius:var(--rx);padding:32px 30px;margin-bottom:15px;position:relative;overflow:hidden;box-shadow:var(--shl);}
+.mh::before{content:'';position:absolute;top:-40px;right:-40px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.06);}
+.mbadge{display:inline-flex;align-items:center;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.3);border-radius:var(--rf);padding:4px 14px;font-size:11px;font-weight:800;color:#fff;margin-bottom:11px;letter-spacing:.04em;text-transform:uppercase;position:relative;z-index:1;}
+.mh h1{font-size:21px;font-weight:900;color:#fff;margin-bottom:9px;line-height:1.25;position:relative;z-index:1;letter-spacing:-.3px;}
+.mh p{font-size:14px;color:rgba(255,255,255,.85);line-height:1.7;position:relative;z-index:1;font-weight:600;}
+.msteps{display:flex;gap:6px;margin-bottom:16px;}
+.ms{flex:1;height:5px;border-radius:var(--rf);}
+.ms.done{background:var(--pll);}
+.ms.active{background:#fff;}
+.ms.todo{background:rgba(255,255,255,.22);}
+
+/* TIP */
+.tip{background:var(--teb);border:2px solid rgba(13,148,136,.3);border-radius:var(--r);padding:12px 15px;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start;}
+.tip-ic{font-size:19px;flex-shrink:0;margin-top:1px;}
+.tip-txt{font-size:13px;color:var(--te);line-height:1.6;font-weight:700;}
+
+/* ── FLASHCARDS — approche fiable sans hauteur fixe ── */
+/* Principe : les deux faces sont dans le flux normal (display:block).
+   On affiche l'une OU l'autre. La rotation 3D est simulée via animation CSS
+   sur le conteneur visible, sans jamais avoir besoin de position:absolute
+   ni de hauteur fixe. */
+.fc-wrap{margin-bottom:13px;}
+
+/* Le conteneur global de la carte — juste du flux normal */
+.fc-card{
+  border-radius:var(--rl);
+  border:2px solid var(--g3);
+  background:#fff;
+  overflow:hidden;
+  cursor:pointer;
+  transition:border-color .25s, box-shadow .25s;
+  animation:fcIn .35s ease;
+}
+@keyframes fcIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.fc-card:hover{border-color:var(--pll);box-shadow:var(--shm);}
+.fc-card.open{border-color:var(--pll);background:var(--pb2);}
+
+/* Face RECTO — toujours dans le flux */
+.fc-front{display:block;}
+.fc-card.open .fc-front{display:none;}
+
+/* Face VERSO — cachée par défaut, visible quand open */
+.fc-back{display:none;}
+.fc-card.open .fc-back{display:block;animation:flipIn .38s cubic-bezier(.4,0,.2,1);}
+@keyframes flipIn{
+  0%{opacity:0;transform:rotateY(-90deg) scale(.96);}
+  60%{transform:rotateY(8deg);}
+  100%{opacity:1;transform:rotateY(0deg) scale(1);}
+}
+
+/* Front content */
+.fc-top{display:flex;align-items:flex-start;gap:13px;padding:16px 18px 12px;}
+.fc-num{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--pu),var(--pl));color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 9px rgba(109,40,217,.28);}
+.fc-tag{font-size:10px;font-weight:800;color:var(--pu);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
+.fc-title{font-size:14px;font-weight:800;color:var(--g9);margin-bottom:5px;line-height:1.35;}
+.fc-teaser{font-size:13px;color:var(--g5);line-height:1.55;font-weight:600;}
+.fc-cta{padding:9px 16px;border-top:2px solid var(--g2);font-size:12px;color:var(--pu);font-weight:800;background:var(--pb2);display:flex;align-items:center;gap:6px;}
+
+/* Back content */
+.fc-back-head{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:2px solid var(--pll);background:var(--pb);}
+.fc-back-body{padding:14px 18px;}
+.sbox{background:#fff;border-radius:var(--r);border-left:3px solid var(--pl);padding:13px;margin-bottom:11px;}
+.sttl{font-size:10px;font-weight:800;color:var(--pu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.sr{display:flex;gap:8px;align-items:flex-start;margin-bottom:7px;}
+.sr:last-child{margin-bottom:0;}
+.sn{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--pu),var(--pl));color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.st{font-size:12px;color:var(--g7);line-height:1.6;font-weight:600;}
+.st em{font-style:normal;font-weight:800;color:var(--pu);}
+.idm{background:var(--teb);border-radius:var(--r);border-left:3px solid var(--te);padding:10px 13px;margin-bottom:10px;}
+.idm-l{font-size:10px;font-weight:800;color:var(--te);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;}
+.idm-t{font-size:12px;color:var(--te);line-height:1.55;font-style:italic;font-weight:600;}
+.wrnm{background:var(--wnb);border-radius:var(--r);border-left:3px solid var(--wn);padding:10px 13px;}
+.wrnm-l{font-size:10px;font-weight:800;color:var(--wn);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;}
+.wrnm-t{font-size:12px;color:var(--wnt);line-height:1.55;font-weight:600;}
+.fc-close{padding:8px 16px;border-top:2px solid var(--pll);font-size:12px;color:var(--g5);font-weight:700;background:#fff;display:flex;align-items:center;justify-content:center;gap:5px;flex-shrink:0;}
+.flip-hint{text-align:center;font-size:12px;color:var(--g5);margin-bottom:12px;padding:8px;background:#fff;border-radius:var(--r);border:2px dashed var(--g3);font-weight:700;}
+
+/* SCENARIO */
+.sc-sit{background:var(--wnb);border-left:4px solid var(--wn);border-radius:0 var(--r) var(--r) 0;padding:14px 17px;margin-bottom:13px;}
+.sc-lbl{font-size:11px;font-weight:800;color:var(--wnt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block;}
+.sc-txt{font-size:14px;color:var(--wnt);line-height:1.7;font-weight:600;}
+.sc-btn{display:flex;align-items:flex-start;gap:10px;width:100%;padding:12px 14px;border-radius:var(--r);border:2px solid var(--g3);background:#fff;cursor:pointer;font-size:13px;color:var(--g7);text-align:left;line-height:1.55;margin-bottom:8px;transition:all .2s;font-family:'Nunito',sans-serif;font-weight:600;}
+.sc-btn:hover:not(:disabled){border-color:var(--pu);background:var(--pb2);transform:translateX(3px);}
+.sc-btn.ok{background:var(--okb);border-color:var(--okb2);color:var(--okt);}
+.sc-btn.ko{background:var(--kob);border-color:var(--kob2);color:var(--kot);}
+.sc-btn.rv{background:var(--okb);border-color:var(--okb2);color:var(--okt);}
+.sc-l{width:22px;height:22px;border-radius:50%;border:2px solid var(--g3);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--g4);}
+.sc-btn.ok .sc-l,.sc-btn.rv .sc-l{background:var(--ok);border-color:var(--ok);color:#fff;}
+.sc-btn.ko .sc-l{background:var(--ko);border-color:var(--ko);color:#fff;}
+.sc-fb{display:none;border-radius:var(--r);overflow:hidden;margin-top:9px;animation:fup .28s ease;}
+.sc-fb.show{display:block;}
+@keyframes fup{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.fbh{display:flex;align-items:center;gap:7px;padding:10px 14px;}
+.fbic{width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;}
+.fbl{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;}
+.fbb{padding:0 14px 13px;}
+.fbt{font-size:13px;line-height:1.65;margin-bottom:7px;font-weight:600;}
+.fbi{font-size:12px;font-style:italic;line-height:1.55;padding:8px 12px;border-radius:8px;font-weight:600;}
+.fb-g .fbh{background:var(--okb);}.fb-g .fbic{background:var(--ok);color:#fff;}.fb-g .fbl{color:var(--okt);}.fb-g .fbb{background:var(--okb);}.fb-g .fbt{color:var(--okt);}.fb-g .fbi{background:var(--okb2);color:var(--okt);}
+.fb-b .fbh{background:var(--kob);}.fb-b .fbic{background:var(--ko);color:#fff;}.fb-b .fbl{color:var(--kot);}.fb-b .fbb{background:var(--kob);}.fb-b .fbt{color:var(--kot);}.fb-b .fbi{background:var(--kob2);color:var(--kot);}
+
+/* QUIZ */
+.qzc{background:#fff;border:2px solid var(--g3);border-radius:var(--rl);overflow:hidden;margin-bottom:12px;}
+.qzh{padding:10px 18px;border-bottom:2px solid var(--g2);display:flex;align-items:center;justify-content:space-between;background:var(--pb2);}
+.qzct{font-size:11px;font-weight:800;color:var(--pu);text-transform:uppercase;letter-spacing:.06em;}
+.qzth{font-size:11px;color:var(--g5);background:#fff;padding:3px 11px;border-radius:var(--rf);font-weight:700;border:2px solid var(--g3);}
+.qzb{padding:19px;}
+.qzq{font-size:15px;font-weight:700;color:var(--g9);margin-bottom:15px;line-height:1.5;}
+.vfr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:11px;}
+.vfb{padding:14px 11px;border-radius:var(--r);border:2px solid var(--g3);background:#fff;cursor:pointer;font-size:16px;font-weight:800;color:var(--g9);text-align:center;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;font-family:'Nunito',sans-serif;}
+.vfb:hover:not(:disabled){border-color:var(--pu);background:var(--pb2);transform:translateY(-2px);}
+.vfb.ok{background:var(--okb);border-color:var(--okb2);color:var(--okt);animation:cpop .3s ease;}
+.vfb.ko{background:var(--kob);border-color:var(--kob2);color:var(--kot);animation:wig .38s ease;}
+.vfb.rv{background:var(--okb);border-color:var(--okb2);color:var(--okt);}
+@keyframes cpop{0%{transform:scale(1);}50%{transform:scale(1.06);}100%{transform:scale(1);}}
+@keyframes wig{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+.vfin{width:20px;height:20px;border-radius:50%;border:2px solid var(--g3);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;color:var(--g4);}
+.vfb.ok .vfin,.vfb.rv .vfin{background:var(--ok);border-color:var(--ok);color:#fff;}
+.vfb.ko .vfin{background:var(--ko);border-color:var(--ko);color:#fff;}
+.qze{display:none;border-radius:var(--r);overflow:hidden;animation:fup .28s ease;}
+.qze.show{display:block;}
+.exh{padding:9px 14px;display:flex;align-items:center;gap:7px;}
+.exic{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0;}
+.exl{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;}
+.exb{padding:0 14px 13px;}
+.exm{font-size:13px;line-height:1.65;margin-bottom:7px;font-weight:600;}
+.exn{font-size:12px;font-style:italic;line-height:1.55;padding:8px 12px;border-radius:8px;font-weight:600;}
+.ex-g .exh{background:var(--okb);}.ex-g .exic{background:var(--ok);color:#fff;}.ex-g .exl{color:var(--okt);}.ex-g .exb{background:var(--okb);}.ex-g .exm{color:var(--okt);}.ex-g .exn{background:var(--okb2);color:var(--okt);}
+.ex-i .exh{background:var(--pb);}.ex-i .exic{background:var(--pu);color:#fff;}.ex-i .exl{color:var(--pd);}.ex-i .exb{background:var(--pb);}.ex-i .exm{color:var(--pd);}.ex-i .exn{background:var(--pll);color:var(--pd);}
+
+/* INSIGHT */
+.ins{border-left:3px solid;border-radius:0 var(--r) var(--r) 0;padding:11px 14px;margin-bottom:12px;font-size:13px;line-height:1.6;font-weight:600;}
+.ins.ok{background:var(--okb);border-color:var(--ok);color:var(--okt);}
+.ins.wn{background:var(--wnb);border-color:var(--wn);color:var(--wnt);}
+.ins.ko{background:var(--kob);border-color:var(--ko);color:var(--kot);}
+.ins.pu{background:var(--pb);border-color:var(--pu);color:var(--pd);}
+
+/* PROFILE */
+.ph-hero{border-radius:var(--rx);padding:36px 32px;text-align:center;margin-bottom:16px;position:relative;overflow:hidden;box-shadow:var(--shl);}
+.ph-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.07);}
+.ph-badge{display:inline-flex;align-items:center;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.32);border-radius:var(--rf);padding:6px 18px;font-size:12px;font-weight:800;color:#fff;margin-bottom:14px;position:relative;z-index:1;letter-spacing:.05em;text-transform:uppercase;}
+.ph-name{font-size:23px;font-weight:900;color:#fff;margin-bottom:11px;position:relative;z-index:1;letter-spacing:-.3px;}
+.ph-desc{font-size:14px;color:rgba(255,255,255,.85);line-height:1.75;position:relative;z-index:1;max-width:490px;margin:0 auto;font-weight:600;}
+.kpi2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px;}
+.kbox{background:#fff;border:2px solid var(--g3);border-radius:var(--rl);padding:17px;text-align:center;}
+.klbl{font-size:11px;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;}
+.kval{font-size:32px;font-weight:900;line-height:1;letter-spacing:-.04em;margin-bottom:4px;}
+.ksub{font-size:11px;color:var(--g4);font-weight:600;}
+.kbart{width:100%;height:5px;background:var(--g2);border-radius:var(--rf);overflow:hidden;margin-top:9px;}
+.kbarf{height:100%;border-radius:var(--rf);}
+.dbr{display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+.dbd{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dbn{font-size:12px;font-weight:700;color:var(--g7);min-width:138px;line-height:1.3;}
+.dbtr{flex:1;height:6px;background:var(--g2);border-radius:var(--rf);overflow:hidden;}
+.dbfi{height:100%;border-radius:var(--rf);}
+.dbv{font-size:12px;font-weight:800;color:var(--g9);min-width:28px;text-align:right;}
+.sig2{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:15px;}
+.sigc{border-radius:var(--r);padding:13px 15px;border:2px solid;}
+.sigl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;}
+.sigi{font-size:13px;margin-bottom:4px;line-height:1.5;font-weight:600;}
+.mi{display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:var(--r);border:2px solid;margin-bottom:8px;transition:all .2s;}
+.mi:hover{transform:translateX(3px);}
+.mi.p{background:var(--kob);border-color:var(--kob2);}
+.mi.h{background:var(--wnb);border-color:var(--wnb2);}
+.mi.s{background:var(--pb2);border-color:var(--pll);}
+.min{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;flex-shrink:0;}
+.min.p{background:var(--ko);color:#fff;}
+.min.h{background:var(--wn);color:#fff;}
+.min.s{background:linear-gradient(135deg,var(--pu),var(--pl));color:#fff;}
+.mi-tt{font-size:13px;font-weight:800;color:var(--g9);margin-bottom:2px;}
+.mi-rs{font-size:12px;color:var(--g5);font-weight:600;}
+
+/* CTA */
+.cta{background:linear-gradient(135deg,#4C1D95,#6D28D9,#A855F7);border-radius:var(--rx);padding:28px 26px;text-align:center;position:relative;overflow:hidden;margin-bottom:13px;box-shadow:var(--shl);}
+.cta::before{content:'';position:absolute;top:-22px;right:-22px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.07);}
+.cta-t{font-size:19px;font-weight:900;color:#fff;margin-bottom:8px;position:relative;z-index:1;letter-spacing:-.3px;}
+.cta-s{font-size:13px;color:rgba(255,255,255,.8);margin-bottom:19px;position:relative;z-index:1;line-height:1.6;font-weight:600;}
+.btn-w{background:#fff;color:var(--pd);padding:13px 34px;border-radius:var(--rl);font-size:15px;font-weight:900;cursor:pointer;border:none;font-family:'Nunito',sans-serif;box-shadow:0 4px 15px rgba(0,0,0,.14);transition:all .22s;position:relative;z-index:1;}
+.btn-w:hover{transform:translateY(-2px);}
+
+/* EVAL */
+.eval-h{background:linear-gradient(135deg,var(--pu),var(--pl));border-radius:var(--rx);padding:26px;text-align:center;margin-bottom:15px;position:relative;overflow:hidden;}
+.eval-h::before{content:'';position:absolute;top:-18px;right:-18px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.07);}
+.ec{background:#fff;border:2px solid var(--g3);border-radius:var(--rl);padding:19px 21px;margin-bottom:12px;}
+.eq{font-size:14px;font-weight:800;color:var(--g9);margin-bottom:13px;line-height:1.5;}
+.stars{display:flex;gap:8px;margin-bottom:5px;}
+.star{font-size:31px;cursor:pointer;transition:transform .2s;color:var(--g3);filter:grayscale(1);}
+.star:hover,.star.on{color:#F59E0B;filter:grayscale(0);transform:scale(1.18);}
+.star.on{animation:spop .28s ease;}
+@keyframes spop{0%{transform:scale(.7);}60%{transform:scale(1.28);}100%{transform:scale(1.18);}}
+.slbl{font-size:12px;color:var(--g4);font-weight:700;height:17px;margin-top:3px;}
+.eopts{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.eopt{padding:11px 13px;border-radius:var(--r);border:2px solid var(--g3);background:#fff;cursor:pointer;font-size:13px;color:var(--g7);text-align:left;font-family:'Nunito',sans-serif;font-weight:700;transition:all .2s;}
+.eopt:hover{border-color:var(--pu);background:var(--pb2);}
+.eopt.sel{background:var(--pb);border-color:var(--pl);color:var(--pd);}
+.eta{width:100%;padding:11px 14px;border:2px solid var(--g3);border-radius:var(--r);font-size:13px;color:var(--g7);font-family:'Nunito',sans-serif;font-weight:600;resize:none;outline:none;transition:border-color .2s;}
+.eta:focus{border-color:var(--pu);}
+.eth{display:none;text-align:center;padding:24px;background:var(--okb);border-radius:var(--rl);border:2px solid var(--okb2);}
+.eth.show{display:block;animation:fup .4s ease;}
+
+/* COMMIT */
+.cki{display:flex;gap:11px;align-items:flex-start;padding:12px 14px;border-radius:var(--r);border:2px solid var(--g3);margin-bottom:8px;cursor:pointer;transition:all .22s;background:#fff;}
+.cki:hover{border-color:var(--pll);background:var(--pb2);}
+.cki.ck{background:var(--pb2);border-color:var(--pl);}
+.ckb{width:22px;height:22px;border-radius:50%;border:2px solid var(--g3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;color:transparent;transition:all .26s;}
+.cki.ck .ckb{background:linear-gradient(135deg,var(--pu),var(--pl));border-color:transparent;color:#fff;animation:ckb .3s ease;}
+@keyframes ckb{0%{transform:scale(.4);}70%{transform:scale(1.18);}100%{transform:scale(1);}}
+.ckt{font-size:13px;color:var(--g7);line-height:1.6;font-weight:600;}
+.ckt em{font-style:normal;font-weight:800;color:var(--pu);}
+
+/* DASHBOARD */
+.dtabs{display:flex;gap:0;background:var(--g2);border-radius:var(--r);padding:4px;margin-bottom:19px;border:2px solid var(--g3);width:fit-content;}
+.dtab{padding:7px 18px;border-radius:8px;font-size:13px;font-weight:800;color:var(--g5);cursor:pointer;transition:all .2s;border:none;background:none;font-family:'Nunito',sans-serif;}
+.dtab.on{background:linear-gradient(135deg,var(--pu),var(--pl));color:#fff;}
+.dk{background:linear-gradient(135deg,var(--pd),var(--pu));border-radius:var(--rl);padding:17px 19px;color:#fff;position:relative;overflow:hidden;}
+.dk::after{content:'';position:absolute;top:-16px;right:-16px;width:85px;height:85px;border-radius:50%;background:rgba(255,255,255,.07);}
+.dk-l{font-size:11px;font-weight:800;opacity:.75;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;}
+.dk-v{font-size:29px;font-weight:900;line-height:1;letter-spacing:-.04em;}
+.dk-s{font-size:12px;opacity:.65;margin-top:4px;font-weight:600;}
+.dk-b{height:4px;background:rgba(255,255,255,.2);border-radius:var(--rf);margin-top:11px;overflow:hidden;}
+.dk-bf{height:100%;background:rgba(255,255,255,.65);border-radius:var(--rf);}
+.dk.ok{background:linear-gradient(135deg,#065F46,var(--ok));}
+.dk.wn{background:linear-gradient(135deg,#78350F,var(--wn));}
+.dk.dg{background:linear-gradient(135deg,#7F1D1D,var(--ko));}
+.dk.nt{background:linear-gradient(135deg,#312E81,#4338CA);}
+.anon{background:var(--teb);border:2px solid rgba(13,148,136,.3);border-radius:var(--r);padding:10px 15px;margin-bottom:15px;display:flex;align-items:center;gap:9px;font-size:13px;color:var(--te);font-weight:700;}
+.tw{border-radius:var(--rl);overflow:hidden;border:2px solid var(--g3);box-shadow:var(--sh);margin-bottom:17px;}
+table{width:100%;border-collapse:collapse;}
+thead{background:var(--pb2);}
+th{padding:10px 12px;text-align:left;font-size:11px;font-weight:800;color:var(--pu);text-transform:uppercase;letter-spacing:.07em;border-bottom:2px solid var(--g3);}
+td{padding:10px 12px;border-bottom:1px solid var(--g2);font-size:12px;color:var(--g7);font-weight:600;background:#fff;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--pb2);}
+.avc{display:flex;align-items:center;gap:9px;}
+.avcir{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;}
+.ptag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:var(--rf);font-size:11px;font-weight:800;border:2px solid;}
+.pt-v{background:var(--kob);border-color:var(--kob2);color:var(--kot);}
+.pt-e{background:var(--wnb);border-color:var(--wnb2);color:var(--wnt);}
+.pt-r{background:var(--okb);border-color:var(--okb2);color:var(--okt);}
+.pt-s{background:#FFF1F2;border-color:#FECDD3;color:#881337;}
+.mp{display:flex;align-items:center;gap:6px;}
+.mpt{flex:1;height:5px;background:var(--g2);border-radius:var(--rf);overflow:hidden;}
+.mpf{height:100%;border-radius:var(--rf);}
+.mpv{font-size:11px;font-weight:800;color:var(--g9);min-width:25px;text-align:right;}
+.pbr{display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+.pbd{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.pbn{font-size:12px;font-weight:700;color:var(--g7);min-width:112px;}
+.pbt{flex:1;height:7px;background:var(--g2);border-radius:var(--rf);overflow:hidden;}
+.pbfi{height:100%;border-radius:var(--rf);}
+.pbv{font-size:12px;font-weight:800;color:var(--g9);min-width:29px;text-align:right;}
+.vi{display:flex;gap:10px;padding:12px 0;border-bottom:2px solid var(--g2);}
+.vi:last-child{border-bottom:none;padding-bottom:0;}
+.vc{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0;}
+.vtag{font-size:10px;font-weight:800;color:var(--pu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;}
+.vt{font-size:13px;color:var(--g7);line-height:1.5;font-weight:600;}
+.vctx{font-size:11px;color:var(--g4);font-style:italic;margin-top:3px;line-height:1.45;font-weight:600;}
+.vcode{font-size:11px;color:var(--g4);margin-top:2px;font-weight:700;}
+
+
+/* FILTRES PROFILS */
+.fbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;}
+.fgroup{display:flex;flex-direction:column;gap:6px;}
+.fgroup-label{font-size:10px;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:.07em;}
+.fpills{display:flex;flex-wrap:wrap;gap:6px;}
+.fpill{padding:6px 14px;border-radius:var(--rf);border:2px solid var(--g3);background:#fff;font-size:12px;font-weight:800;color:var(--g5);cursor:pointer;transition:all .2s;font-family:'Nunito',sans-serif;display:flex;align-items:center;gap:6px;}
+.fpill:hover{border-color:var(--pll);color:var(--pu);background:var(--pb2);}
+.fpill.on{background:linear-gradient(135deg,var(--pu),var(--pl));color:#fff;border-color:transparent;box-shadow:0 3px 10px rgba(109,40,217,.22);}
+.fpill .fcnt{background:rgba(255,255,255,.25);border-radius:999px;padding:1px 7px;font-size:10px;font-weight:900;}
+.fpill:not(.on) .fcnt{background:var(--g2);color:var(--g5);}
+.fsearch{flex:1;min-width:180px;position:relative;}
+.fsearch input{width:100%;padding:8px 12px 8px 34px;border:2px solid var(--g3);border-radius:var(--r);font-size:13px;font-family:'Nunito',sans-serif;font-weight:600;color:var(--g9);background:#fff;outline:none;transition:border-color .2s;}
+.fsearch input:focus{border-color:var(--pu);}
+.fsearch-ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--g4);font-size:15px;}
+.fcount{font-size:12px;color:var(--g5);font-weight:700;padding:6px 12px;background:var(--g2);border-radius:var(--rf);border:2px solid var(--g3);white-space:nowrap;}
+.fcount strong{color:var(--pu);}
+.freset{padding:6px 13px;border-radius:var(--rf);border:2px solid var(--g3);background:#fff;font-size:12px;font-weight:800;color:var(--g5);cursor:pointer;transition:all .2s;font-family:'Nunito',sans-serif;}
+.freset:hover{border-color:var(--pll);color:var(--pu);}
+.no-results{text-align:center;padding:36px 20px;color:var(--g4);font-size:14px;font-weight:700;}
+.no-results div{font-size:32px;margin-bottom:10px;}
+
+/* MODAL */
+.mov{display:none;position:fixed;inset:0;background:rgba(30,27,75,.45);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.mov.open{display:flex;}
+.modal{background:#fff;border-radius:var(--rx);padding:24px 28px;max-width:540px;width:92%;max-height:82vh;overflow-y:auto;box-shadow:0 20px 60px rgba(109,40,217,.22);}
+.mhd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.mtit{font-size:17px;font-weight:900;color:var(--g9);letter-spacing:-.3px;}
+.mcl{width:29px;height:29px;border-radius:50%;border:2px solid var(--g3);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--g5);font-weight:800;}
+
+/* CONFETTI */
+#confC{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;display:none;}
+
+/* COMPLETION */
+.cmpw{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:66vh;text-align:center;padding:38px 20px;}
+.cmpb{width:92px;height:92px;border-radius:50%;background:linear-gradient(135deg,var(--pu),var(--pl));display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 10px 34px rgba(109,40,217,.33);}
+
+/* AVATAR */
+#avwrap{position:fixed;bottom:72px;right:16px;z-index:500;display:flex;flex-direction:column;align-items:flex-end;gap:7px;}
+#avbub{background:#fff;border:2px solid var(--pll);border-radius:15px 15px 4px 15px;padding:10px 14px;max-width:210px;font-size:13px;color:var(--pd);line-height:1.5;font-weight:700;box-shadow:var(--shm);display:none;}
+#avbub.show{display:block;animation:bin .3s cubic-bezier(.34,1.56,.64,1);}
+@keyframes bin{from{opacity:0;transform:scale(.78) translateY(5px);}to{opacity:1;transform:scale(1) translateY(0);}}
+#avsvg{width:120px;height:132px;cursor:pointer;filter:drop-shadow(0 4px 11px rgba(109,40,217,.2));transition:filter .2s;}
+#avsvg:hover{filter:drop-shadow(0 6px 16px rgba(109,40,217,.35));}
+#avbody{transform-origin:40px 66px;animation:br 3.6s ease-in-out infinite;}
+@keyframes br{0%,100%{transform:scaleY(1);}50%{transform:scaleY(1.025) translateY(-1px);}}
+#avlidL,#avlidR{animation:blk 5.5s ease-in-out infinite;}
+@keyframes blk{0%,89%,100%{transform:scaleY(0);}93%{transform:scaleY(1);}}
+#avsvg.happy{animation:nd .48s ease;}
+#avsvg.sad{animation:shk .48s ease;}
+#avsvg.wow{animation:bnc .62s cubic-bezier(.36,.07,.19,.97);}
+@keyframes nd{0%,100%{transform:rotate(0);}35%{transform:rotate(6deg);}70%{transform:rotate(-4deg);}}
+@keyframes shk{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
+@keyframes bnc{0%,100%{transform:translateY(0);}22%{transform:translateY(-15px) scale(1.05);}44%{transform:translateY(-7px);}66%{transform:translateY(-12px);}88%{transform:translateY(-3px);}}
+
+@media(max-width:580px){
+  .hero{padding:24px 16px;}.hero h1{font-size:18px;}
+  .ll{display:none;}.lb{width:41px;height:41px;}
+  .sig2,.kpi2,.g2,.fg2,.vfr,.eopts{grid-template-columns:1fr;}
+  .g4,.g3,.g5{grid-template-columns:1fr 1fr;}
+  .pw,.pw-w{padding:15px 12px 90px;}
+  #avsvg{width:96px;height:106px;}
+}
+</style>
+</head>
+<body>
+<canvas id="confC"></canvas>
+
+<!-- AVATAR  -->
+<div id="avwrap">
+  <div id="avbub"></div>
+  <svg id="avsvg" viewBox="0 0 80 88" xmlns="http://www.w3.org/2000/svg" onclick="avClick()">
+    <g id="avbody">
+      <!-- Hawaiian shirt -->
+      <rect x="12" y="52" width="56" height="36" rx="10" fill="#FF6B6B"/>
+      <circle cx="21" cy="61" r="3.2" fill="#FFE66D" opacity=".9"/>
+      <circle cx="21" cy="61" r="1.4" fill="#FF6B6B"/>
+      <circle cx="37" cy="69" r="3.2" fill="#4ECDC4" opacity=".9"/>
+      <circle cx="37" cy="69" r="1.4" fill="#FF6B6B"/>
+      <circle cx="53" cy="61" r="3.2" fill="#FFE66D" opacity=".9"/>
+      <circle cx="53" cy="61" r="1.4" fill="#FF6B6B"/>
+      <circle cx="28" cy="75" r="2.6" fill="#4ECDC4" opacity=".9"/>
+      <circle cx="45" cy="59" r="2.6" fill="#FF9FF3" opacity=".9"/>
+      <circle cx="59" cy="73" r="2.6" fill="#FFE66D" opacity=".9"/>
+      <path d="M40 54 L32 45 L38 54Z" fill="#E05555"/>
+      <path d="M40 54 L48 45 L44 54Z" fill="#E05555"/>
+      <line x1="40" y1="54" x2="40" y2="88" stroke="#C04040" stroke-width=".8"/>
+      <circle cx="40" cy="62" r="1.7" fill="#C04040"/>
+      <circle cx="40" cy="70" r="1.7" fill="#C04040"/>
+      <circle cx="40" cy="78" r="1.7" fill="#C04040"/>
+      <rect x="46" y="59" width="12" height="7.5" rx="2" fill="#E05555" stroke="#C04040" stroke-width=".9"/>
+      <circle cx="52" cy="57" r="1.8" fill="#FFE66D" opacity=".8"/>
+    </g>
+    <!-- Neck -->
+    <rect x="34" y="42" width="12" height="12" rx="5" fill="#C8834A"/>
+    <!-- Head bald métis -->
+    <ellipse cx="40" cy="30" rx="17" ry="18" fill="#C8834A" stroke="#B07030" stroke-width=".8"/>
+    <ellipse cx="36" cy="20" rx="7" ry="4.5" fill="rgba(255,255,255,.14)" transform="rotate(-15 36 20)"/>
+    <ellipse cx="23.5" cy="30" rx="3" ry="4.5" fill="#C8834A" stroke="#B07030" stroke-width=".8"/>
+    <ellipse cx="56.5" cy="30" rx="3" ry="4.5" fill="#C8834A" stroke="#B07030" stroke-width=".8"/>
+    <path d="M29 22.5 Q34 20.5 38 22.5" fill="none" stroke="#5C3010" stroke-width="2.1" stroke-linecap="round"/>
+    <path d="M42 22.5 Q46 20.5 51 22.5" fill="none" stroke="#5C3010" stroke-width="2.1" stroke-linecap="round"/>
+    <ellipse cx="34" cy="29" rx="4" ry="4.5" fill="white"/>
+    <ellipse cx="46" cy="29" rx="4" ry="4.5" fill="white"/>
+    <ellipse cx="34.5" cy="29.5" rx="2.4" ry="2.7" fill="#2D1400"/>
+    <ellipse cx="46.5" cy="29.5" rx="2.4" ry="2.7" fill="#2D1400"/>
+    <circle cx="35.2" cy="28.4" r=".8" fill="white"/>
+    <circle cx="47.2" cy="28.4" r=".8" fill="white"/>
+    <rect id="avlidL" x="30" y="24.5" width="8" height="9" rx="3" fill="#C8834A" transform-origin="34 24.5" style="transform:scaleY(0);"/>
+    <rect id="avlidR" x="42" y="24.5" width="8" height="9" rx="3" fill="#C8834A" transform-origin="46 24.5" style="transform:scaleY(0);"/>
+    <path d="M37 34 Q40 37 43 34" fill="none" stroke="#9A5C2A" stroke-width="1.4" stroke-linecap="round"/>
+    <ellipse id="avckL" cx="28" cy="36" rx="5" ry="3" fill="#E08050" opacity="0.38"/>
+    <ellipse id="avckR" cx="52" cy="36" rx="5" ry="3" fill="#E08050" opacity="0.38"/>
+    <path id="avmouth" d="M33.5 40 Q40 46 46.5 40" fill="none" stroke="#8B4010" stroke-width="2.1" stroke-linecap="round"/>
+  </svg>
+</div>
+
+<!-- TOPBAR -->
+<div class="tb">
+  <div style="display:flex;align-items:center;gap:2px;">
+    <span class="logo-t">PHYSICARE</span><span class="logo-r">®</span>
+  </div>
+  <div class="tb-r">
+    <span class="tb-pill" id="tpill">Bienvenue</span>
+    <span class="tb-user" id="tuser"></span>
+  </div>
+</div>
+
+<!-- S0 ACCUEIL -->
+<div class="screen on" id="s0">
+<div class="pw">
+  <div class="hero">
+    <div class="hero-ic"><svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+    <h1>Bienvenue dans votre parcours<br>Santé Comportementale</h1>
+    <p>Un diagnostic de 7 à 10 minutes génère votre profil et personnalise votre accès aux 5 modules de formation.</p>
+    <div class="hchips">
+      <span class="hchip">⏱ 7-10 min</span>
+      <span class="hchip">🔒 Résultats protégés</span>
+      <span class="hchip">📊 Profil instantané</span>
+      <span class="hchip">🎯 5 modules adaptés</span>
+    </div>
+  </div>
+  <div class="icard">
+    <div style="font-size:15px;font-weight:900;color:var(--g9);margin-bottom:15px;">Vos informations</div>
+    <div class="fg2" style="margin-bottom:11px;">
+      <div><label class="fl">Prénom *</label><input class="fi" id="fFirst" type="text" placeholder="Prénom" oninput="chkId()"></div>
+      <div><label class="fl">Nom *</label><input class="fi" id="fLast" type="text" placeholder="Nom" oninput="chkId()"></div>
+    </div>
+    <div class="fg2">
+      <div><label class="fl">Poste *</label><input class="fi" id="fRole" type="text" placeholder="Ex : Opticien(ne)" oninput="chkId()"></div>
+      <div><label class="fl">Centre / Magasin</label><input class="fi" id="fCenter" type="text" placeholder="Ex : Paris 11e"></div>
+    </div>
+  </div>
+  <div class="ibox"><strong>Comment répondre ?</strong> Indiquez à quel point chaque affirmation correspond à votre réalité <strong>aujourd'hui</strong>, de 1 (pas du tout) à 5 (tout à fait). Votre première impression est toujours la plus juste.</div>
+  <div style="text-align:center;padding-bottom:80px;">
+    <button class="btn bp" id="btnStart" disabled onclick="startQ()" style="font-size:16px;padding:14px 42px;">Démarrer mon diagnostic →</button>
+  </div>
+  <div onclick="openDash()" style="background:#fff;border:2px solid var(--g3);border-radius:var(--rl);padding:17px 20px;cursor:pointer;box-shadow:var(--sh);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;"><span style="font-size:13px;font-weight:800;color:var(--pu);">👔 Tableau de bord manager</span><span style="color:var(--g4);">→</span></div>
+    <p style="font-size:12px;color:var(--g5);font-weight:600;">Suivi formations · Profils anonymisés · ISC collectif · Verbatims détaillés</p>
+  </div>
+</div>
+</div>
+
+<!-- S1 QUESTIONNAIRE -->
+<div class="screen" id="s1">
+<div class="pw">
+  <div class="prog-w">
+    <div class="prog-t"><div class="prog-f" id="qPF" style="width:0%"></div></div>
+    <div class="prog-m"><div class="prog-l" id="qPL">Dim 1/7</div><div class="dpills" id="qPills"></div></div>
+  </div>
+  <div id="dimH"></div>
+  <div id="qCont"></div>
+  <div style="height:80px;"></div>
+</div>
+<div class="bot">
+  <button class="btn bg" id="bPrev" onclick="prevD()" style="visibility:hidden;">← Retour</button>
+  <button class="btn bp" id="bNext" onclick="nextD()" disabled>Continuer →</button>
+</div>
+</div>
+
+<!-- S2 PROFIL -->
+<div class="screen" id="s2">
+<div class="pw">
+  <div id="phHero"></div>
+  <div class="sks" id="stks"></div>
+  <div id="phKpi"></div>
+  <div class="card mb"><div style="font-size:14px;font-weight:800;color:var(--g9);margin-bottom:13px;">Votre profil détaillé</div><div id="phBars"></div></div>
+  <div id="phSig"></div>
+  <div id="phIns"></div>
+  <div id="phRecs"></div>
+  <div id="phCta"></div>
+  <div style="height:80px;"></div>
+</div>
+</div>
+
+<!-- S-MOD MODULE -->
+<div class="screen" id="sMod">
+<div class="pw">
+  <div class="xp-wrap">
+    <span class="xp-ic">⚡</span>
+    <div class="xp-t"><div class="xp-f" id="xpF" style="width:0%"></div></div>
+    <span class="xp-l" id="xpL">0 XP</span>
+  </div>
+  <div id="modC"></div>
+  <div style="height:80px;"></div>
+</div>
+<div class="bot">
+  <button class="btn bg" id="mBP" onclick="modPrev()">← Retour</button>
+  <button class="btn bp" id="mBN" onclick="modNext()">Continuer →</button>
+</div>
+</div>
+
+<!-- S-DASH DASHBOARD -->
+<!-- SCREEN LOGIN MANAGER -->
+<div class="screen" id="sLogin">
+<div class="pw" style="max-width:440px;">
+  <div style="text-align:center;padding:48px 0 32px;">
+    <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--pd),var(--pu));display:flex;align-items:center;justify-content:center;margin:0 auto 18px;box-shadow:0 8px 28px rgba(109,40,217,.32);">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:2px;margin-bottom:6px;">
+      <span class="logo-t" style="font-size:26px;">PHYSICARE</span><span class="logo-r">®</span>
+    </div>
+    <p style="font-size:14px;color:var(--g5);font-weight:600;">Accès Manager · Tableau de bord</p>
+  </div>
+
+  <div style="background:#fff;border:2px solid var(--g3);border-radius:var(--rx);padding:28px 26px;box-shadow:var(--shl);">
+    <div style="font-size:16px;font-weight:900;color:var(--g9);margin-bottom:5px;">Connexion sécurisée</div>
+    <p style="font-size:13px;color:var(--g5);margin-bottom:22px;font-weight:600;">Accès réservé aux managers Physicare autorisés. Données anonymisées affichées.</p>
+
+    <label class="fl">Identifiant manager</label>
+    <input class="fi" id="lgUser" type="text" placeholder="manager@physicare.fr" style="margin-bottom:13px;" onkeydown="if(event.key==='Enter')doLogin()">
+
+    <label class="fl">Mot de passe</label>
+    <div style="position:relative;margin-bottom:6px;">
+      <input class="fi" id="lgPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      <button onclick="togglePwd()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;color:var(--g4);" id="eyeBtn">👁</button>
+    </div>
+    <div id="lgErr" style="display:none;font-size:12px;color:var(--ko);font-weight:700;margin-bottom:10px;padding:8px 12px;background:var(--kob);border-radius:var(--r);border:2px solid var(--kob2);">
+      ❌ Identifiant ou mot de passe incorrect.
+    </div>
+    <div style="margin-bottom:18px;">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--g7);font-weight:600;">
+        <input type="checkbox" id="lgRemember" style="width:16px;height:16px;accent-color:var(--pu);">
+        Se souvenir de moi (7 jours)
+      </label>
+    </div>
+
+    <button class="btn bp" onclick="doLogin()" style="width:100%;font-size:15px;padding:14px;margin-bottom:13px;">
+      Se connecter →
+    </button>
+
+    <div style="text-align:center;font-size:12px;color:var(--g4);font-weight:600;">
+      Accès oublié ? Contactez <span style="color:var(--pu);font-weight:800;">admin@physicare.fr</span>
+    </div>
+  </div>
+
+  <div style="background:var(--teb);border:2px solid rgba(13,148,136,.25);border-radius:var(--r);padding:11px 15px;margin-top:16px;display:flex;align-items:center;gap:9px;">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <span style="font-size:12px;color:var(--te);font-weight:700;">Données chiffrées · Accès nominatif via Digiforma uniquement · Session sécurisée</span>
+  </div>
+
+  <div style="text-align:center;margin-top:18px;">
+    <button class="btn bg" onclick="go('s0')" style="font-size:12px;padding:9px 20px;">← Retour espace collaborateur</button>
+  </div>
+</div>
+</div>
+
+<div class="screen" id="sDash">
+<div class="pw-w">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:11px;">
+    <div>
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:4px;"><span class="logo-t" style="font-size:22px;">PHYSICARE®</span><span style="font-size:13px;color:var(--g4);">×</span><span style="font-size:14px;font-weight:800;color:var(--g7);">Optical Center</span></div>
+      <p style="font-size:13px;color:var(--g5);font-weight:600;">Pilotage de la performance durable</p>
+    </div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap;">
+      <button class="btn bg" style="font-size:12px;padding:9px 15px;" onclick="exportCSV()">↓ CSV</button>
+      <button class="btn bp" style="font-size:12px;padding:9px 15px;" onclick="refreshDash()">⟳ Actualiser données</button>
+      <button class="btn bg" style="font-size:12px;padding:9px 15px;" onclick="mgLogged=false;go('s0')">🔓 Déconnexion</button>
+      <button class="btn bg" style="font-size:12px;padding:9px 15px;" onclick="go('s0')">← Retour</button>
+    </div>
+  </div>
+  <div class="anon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span><strong>Anonymisation active</strong> — Résultats sous codes. Accès nominatif via Digiforma uniquement. &nbsp;·&nbsp; <strong>Session manager active 🔒</strong></span></div>
+  <div class="dtabs">
+    <button class="dtab on" onclick="dTab('dT0',this)">Diagnostic T0</button>
+    <button class="dtab" onclick="dTab('dSuivi',this)">Suivi</button>
+    <button class="dtab" onclick="dTab('dProf',this)">Profils</button>
+    <button class="dtab" onclick="dTab('dVerb',this)">Verbatims</button>
+  </div>
+
+  <!-- T0 -->
+  <div id="dT0">
+    <div class="g4 mb">
+      <div class="dk wn"><div class="dk-l">ISC collectif</div><div class="dk-v">3,49</div><div class="dk-s">Seuil vigilance : 3,5</div><div class="dk-b"><div class="dk-bf" style="width:70%"></div></div></div>
+      <div class="dk nt"><div class="dk-l">Score clarté</div><div class="dk-v">3,17</div><div class="dk-s">Exigences & contrôle</div><div class="dk-b"><div class="dk-bf" style="width:63%"></div></div></div>
+      <div class="dk ok"><div class="dk-l">Sécurité psychologique</div><div class="dk-v">3,54</div><div class="dk-s">Climat collectif</div><div class="dk-b"><div class="dk-bf" style="width:71%"></div></div></div>
+      <div class="dk dg"><div class="dk-l">Indice de résilience</div><div class="dk-v">0,85</div><div class="dk-s">Cible &gt; 1,0</div><div class="dk-b"><div class="dk-bf" style="width:43%"></div></div></div>
+    </div>
+    <div class="g2 mb">
+      <div class="card">
+        <div style="font-size:14px;font-weight:800;color:var(--g9);margin-bottom:13px;">Analyse de la charge collective</div>
+        <div style="display:flex;height:38px;border-radius:7px;overflow:hidden;margin-bottom:9px;"><div style="width:42%;background:linear-gradient(90deg,var(--pd),var(--pu));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;">Mental 42%</div><div style="width:31%;background:linear-gradient(90deg,#92400E,#D97706);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;">Émot. 31%</div><div style="width:27%;background:linear-gradient(90deg,var(--pu),#A855F7);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;">Cogn. 27%</div></div>
+        <div style="font-size:12px;color:var(--g5);font-style:italic;margin-bottom:13px;line-height:1.5;font-weight:600;">Surcharge majorit. cognitive — levier : priorisation et découpage des tâches.</div>
+        <div class="pbr"><div class="pbd" style="background:#EF4444;"></div><div class="pbn">A. Pression / stress</div><div class="pbt"><div class="pbfi" style="width:74%;background:#EF4444;"></div></div><div class="pbv">3,70</div></div>
+        <div class="pbr"><div class="pbd" style="background:#F59E0B;"></div><div class="pbn">B. Fatigue émotion.</div><div class="pbt"><div class="pbfi" style="width:62%;background:#F59E0B;"></div></div><div class="pbv">3,11</div></div>
+        <div class="pbr"><div class="pbd" style="background:#10B981;"></div><div class="pbn">C. Régulation</div><div class="pbt"><div class="pbfi" style="width:60%;background:#10B981;"></div></div><div class="pbv">3,00</div></div>
+        <div class="pbr"><div class="pbd" style="background:#6366F1;"></div><div class="pbn">D. Clarté & contrôle</div><div class="pbt"><div class="pbfi" style="width:63%;background:#6366F1;"></div></div><div class="pbv">3,17</div></div>
+        <div class="pbr"><div class="pbd" style="background:#0D9488;"></div><div class="pbn">E. Sécurité psy.</div><div class="pbt"><div class="pbfi" style="width:71%;background:#0D9488;"></div></div><div class="pbv">3,54</div></div>
+        <div class="pbr"><div class="pbd" style="background:#A855F7;"></div><div class="pbn">F. Comportement</div><div class="pbt"><div class="pbfi" style="width:59%;background:#A855F7;"></div></div><div class="pbv">2,96</div></div>
+        <div class="pbr"><div class="pbd" style="background:#E11D48;"></div><div class="pbn">G. Impact org.</div><div class="pbt"><div class="pbfi" style="width:62%;background:#E11D48;"></div></div><div class="pbv">3,10</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:13px;">
+        <div class="card"><div style="font-size:14px;font-weight:800;color:var(--g9);margin-bottom:12px;">Points de vigilance</div><canvas id="treemapC" height="182"></canvas><div style="display:flex;gap:11px;margin-top:9px;flex-wrap:wrap;"><span style="font-size:11px;font-weight:800;color:var(--kot);display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;border-radius:2px;background:#EF4444;display:inline-block;"></span>Priorité</span><span style="font-size:11px;font-weight:800;color:var(--wnt);display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;border-radius:2px;background:#F59E0B;display:inline-block;"></span>Vigilance</span><span style="font-size:11px;font-weight:800;color:var(--okt);display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;border-radius:2px;background:#10B981;display:inline-block;"></span>Appui</span></div></div>
+        <div class="card" style="text-align:center;"><div style="font-size:14px;font-weight:800;color:var(--g9);margin-bottom:5px;">Indice résilience</div><canvas id="gaugeC" width="158" height="88" style="display:block;margin:0 auto;"></canvas><div style="font-size:32px;font-weight:900;color:#DC2626;margin-top:-18px;letter-spacing:-.04em;">0,85</div><div style="background:var(--kob);border-radius:7px;padding:8px 12px;font-size:12px;color:var(--kot);margin-top:9px;line-height:1.5;font-weight:700;">Zone rouge — prioriser les modules de régulation.</div></div>
+      </div>
+    </div>
+    <div class="card mb"><div style="font-size:14px;font-weight:800;color:var(--g9);margin-bottom:12px;">Ordre de déploiement recommandé</div><div class="g5">
+      <div style="background:var(--kob);border:2px solid var(--kob2);border-radius:var(--r);padding:12px;text-align:center;"><div style="font-size:21px;font-weight:900;color:var(--kot);">02</div><div style="font-size:11px;font-weight:800;color:var(--kot);margin:3px 0;">Charge mentale</div><div style="font-size:10px;color:var(--kot);">URGENT</div></div>
+      <div style="background:var(--kob);border:2px solid var(--kob2);border-radius:var(--r);padding:12px;text-align:center;"><div style="font-size:21px;font-weight:900;color:var(--kot);">03</div><div style="font-size:11px;font-weight:800;color:var(--kot);margin:3px 0;">Santé mentale</div><div style="font-size:10px;color:var(--kot);">URGENT</div></div>
+      <div style="background:var(--wnb);border:2px solid var(--wnb2);border-radius:var(--r);padding:12px;text-align:center;"><div style="font-size:21px;font-weight:900;color:var(--wnt);">01</div><div style="font-size:11px;font-weight:800;color:var(--wnt);margin:3px 0;">Responsabilité</div><div style="font-size:10px;color:var(--wnt);">PRIORITAIRE</div></div>
+      <div style="background:var(--pb2);border:2px solid var(--pll);border-radius:var(--r);padding:12px;text-align:center;"><div style="font-size:21px;font-weight:900;color:var(--pu);">04</div><div style="font-size:11px;font-weight:800;color:var(--pd);margin:3px 0;">TMS & Gestes</div><div style="font-size:10px;color:var(--g5);">Standard</div></div>
+      <div style="background:var(--pb2);border:2px solid var(--pll);border-radius:var(--r);padding:12px;text-align:center;"><div style="font-size:21px;font-weight:900;color:var(--pu);">05</div><div style="font-size:11px;font-weight:800;color:var(--pd);margin:3px 0;">Hygiène & Sécu.</div><div style="font-size:10px;color:var(--g5);">Standard</div></div>
+    </div></div>
+  </div>
+
+  <!-- SUIVI -->
+  <div id="dSuivi" style="display:none;">
+    <div class="g4 mb">
+      <div class="dk"><div class="dk-l">Inscrits</div><div class="dk-v">24</div><div class="dk-s">Optical Center</div><div class="dk-b"><div class="dk-bf" style="width:100%"></div></div></div>
+      <div class="dk ok"><div class="dk-l">Complétion</div><div class="dk-v">71%</div><div class="dk-s">17/24</div><div class="dk-b"><div class="dk-bf" style="width:71%"></div></div></div>
+      <div class="dk nt"><div class="dk-l">Score quiz moy.</div><div class="dk-v">3,2/4</div><div class="dk-s">groupe</div><div class="dk-b"><div class="dk-bf" style="width:80%"></div></div></div>
+      <div class="dk wn"><div class="dk-l">Satisfaction</div><div class="dk-v">4,4★</div><div class="dk-s">14 répondants</div><div class="dk-b"><div class="dk-bf" style="width:88%"></div></div></div>
+    </div>
+    <div class="g5 mb">
+      <div class="card" style="text-align:center;padding:13px;"><div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--pu),var(--pl));color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;">1</div><div style="font-size:11px;font-weight:800;margin-bottom:3px;">Responsabilité</div><div style="font-size:19px;font-weight:900;color:var(--ok);">92%</div></div>
+      <div class="card" style="text-align:center;padding:13px;"><div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--pu),var(--pl));color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;">2</div><div style="font-size:11px;font-weight:800;margin-bottom:3px;">Charge mentale</div><div style="font-size:19px;font-weight:900;color:var(--ok);">88%</div></div>
+      <div class="card" style="text-align:center;padding:13px;"><div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--pu),var(--pl));color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;">3</div><div style="font-size:11px;font-weight:800;margin-bottom:3px;">Santé mentale</div><div style="font-size:19px;font-weight:900;color:var(--wn);">79%</div></div>
+      <div class="card" style="text-align:center;padding:13px;"><div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--pu),var(--pl));color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;">4</div><div style="font-size:11px;font-weight:800;margin-bottom:3px;">TMS & Gestes</div><div style="font-size:19px;font-weight:900;color:var(--wn);">71%</div></div>
+      <div class="card" style="text-align:center;padding:13px;"><div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--pu),var(--pl));color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;">5</div><div style="font-size:11px;font-weight:800;margin-bottom:3px;">Hygiène & Sécu.</div><div style="font-size:19px;font-weight:900;color:var(--ko);">46%</div></div>
+    </div>
+    <div class="g2">
+      <div class="card"><div style="font-size:14px;font-weight:800;margin-bottom:12px;">Satisfaction par critère</div>
+        <div class="pbr"><div class="pbn">Note globale</div><div class="pbt"><div class="pbfi" style="width:88%;background:linear-gradient(90deg,var(--pu),var(--pl));"></div></div><div class="pbv">4,4/5</div></div>
+        <div class="pbr"><div class="pbn">Clarté contenu</div><div class="pbt"><div class="pbfi" style="width:90%;background:linear-gradient(90deg,var(--pu),var(--pl));"></div></div><div class="pbv">4,5/5</div></div>
+        <div class="pbr"><div class="pbn">Interactions</div><div class="pbt"><div class="pbfi" style="width:92%;background:linear-gradient(90deg,var(--ok),#6EE7B7);"></div></div><div class="pbv">4,6/5</div></div>
+        <div class="pbr"><div class="pbn">Impact terrain</div><div class="pbt"><div class="pbfi" style="width:80%;background:linear-gradient(90deg,var(--wn),#FCD34D);"></div></div><div class="pbv">4,0/5</div></div>
+      </div>
+      <div class="card"><div style="font-size:14px;font-weight:800;margin-bottom:12px;">Ce module changera ma pratique ?</div>
+        <div class="pbr"><div class="pbn">Oui, clairement</div><div class="pbt"><div class="pbfi" style="width:57%;background:var(--ok);"></div></div><div class="pbv">8</div></div>
+        <div class="pbr"><div class="pbn">Probablement</div><div class="pbt"><div class="pbfi" style="width:28%;background:var(--wn);"></div></div><div class="pbv">4</div></div>
+        <div class="pbr"><div class="pbn">Je verrai</div><div class="pbt"><div class="pbfi" style="width:14%;background:var(--pu);"></div></div><div class="pbv">2</div></div>
+        <div class="pbr"><div class="pbn">Pas vraiment</div><div class="pbt"><div class="pbfi" style="width:0%;"></div></div><div class="pbv">0</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILS -->
+  <div id="dProf" style="display:none;">
+    <div class="anon" style="margin-bottom:14px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Noms remplacés par codes. Accès nominatif : manager Physicare via Digiforma uniquement.</span></div>
+
+    <!-- FILTRES -->
+    <div style="background:#fff;border:2px solid var(--g3);border-radius:var(--rl);padding:18px 20px;margin-bottom:14px;box-shadow:var(--sh);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:9px;">
+        <div style="font-size:14px;font-weight:900;color:var(--g9);">Filtres</div>
+        <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;">
+          <div class="fcount" id="fcount"><strong>7</strong> / 7 profils</div>
+          <button class="freset" onclick="resetFilters()">✕ Réinitialiser</button>
+        </div>
+      </div>
+
+      <!-- Recherche -->
+      <div class="fsearch" style="margin-bottom:14px;">
+        <span class="fsearch-ic">🔍</span>
+        <input id="fsearchInput" type="text" placeholder="Rechercher par code, métier…" oninput="applyFilters()">
+      </div>
+
+      <!-- Filtre Métier -->
+      <div class="fgroup" style="margin-bottom:12px;">
+        <div class="fgroup-label">💼 Filtrer par métier</div>
+        <div class="fpills" id="fpMetier"></div>
+      </div>
+
+      <!-- Filtre Profil T0 -->
+      <div class="fgroup">
+        <div class="fgroup-label">📊 Filtrer par profil T0</div>
+        <div class="fpills" id="fpProfil">
+          <button class="fpill on" data-profil="all" onclick="toggleFilter(this,'profil')">
+            Tous <span class="fcnt" id="cnt_all">7</span>
+          </button>
+          <button class="fpill" data-profil="surcharge" onclick="toggleFilter(this,'profil')">
+            <span style="width:8px;height:8px;border-radius:50%;background:#DC2626;display:inline-block;"></span>
+            Surcharge critique <span class="fcnt" id="cnt_surcharge">1</span>
+          </button>
+          <button class="fpill" data-profil="vigilance" onclick="toggleFilter(this,'profil')">
+            <span style="width:8px;height:8px;border-radius:50%;background:#D97706;display:inline-block;"></span>
+            Vigilance <span class="fcnt" id="cnt_vigilance">3</span>
+          </button>
+          <button class="fpill" data-profil="equilibre" onclick="toggleFilter(this,'profil')">
+            <span style="width:8px;height:8px;border-radius:50%;background:#6366F1;display:inline-block;"></span>
+            Équilibre fragile <span class="fcnt" id="cnt_equilibre">2</span>
+          </button>
+          <button class="fpill" data-profil="resilient" onclick="toggleFilter(this,'profil')">
+            <span style="width:8px;height:8px;border-radius:50%;background:#059669;display:inline-block;"></span>
+            Résilient <span class="fcnt" id="cnt_resilient">1</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tw"><table><thead><tr><th>Code</th><th>Métier</th><th>Profil T0</th><th>ISC</th><th>Régul.</th><th>Séc. Psy.</th><th>Module</th><th>Progression</th><th>Score</th><th></th></tr></thead><tbody id="profBody"></tbody></table></div>
+    <div id="noResults" class="no-results" style="display:none;"><div>🔎</div>Aucun profil ne correspond à ces filtres.<br><span style="font-size:12px;font-weight:600;">Essayez de réinitialiser les filtres.</span></div>
+  </div>
+
+  <!-- VERBATIMS -->
+  <div id="dVerb" style="display:none;">
+    <div class="g2 mb">
+      <div class="card"><div style="font-size:15px;font-weight:900;margin-bottom:4px;">Ce qui vide l'énergie</div><div style="font-size:12px;color:var(--g5);margin-bottom:13px;font-weight:600;">7 répondants · verbatims intégraux</div><div id="vDrain"></div></div>
+      <div class="card"><div style="font-size:15px;font-weight:900;margin-bottom:4px;">Ce qui redonne de l'énergie</div><div style="font-size:12px;color:var(--g5);margin-bottom:13px;font-weight:600;">7 répondants · verbatims intégraux</div><div id="vBoost"></div></div>
+    </div>
+    <div class="card mb"><div style="font-size:15px;font-weight:900;margin-bottom:4px;">Sujets ouverts en fin de journée</div><div style="font-size:12px;color:var(--g5);margin-bottom:13px;font-weight:600;">Signaux de charge cognitive non résolue</div><div id="vOpen"></div></div>
+    <div class="card"><div style="font-size:15px;font-weight:900;margin-bottom:4px;">Indicateurs de succès attendus</div><div style="font-size:12px;color:var(--g5);margin-bottom:13px;font-weight:600;">Ce que chacun espère transformer</div><div id="vSuccess"></div></div>
+  </div>
+</div>
+</div>
+
+<div class="mov" id="mOv" onclick="closeMod(event)"><div class="modal" id="mContent"></div></div>
+<script>
+/* ══ DATA ══ */
+/* ════════════════════════════════════════
+   CONFIGURATION SUPABASE
+   → Copiez vos clés depuis supabase.com
+     Settings → API
+════════════════════════════════════════ */
+var SB_URL  = 'VOTRE_SUPABASE_URL';   // ex: https://xxxx.supabase.co
+var SB_KEY  = 'VOTRE_ANON_KEY';       // Clé publiable (sb_publishable_...) ou anon (eyJ...)
+// Mode démo automatique si non configuré
+var CLIENT_SLUG = 'optical-center'; // ← à changer par client
+
+var dims=[
+  {id:'A',name:'Gestion de la pression',vulga:'Comment vous sentez-vous face à la charge de travail ? Explore si vous êtes souvent sous pression et si cela impacte votre capacité à bien faire.',ref:'PSS / Karasek',c:'#EF4444',bg:'#FEF2F2',bd:'#FECACA',icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>',
+   qs:['Je me sens souvent sous pression dans mon rôle professionnel.','J\'ai le sentiment de devoir gérer trop de choses en même temps.','Les imprévus me demandent un effort important d\'adaptation.','J\'ai parfois l\'impression de manquer de temps pour bien faire.','La charge actuelle impacte ma capacité à prioriser.'],
+   vg:['Ex : sollicitations constantes, urgences en cascade','Ex : plusieurs projets simultanés, multitâche permanent','Ex : changements de planning, demandes de dernière minute','Ex : je bâcle ou reporte faute de temps','Ex : difficile de distinguer l\'important de l\'urgent']},
+  {id:'B',name:'Fatigue émotionnelle',vulga:'La fatigue émotionnelle, c\'est être "vidé(e)" intérieurement — pas seulement fatigué(e) physiquement, mais épuisé(e) par les interactions et la charge relationnelle.',ref:'MBI abrégé',c:'#F59E0B',bg:'#FFFBEB',bd:'#FDE68A',icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+   qs:['Je me sens émotionnellement fatigué(e) par mon travail.','Il m\'arrive de me sentir « vidé(e) » en fin de journée.','La charge émotionnelle de mon rôle est parfois difficile.','Je ressens une fatigue qui ne disparaît pas avec le repos.'],
+   vg:['Ex : relations difficiles, gestion de conflits, pression client','Ex : sensation de "tank vide" même sans effort physique','Ex : les émotions des autres me coûtent beaucoup d\'énergie','Ex : même le week-end, je ne récupère pas vraiment']},
+  {id:'C',name:'Capacité à se réguler',vulga:'La régulation, c\'est votre aptitude à récupérer mentalement — prendre du recul, ne pas laisser la pression s\'accumuler. C\'est une compétence qui s\'apprend.',ref:'Schwarzer',c:'#10B981',bg:'#ECFDF5',bd:'#A7F3D0',icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+   qs:['Je parviens à prendre du recul face aux situations tendues.','Je sais identifier mes signaux personnels de surcharge.','J\'ai des stratégies efficaces pour récupérer et me réguler.','Je me sens capable d\'agir pour préserver mon équilibre.'],
+   vg:['Ex : faire une pause, relativiser, changer d\'angle','Ex : reconnaître quand je suis "à bout" avant d\'exploser','Ex : sport, respiration, organisation, coupures numériques','Ex : savoir poser des limites quand c\'est nécessaire']},
+  {id:'D',name:'Clarté et reconnaissance',vulga:'Savez-vous exactement ce qu\'on attend de vous ? Vos efforts sont-ils reconnus ? Cette dimension explore votre relation au cadre de travail.',ref:'Karasek / Siegrist',c:'#6366F1',bg:'#EEF2FF',bd:'#C7D2FE',icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg>',
+   qs:['Les exigences de mon poste sont claires pour moi.','J\'ai une marge de manœuvre pour organiser mon travail.','Les efforts fournis sont reconnus à leur juste valeur.','Je me sens soutenu(e) par mon environnement professionnel.','Les objectifs sont compatibles avec les moyens disponibles.'],
+   vg:['Ex : je sais précisément ce qu\'on attend de moi','Ex : j\'organise mes tâches à ma façon','Ex : on valorise mes efforts, on me dit merci','Ex : mes collègues et manager sont disponibles','Ex : les objectifs sont ambitieux mais atteignables']},
+  {id:'E',name:'Confiance dans l\'équipe',vulga:'La sécurité psychologique, c\'est la liberté d\'exprimer vos difficultés sans craindre d\'être jugé(e). Un bon climat rend tout le monde plus efficace et épanoui.',ref:'Edmondson',c:'#0891B2',bg:'#ECFEFF',bd:'#A5F3FC',icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+   qs:['Je peux exprimer mes difficultés sans crainte.','Les erreurs peuvent être abordées de façon constructive.','Les échanges sont globalement respectueux et ouverts.','Je me sens légitime pour poser des questions.','Les tensions sont traitées avant qu\'elles durent.'],
+   vg:['Ex : je peux dire quand ça ne va pas sans être pénalisé(e)','Ex : les erreurs servent à apprendre, pas à punir','Ex : on se parle franchement, sans violence','Ex : je peux dire "je ne sais pas" sans honte','Ex : les conflits sont gérés rapidement']},
+  {id:'F',name:'Comportement sous pression',vulga:'Comment réagissez-vous quand la pression monte ? Tendez-vous à vous fermer, à devenir directif, ou maintenez-vous une posture stable ?',ref:'Leadership comportemental',c:'#9B4DCA',bg:'#F5F3FF',bd:'#DDD6FE',icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9B4DCA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+   qs:['Sous pression, j\'ai tendance à me replier sur moi-même.','En situation tendue, je deviens plus directif(ve) que souhaité.','Je maintiens une posture stable malgré la pression.','Je reste attentif(ve) à l\'impact de mes comportements.','Sous contrainte, mes décisions génèrent de la tension.'],
+   vg:['Ex : je coupe les échanges, je m\'isole','Ex : je tranche sans consulter, je deviens impatient(e)','Ex : je garde mon calme même quand ça s\'emballe','Ex : attention à mon ton, mes mots, mon énergie','Ex : mes décisions rapides créent des incompréhensions']},
+  {id:'G',name:'Impact sur mon efficacité',vulga:'Comment la charge actuelle affecte-t-elle votre performance ? Cette dimension relie votre santé comportementale à la qualité de vos décisions et votre capacité à durer.',ref:'Santé comportementale ↔ ROI',c:'#E11D48',bg:'#FFF1F2',bd:'#FECDD3',icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>',
+   qs:['La charge actuelle influence la qualité de mes décisions.','Le rythme de travail impacte la coordination d\'équipe.','Les modes de fonctionnement favorisent la performance durable.','Je dispose d\'espaces pour ajuster ma posture.'],
+   vg:['Ex : je décide trop vite quand je suis surchargé(e)','Ex : la communication avec les collègues souffre de la pression','Ex : je peux tenir ce rythme sans m\'abîmer','Ex : temps pour réfléchir à comment je travaille']}
+];
+
+/* ══ 5 MODULES ══ */
+var MOD=[
+  {num:'01',title:'Responsabilité & Culture sécurité',color:'#6D28D9',
+   intro:'Ce module explore pourquoi la sécurité n\'est pas qu\'une obligation réglementaire — c\'est une posture professionnelle qui protège votre équipe, vos clients et vous-même.',
+   tips:['💡 Astuce santé : Signaler une difficulté avant qu\'elle ne devienne un problème, c\'est de la prévention active — pas de la plainte.','🌟 Le saviez-vous ? Dans les équipes les plus performantes, chacun se sent libre de dire "ça ne va pas" avant que ça devienne grave.'],
+   flashcards:[
+     {tag:'Concept clé',t:'Règle imposée vs engagement personnel',teaser:'Une règle subie disparaît sans surveillance. Un engagement personnel résiste même sous pression, même seul, même fatigué(e).',steps:['Une règle subie disparaît dès que la surveillance s\'arrête.','Un engagement personnel résiste même seul, même sous pression.','La santé comportementale transforme la règle en conviction.'],insight:'Vous n\'avez pas besoin de surveiller quelqu\'un qui a vraiment compris pourquoi la sécurité compte.',warn:'Piège : "Personne ne regarde, donc ça ne compte pas." Mais ça compte toujours.'},
+     {tag:'Astuce santé 💡',t:'La règle des 24h — exprimer avant que ça grossisse',teaser:'Une tension non exprimée en 24h cristallise et grossit. Une phrase dite à temps évite un conflit dans une semaine.',steps:['Identifier : "J\'ai un inconfort sur ce sujet."','Exprimer dans les 24h : "J\'ai besoin qu\'on en parle."','Résoudre ou noter si pas encore réglé.'],insight:'Ce n\'est pas la tension elle-même qui abîme les équipes — c\'est la tension tue et accumulée.',warn:'Attention à la culture du "c\'est normal" : normaliser un risque ne le rend pas acceptable.'},
+     {tag:'Dimension collective',t:'L\'effet domino de votre posture individuelle',teaser:'Vos comportements façonnent le niveau de sécurité de toute l\'équipe — dans les deux sens.',steps:['Un seul comportement rigoureux visible influence inconsciemment les collègues.','Une seule déviation banalisée normalise le relâchement progressivement.','La culture de sécurité se construit geste après geste.'],insight:'Vous êtes un modèle, que vous le vouliez ou non. Autant en faire un modèle positif.',warn:''},
+     {tag:'Pratique 🎯',t:'Le check sécurité de fin de journée — 2 min',teaser:'Avant de partir : 3 questions simples qui font de vous un professionnel rigoureux et bienveillant.',steps:['Y a-t-il quelque chose que j\'ai vu qui mérite d\'être signalé ?','Y a-t-il une tension dans l\'équipe non abordée ?','Mon espace de travail est-il laissé dans un bon état ?'],insight:'Ces 2 minutes sont un acte de professionnalisme et de bienveillance envers vos collègues du lendemain.',warn:''}
+   ],
+   scenario:{sit:'Inès remarque depuis 3 semaines que son collègue Thomas range un matériel défectueux "pour ne pas embêter tout le monde". Elle n\'a rien dit. Ce soir, un incident mineur a eu lieu.',q:'Quelle est la lecture comportementale la plus juste ?',opts:['Thomas est négligent — c\'est son problème, pas celui d\'Inès.','Inès a aussi une responsabilité : en ne signalant pas, elle a participé passivement à l\'installation du risque.','L\'incident était imprévisible, personne n\'est vraiment responsable.'],ok:1,
+    fbOk:'Exactement. La responsabilité sécurité est partagée. Le silence bienveillant d\'Inès a involontairement protégé un risque.',fbIns:'Inès n\'est pas coupable — elle a besoin d\'outils pour agir différemment la prochaine fois.',
+    fbKo:'La responsabilité de Thomas est réelle mais elle ne dispense pas Inès d\'agir. Dans un espace partagé, le silence face à un risque connu est lui-même un comportement qui compte.',fbInsKo:'Réponse B — la responsabilité collective ne s\'arrête pas à "ce n\'est pas mon problème".'},
+   quiz:[
+     {q:'Signaler une difficulté à un collègue ou manager est un signe de faiblesse professionnelle.',c:'false',th:'Culture sécurité',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'C\'est l\'inverse. Dans les organisations les plus sûres, le signalement est un acte de maturité professionnelle. Les équipes qui signalent peu sont celles où les incidents majeurs surviennent silencieusement.',nu:'Signaler tôt = force. Taire = risque qui grossit.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'Ceux qui signalent contribuent à la sécurité de tous. Ne pas signaler par peur du jugement génère des risques invisibles.',nu:'La bonne réponse est Faux.'}},
+     {q:'Un comportement individuel discret peut influencer toute la culture de sécurité d\'une équipe.',c:'true',th:'Effet collectif',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'L\'effet miroir est documenté : un geste rigoureux visible influence inconsciemment les autres. Une déviation banalisée normalise progressivement le relâchement. Vous construisez la culture sécurité par vos gestes quotidiens.',nu:'Vos gestes — bons ou mauvais — sont contagieux.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'Chaque comportement, même invisible, contribue à ce qui est normalisé dans l\'équipe.',nu:'La bonne réponse est Vrai.'}},
+     {q:'Une règle bien comprise personnellement résiste mieux à la pression qu\'une règle imposée.',c:'true',th:'Engagement',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'C\'est le fondement de la santé comportementale : transformer la conformité en conviction. Ce qui est compris tient sous pression. Ce qui est subi disparaît dès que la surveillance se relâche.',nu:'Comprendre le "pourquoi" est la clé de la durabilité.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'Les règles imposées sans compréhension sont les premières abandonnées en situation de stress.',nu:'La bonne réponse est Vrai.'}},
+     {q:'Il vaut mieux attendre qu\'une tension soit "suffisamment grave" avant d\'en parler.',c:'false',th:'Communication',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'Attendre que ça soit "suffisamment grave" laisse les risques s\'installer silencieusement. Exprimer tôt — avant que ça grossisse — est la règle des 24h en action.',nu:'Les petits signaux ignorés deviennent les grands incidents de demain.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'Plus on attend, plus la tension grossit et plus elle devient difficile à résoudre.',nu:'La bonne réponse est Faux.'}}
+   ],
+   rituels:[
+     {num:'1',tag:'Rituel quotidien',t:'Check sécurité de fin de journée',teaser:'3 questions simples avant de quitter votre poste.',trigger:'Fin de journée',steps:['Un risque à signaler que j\'ai vu aujourd\'hui ?','Une tension dans l\'équipe non abordée ?','Mon poste est-il laissé propre et sécurisé ?'],insight:'Ce rituel de 2 min est un acte concret de la culture sécurité.',warn:'"Je n\'ai pas le temps." → 2 min coûtent moins cher qu\'un incident la semaine prochaine.'},
+     {num:'2',tag:'Communication',t:'"Tu as une minute ?" — le signal bienveillant',teaser:'Aborder un sujet difficile sans créer de conflit.',trigger:'Quand je dois signaler',steps:['"Tu as une minute ?" — vérifier la disponibilité avant.','Formuler en "je" : "J\'ai remarqué que..."','"Qu\'est-ce qu\'on peut faire ensemble ?"'],insight:'Le signal bienveillant transforme une confrontation en collaboration.',warn:'Ce n\'est pas de la surveillance — c\'est de l\'entraide.'}
+   ],
+   conclH:'Ce module a posé les fondations.',
+   conclP:'La culture sécurité se construit geste après geste. Vous êtes maintenant mieux équipé(e) pour en être un acteur actif.'
+  },
+  {num:'02',title:'Charge mentale & Relation client',color:'#EF4444',
+   intro:'Ce module vous donne des outils concrets pour gérer la pression, réduire le multitâche subi et maintenir votre efficacité même dans les moments intenses — sans vous épuiser.',
+   tips:['💡 Astuce santé : Votre cerveau a une "bande passante" limitée. Une vraie pause de 10 min récupère jusqu\'à 40% de capacité cognitive.','🌟 Le saviez-vous ? Le multitâche réduit l\'efficacité de 40% selon les neurosciences. Faire une chose à la fois est souvent plus rapide !'],
+   flashcards:[
+     {tag:'Neurosciences',t:'La saturation attentionnelle — comprendre pour déjouer',teaser:'Sous forte charge, le cerveau passe en "pilote automatique". Ce n\'est pas de la négligence — c\'est de la biologie.',steps:['Le cerveau a une capacité d\'attention limitée. Au-delà d\'un seuil, il bascule en mode automatique.','En mode automatique : les habitudes prennent le dessus — bonnes ou mauvaises — sans contrôle conscient.','La solution : des rituels ancrés qui fonctionnent même en pilote automatique.'],insight:'Ce mécanisme n\'est pas un défaut de caractère — c\'est de la neurologie. La solution est comportementale.',warn:'Piège : "Je devrais être capable de gérer tout ça." Non — votre cerveau a des limites physiologiques, comme tout le monde.'},
+     {tag:'Astuce santé 🌟',t:'Le micro-reset de 30 secondes',teaser:'30 secondes de pause consciente entre deux clients réduisent significativement la charge accumulée. Technique utilisée par les chirurgiens, pilotes et sportifs de haut niveau.',steps:['Fermez les yeux 5 secondes. Respirez 4 temps : inspire, retiens, expire, retiens.','Nommez mentalement ce qui se termine : "Client précédent — fait."','Recentrez : "Client suivant — je commence frais."'],insight:'Cette transition consciente libère le cortex préfrontal et améliore la qualité du contact suivant.',warn:'"Je n\'ai pas 30 secondes." — Si vous n\'en avez pas, c\'est précisément que vous en avez besoin.'},
+     {tag:'Relation client',t:'La présence active — l\'arme secrète de la qualité',teaser:'Un client qui se sent vraiment écouté est un client fidèle. La présence active s\'apprend et s\'entretient — surtout en forte charge.',steps:['Posture : tournez-vous physiquement vers le client. Contact visuel naturel.','Écoute : laissez-le finir sa phrase. Résistez à l\'envie de préparer votre réponse pendant qu\'il parle.','Reformulez : "Si je vous comprends bien..." — évite 80% des malentendus.'],insight:'La qualité de votre présence est directement liée à votre niveau de charge mentale. Gérer l\'une améliore l\'autre.',warn:'Le multitâche avec un client coûte plus cher que le temps qu\'il prétend faire gagner.'},
+     {tag:'Organisation 🎯',t:'La liste des 3 priorités — prioriser sans se noyer',teaser:'Face à un tsunami de tâches, une méthode simple : quelles sont les 3 choses les plus importantes aujourd\'hui ?',steps:['Chaque matin : noter les 3 tâches qui font vraiment avancer les choses.','Distinguer urgent/important : ce qui est urgent n\'est pas toujours important.','Accepter que tout ne peut pas être fait — mieux vaut 3 choses bien faites que 10 bâclées.'],insight:'La surcharge naît souvent de la liste infinie. La liste des 3 crée un horizon atteignable chaque jour.',warn:'Piège : ajouter 12 tâches après les 3. La liste des 3 n\'est efficace que si on la respecte.'}
+   ],
+   scenario:{sit:'Sofiane enchaîne 8 clients depuis l\'ouverture. Il est 12h30, il n\'a pas déjeuné. Camille remarque qu\'il parle de plus en plus vite, coupe les phrases des clients et fait des erreurs sur les commandes. Elle hésite à intervenir.',q:'Que devrait faire Camille ?',opts:['Ne rien dire — Sofiane est adulte et professionnel.','Signaler au manager que Sofiane "ne va pas" pour qu\'il soit remplacé.','S\'approcher discrètement : "Tu as l\'air sous pression — je peux te couvrir 10 minutes ?"'],ok:2,
+    fbOk:'Exactement. Camille propose une solution concrète, sans jugement. 10 min de récupération pour Sofiane peuvent éviter des erreurs coûteuses et une fin de journée épuisante.',fbIns:'Remarquer la surcharge d\'un collègue et proposer de l\'aide, c\'est de la solidarité professionnelle.',
+    fbKo:'A ignore le signal. B transforme un besoin de soutien en problème managérial. Camille peut agir directement avec bienveillance — c\'est beaucoup plus efficace.',fbInsKo:'La bonne réponse est C — proposer du soutien concret, au bon moment, avec les bons mots.'},
+   quiz:[
+     {q:'Le multitâche (gérer plusieurs clients en même temps) améliore la productivité.',c:'false',th:'Neurosciences',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'Le cerveau bascule d\'une tâche à l\'autre en perdant énergie et précision à chaque bascule. Le multitâche augmente les erreurs et épuise plus vite. Faire une chose à la fois est objectivement plus efficace.',nu:'Mieux vaut 1 chose bien faite que 5 choses approximatives.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'C\'est un mythe très répandu. Le multitâche n\'est pas une compétence — c\'est un coût cognitif.',nu:'La bonne réponse est Faux.'}},
+     {q:'Un micro-reset de 30 secondes entre deux clients peut réduire la charge mentale accumulée.',c:'true',th:'Santé mentale',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'Des recherches neuroscientifiques montrent que de très courtes pauses conscientes permettent au cortex préfrontal de "rebouter" — réduisant le stress résiduel et améliorant la décision suivante.',nu:'30 secondes bien utilisées valent mieux que rien du tout.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'La science valide l\'effet des micro-pauses sur la charge cognitive, même très courtes.',nu:'La bonne réponse est Vrai.'}},
+     {q:'Quand un collègue montre des signes de surcharge, intervenir directement (lui proposer de l\'aide) est de l\'ingérence.',c:'false',th:'Esprit d\'équipe',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'Proposer du soutien à un collègue en difficulté, c\'est de la solidarité — pas de l\'ingérence. L\'ingérence, c\'est juger ou décider à sa place. L\'entraide, c\'est proposer une aide concrète.',nu:'Différence : "Tu n\'es pas capable" vs "Je peux t\'aider, tu veux ?"'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'Proposer de l\'aide n\'est pas de l\'ingérence. C\'est de la bienveillance active.',nu:'La bonne réponse est Faux.'}},
+     {q:'La "liste des 3 priorités" par jour est plus efficace qu\'une liste exhaustive de toutes les tâches.',c:'true',th:'Organisation',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'Les listes exhaustives génèrent de l\'anxiété et l\'impression de ne jamais avancer. Trois priorités clairement définies créent un horizon atteignable et un sentiment de maîtrise — facteurs clés de la santé mentale au travail.',nu:'Ce n\'est pas de la procrastination — c\'est de la priorisation consciente.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'Les listes longues surchargent la mémoire de travail et augmentent le stress.',nu:'La bonne réponse est Vrai.'}}
+   ],
+   rituels:[
+     {num:'1',tag:'Anti-surcharge',t:'Le micro-reset — 30 sec entre chaque client',teaser:'La technique de transition consciente des pros sous haute pression.',trigger:'Entre chaque client',steps:['Respirez 4 temps (inspire-retiens-expire-retiens).','Nommez mentalement : "Client précédent — fait."','Recentrez : "Prochain client — je commence frais."'],insight:'30 secondes d\'intention consciente peuvent transformer votre niveau d\'énergie sur toute une matinée.',warn:'"Je n\'ai pas le temps" = signe que vous en avez le plus besoin. Ce n\'est pas un luxe — c\'est de la maintenance.'},
+     {num:'2',tag:'Organisation',t:'La règle du one-thing — finir avant de commencer',teaser:'Résistez à l\'impulsion de commencer quelque chose avant d\'avoir fermé ce qui précède.',trigger:'Quand plusieurs choses arrivent en même temps',steps:['"Qu\'est-ce qui est le plus important là, maintenant ?"','Finissez ou mettez en pause intentionnelle ce que vous faites.','Commencez la nouvelle tâche avec une intention claire.'],insight:'Le sentiment de chaos vient rarement du nombre de tâches — il vient de la sensation de ne jamais rien terminer.',warn:'Attention aux interruptions "d\'une seconde" qui durent 10 minutes et brisent votre concentration.'}
+   ],
+   conclH:'Votre cerveau mérite d\'être pris soin.',
+   conclP:'Gérer sa charge mentale est une compétence professionnelle à part entière. Les outils de ce module sont simples, mais leur impact est profond quand ils deviennent des habitudes.'
+  },
+  {num:'03',title:'Santé mentale & Bien-être',color:'#10B981',
+   intro:'Ce module vous aide à reconnaître vos propres signaux d\'alerte, comprendre ce qui nourrit ou épuise votre énergie mentale, et développer des pratiques de récupération efficaces.',
+   tips:['💡 Astuce santé : Prendre soin de sa santé mentale n\'est pas de l\'égoïsme — c\'est une condition de la performance durable.','🌟 Le saviez-vous ? 20 minutes de marche réduisent le cortisol (hormone du stress) de 15 à 20%. Pas besoin de courir !'],
+   flashcards:[
+     {tag:'Santé mentale',t:'L\'épuisement professionnel — reconnaître les signaux tôt',teaser:'Le burnout ne surgit pas du jour au lendemain — il s\'installe progressivement, par accumulation de signaux ignorés.',steps:['Phase 1 — Surengagement : "Je donne tout, je gère." (énergie apparente, épuisement caché)','Phase 2 — Résistance : irritabilité, cynisme, erreurs, décrochage progressif.','Phase 3 — Épuisement : sentiment d\'impuissance, incapacité à récupérer.'],insight:'La plupart des burnouts sont précédés de mois de signaux ignorés. Les reconnaître tôt, c\'est encore temps d\'agir.',warn:'Signal d\'alerte concret : vous êtes fatigué(e) le lundi matin après un week-end de repos. C\'est à prendre au sérieux.'},
+     {tag:'Astuce santé 🌟',t:'Les 3 ressources qui rechargent le cerveau',teaser:'Sommeil, liens sociaux, mouvement physique — ces 3 ressources sont les premières sacrifiées quand la pression monte.',steps:['Sommeil : 7-9h par nuit. Moins de 6h une semaine = capacités cognitives équivalentes à 0,1g/L d\'alcool.','Liens sociaux : 10 min d\'échange humain authentique est un régulateur émotionnel puissant.','Mouvement physique : 20 min de marche réduisent le cortisol de 15-20%.'],insight:'Ces ressources ne sont pas des récompenses pour "après le travail" — ce sont des conditions de performance pendant.',warn:'Erreur classique : "Je récupérerai en vacances." L\'épuisement de plusieurs mois ne se répare pas en deux semaines.'},
+     {tag:'Mindset',t:'Stress positif vs stress toxique — la différence qui change tout',teaser:'Tout stress n\'est pas mauvais. Mais certains types s\'accumulent et abîment sur la durée.',steps:['Stress positif : court terme, défi atteignable, suivi de récupération. Il motive et améliore la performance.','Stress toxique : chronique, sans fin, sans récupération, avec perte de contrôle. Il épuise et abîme.','Indicateur clé : est-ce que vous récupérez après une période intense ? Oui = ponctuel. Non = chronique.'],insight:'La question n\'est pas "est-ce que je stresse ?" mais "est-ce que je récupère ?"',warn:'Normaliser le stress chronique ("c\'est comme ça dans ce métier") est l\'une des principales causes de burnout.'},
+     {tag:'Communication 💡',t:'Parler de sa santé mentale — comment le faire sans tabou',teaser:'Exprimer une difficulté psychologique reste tabou dans beaucoup d\'organisations. Voici comment le faire avec confiance.',steps:['Choisir le bon moment et la bonne personne : quelqu\'un de confiance, un moment calme.','Formuler concrètement : "Je me sens dépassé(e) sur tel sujet depuis X semaines."','Proposer une piste : "J\'aurais besoin de..." ou "On peut voir ensemble comment...?"'],insight:'Demander de l\'aide n\'est pas une faiblesse — c\'est une compétence relationnelle avancée.',warn:'Si parler est impossible dans votre environnement, c\'est un signal sur la culture de sécurité psychologique de votre équipe.'}
+   ],
+   scenario:{sit:'Alizé est opticienne depuis 4 ans. Depuis 2 mois elle arrive fatiguée, fait des erreurs inhabituelles, a du mal à se rappeler les conversations de la veille. Elle se dit que c\'est "une période difficile" et que "ça va passer". Son manager lui a demandé si tout allait bien — elle a répondu "oui".',q:'Quel est le principal risque comportemental ici ?',opts:['Alizé exagère — tout le monde est fatigué de temps en temps.','Alizé minimise des signaux d\'épuisement qui méritent d\'être pris au sérieux, ce qui risque d\'accélérer la dégradation.','Le manager aurait dû insister — la responsabilité est uniquement la sienne.'],ok:1,
+    fbOk:'Exactement. Minimiser les signaux d\'épuisement ("ça va passer") est l\'un des mécanismes les plus courants qui mènent au burnout. Reconnaître et exprimer ses besoins est une compétence clé.',fbIns:'Ce module vous donne des outils pour reconnaître ces signaux chez vous — et agir avant le point de rupture.',
+    fbKo:'A minimise un signal réel. C déplace la responsabilité sans proposer de solution. La réponse B reconnaît que la minimisation est le vrai risque.',fbInsKo:'La bonne réponse est B — les signaux méritent d\'être pris au sérieux, pas rationalisés.'},
+   quiz:[
+     {q:'Dormir moins de 6h par nuit pendant une semaine n\'affecte pas les capacités cognitives si l\'on est habitué.',c:'false',th:'Sommeil',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'Après 6 jours à moins de 6h de sommeil, les capacités cognitives sont équivalentes à 0,1g/L d\'alcool dans le sang. Et la plupart des gens ne ressentent pas cette dégradation — ils perdent la capacité de percevoir leur propre détérioration.',nu:'On ne s\'habitue pas au manque de sommeil — on perd juste la lucidité sur son état réel.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'C\'est l\'un des mythes les plus dangereux sur le sommeil. Le cerveau ne s\'adapte pas à la privation.',nu:'La bonne réponse est Faux.'}},
+     {q:'20 minutes de marche peuvent réduire le niveau de cortisol (hormone du stress) de façon mesurable.',c:'true',th:'Activité physique',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'Une marche de 20-30 minutes à allure modérée réduit le cortisol de 15 à 20% et libère des endorphines. Pas besoin de courir un marathon — marcher suffit. C\'est l\'un des régulateurs de stress les plus accessibles.',nu:'La marche est gratuite, accessible, et scientifiquement validée contre le stress.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'L\'activité physique modérée est un régulateur de stress validé scientifiquement.',nu:'La bonne réponse est Vrai.'}},
+     {q:'Exprimer une difficulté psychologique au travail est un signe de manque de professionnalisme.',c:'false',th:'Tabous',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'C\'est l\'inverse. Les organisations les plus performantes sont celles où les collaborateurs peuvent exprimer leurs difficultés sans crainte. La sécurité psychologique est un facteur prédictif de la performance collective (étude Google "Project Aristotle", 2015).',nu:'Exprimer une difficulté, c\'est de la conscience professionnelle — pas de la faiblesse.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'Ce tabou est lui-même un facteur de risque. Les burn-outs s\'accumulent silencieusement là où on ne peut pas parler.',nu:'La bonne réponse est Faux.'}},
+     {q:'Le stress chronique sans récupération peut déclencher un épuisement même sans "événement traumatique" visible.',c:'true',th:'Prévention',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'Le burnout ne nécessite pas un choc majeur — il résulte souvent de l\'accumulation de petites pressions quotidiennes sans phases de récupération. C\'est l\'effet "roche percée par l\'eau" : chaque goutte semble anodine, c\'est l\'accumulation qui creuse.',nu:'La récupération n\'est pas optionnelle — c\'est une condition biologique de la performance.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'L\'absence de gros choc n\'immunise pas contre l\'épuisement.',nu:'La bonne réponse est Vrai.'}}
+   ],
+   rituels:[
+     {num:'1',tag:'Santé mentale',t:'Le journal des ressources — 5 min par semaine',teaser:'Identifier ce qui vous nourrit vs ce qui vous épuise pour piloter votre énergie.',trigger:'Chaque vendredi soir',steps:['Notez 2-3 choses qui vous ont "rechargé" cette semaine.','Notez 1-2 choses qui vous ont "vidé" de façon significative.','"La semaine prochaine, comment avoir plus de colonne 1 ?"'],insight:'Ce qui se nomme se pilote. Ce journal transforme une intuition floue en données actionnables.',warn:'Ne pas confondre "ce qui est difficile" et "ce qui m\'épuise" — certaines choses difficiles nous renforcent.'},
+     {num:'2',tag:'Récupération',t:'La coupure numérique — 30 min sans écran',teaser:'Le cerveau a besoin de temps de non-stimulation pour se régénérer vraiment.',trigger:'Chaque jour, au moins une fois',steps:['Choisir un moment fixe sans téléphone ni écran.','Remplacer par : marche, repas attentif, conversation en face à face.','Résister à l\'impulsion de "vérifier juste un truc".'],insight:'Les écrans "relaxants" maintiennent un niveau d\'activation qui empêche la vraie récupération.',warn:'La coupure numérique du soir est particulièrement importante : la lumière bleue perturbe la mélatonine et dégrade le sommeil.'}
+   ],
+   conclH:'Votre santé mentale est votre asset le plus précieux.',
+   conclP:'Elle n\'est pas séparable de votre performance professionnelle. Prendre soin de vous n\'est pas du luxe — c\'est de la stratégie.'
+  },
+  {num:'04',title:'TMS & Gestes métiers',color:'#F59E0B',
+   intro:'Ce module vous donne les clés pour prévenir les troubles musculo-squelettiques par des ajustements simples dans vos gestes quotidiens — et comprendre le lien entre stress et douleur physique.',
+   tips:['💡 Astuce santé : Les TMS ne surgissent pas du jour au lendemain — ils s\'installent progressivement, par accumulation de petites tensions non résolues.','🌟 Le saviez-vous ? Le stress chronique aggrave les TMS : le cortisol augmente la tension musculaire et l\'inflammation systémique.'],
+   flashcards:[
+     {tag:'Biologie',t:'Les TMS — comprendre pour prévenir',teaser:'Les troubles musculo-squelettiques touchent 70% des professionnels du retail optique. Comprendre pourquoi est la première étape.',steps:['Les TMS résultent de la combinaison : gestes répétitifs + postures statiques + stress chronique.','L\'opticien cumule souvent les 3 : station debout, gestes de précision répétés, pression client.','La prévention n\'est pas "arrêter de bouger" — c\'est bouger différemment et récupérer activement.'],insight:'Le corps envoie des signaux bien avant la douleur : raideur, chaleur, fourmillements, fatigue localisée. Ces signaux méritent attention.',warn:'Piège : "La douleur est normale dans ce métier." Non — la douleur est un signal, pas une norme professionnelle.'},
+     {tag:'Astuce santé 🌟',t:'La règle du 20-20-20 pour les yeux et le dos',teaser:'Toutes les 20 minutes : 20 secondes pour les yeux, 20 secondes pour le dos. Simple, efficace, cumulatif.',steps:['Yeux : regarder à 6 mètres pendant 20 secondes relâche les muscles ciliaires.','Dos : se redresser, basculer le bassin, relâcher les épaules — 20 secondes.','Épaules : rouler les épaules vers l\'arrière 5 fois dès qu\'on les sent remonter.'],insight:'Ces micro-corrections prennent 20 secondes. Leur impact cumulé sur une journée est considérable.',warn:'L\'objectif n\'est pas la "posture parfaite" — c\'est la variété du mouvement.'},
+     {tag:'Interoception 💡',t:'L\'intelligence du corps que personne ne vous a appris',teaser:'L\'interoception est la capacité à percevoir les signaux internes de votre corps. C\'est une compétence qui s\'entraîne.',steps:['Scanner corporel rapide : fermer les yeux 10 secondes, "balayer" de la tête aux pieds.','Identifier : "Où est-ce que je retiens de la tension ?" (souvent : nuque, épaules, mâchoires)','Relâcher : expiration longue en relâchant consciemment la zone identifiée.'],insight:'Développer l\'interoception, c\'est apprendre à entendre votre corps avant qu\'il n\'élève la voix.',warn:'Ce n\'est pas de la méditation avancée — c\'est 10 secondes de conscience corporelle.'},
+     {tag:'Corps & esprit',t:'Le stress aggrave les TMS — le lien corps-esprit',teaser:'Le stress chronique n\'est pas "dans la tête" — il a des effets mesurables sur les muscles, les tendons et l\'inflammation.',steps:['Le cortisol (stress) augmente la tension musculaire et l\'inflammation systémique.','Un professionnel stressé adopte des postures défensives (épaules remontées, nuque contractée) sans s\'en rendre compte.','Gérer son stress, c\'est aussi prévenir ses TMS — les deux sont biologiquement connectés.'],insight:'C\'est pourquoi ce module vient après Santé mentale : les deux sujets se nourrissent mutuellement.',warn:''}
+   ],
+   scenario:{sit:'Marc est opticien depuis 7 ans. Il ressent depuis 3 mois une douleur dans l\'épaule droite, surtout le soir. Il continue normalement, prend des antidouleurs occasionnellement, et attend que "ça passe". Il n\'en a pas parlé à son manager.',q:'Quel est le principal risque ici ?',opts:['Aucun — les douleurs musculaires sont normales dans ce métier, ça finit par passer.','Marc minimise un signal précoce de TMS. Sans intervention, la douleur risque de s\'aggraver et de mener à une incapacité.','Marc devrait juste changer de poste — le problème vient uniquement de son travail.'],ok:1,
+    fbOk:'Exactement. Une douleur persistante depuis 3 mois n\'est pas un signe que "ça va passer" — c\'est un signal que le corps a besoin d\'aide. Agir tôt peut éviter un arrêt de travail.',fbIns:'Ce module vous donne des outils pour détecter ces signaux tôt et y répondre de façon adaptée.',
+    fbKo:'A banalise ce qui ne doit pas l\'être. C déplace la responsabilité sans solution. La bonne réponse est B : reconnaître et agir sur un signal précoce.',fbInsKo:'La bonne réponse est B — les signaux précoces méritent une attention précoce.'},
+   quiz:[
+     {q:'Les TMS se développent uniquement à cause des gestes répétitifs — le stress n\'y contribue pas.',c:'false',th:'Biologie',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'Le stress chronique augmente le cortisol, qui augmente la tension musculaire et l\'inflammation. Des études montrent que les professionnels sous forte pression psychologique développent 2x plus de TMS que leurs collègues soumis à la même charge physique dans un environnement moins stressant.',nu:'Corps et esprit sont connectés — prévenir les TMS, c\'est aussi gérer son stress.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'Le stress est un facteur de risque documenté des TMS, pas seulement les gestes répétitifs.',nu:'La bonne réponse est Faux.'}},
+     {q:'Se redresser et varier sa posture toutes les 20 minutes suffit à réduire significativement la charge musculaire.',c:'true',th:'Posture',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'La charge musculaire statique (rester immobile dans une posture) est plus épuisante pour les muscles que le mouvement dynamique. Des micro-corrections toutes les 20 minutes préviennent une grande partie des tensions cumulatives.',nu:'L\'objectif n\'est pas la posture parfaite — c\'est la variété du mouvement.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'La recherche en ergonomie valide l\'effet des micro-pauses posturales sur la prévention des TMS.',nu:'La bonne réponse est Vrai.'}},
+     {q:'L\'interoception (percevoir les signaux de son corps) est innée et ne peut pas s\'améliorer.',c:'false',th:'Interoception',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'L\'interoception est une compétence qui s\'entraîne. Des pratiques simples (scanner corporel, respiration consciente) améliorent la capacité à détecter les signaux du corps — et donc à agir avant la douleur.',nu:'10 secondes de conscience corporelle par heure = prévention active des TMS.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'Comme toutes les compétences, l\'interoception s\'apprend et se renforce.',nu:'La bonne réponse est Faux.'}},
+     {q:'Une douleur persistante depuis plus de 4 semaines mérite une consultation, même si elle "n\'est pas grave".',c:'true',th:'Prévention',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'Une douleur qui dure depuis plus de 4 semaines sans amélioration est un signe que le corps ne récupère pas seul. Une consultation précoce permet d\'identifier la cause avant que la situation ne devienne chronique.',nu:'Agir tôt coûte beaucoup moins cher en termes de santé et d\'arrêt de travail.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'La persistance est le signal clé — pas l\'intensité. Une douleur légère mais persistante mérite attention.',nu:'La bonne réponse est Vrai.'}}
+   ],
+   rituels:[
+     {num:'1',tag:'Micro-pause active',t:'Le 20-20-20 — la règle d\'or',teaser:'Toutes les 20 min : 20 secondes pour les yeux, 20 secondes pour le dos.',trigger:'Toutes les 20 minutes',steps:['Yeux : regarder à 6 mètres (fenêtre, fond de salle) pendant 20 sec.','Dos : redressez-vous, rentrez le nombril, relâchez les épaules.','Cou : arc de cercle gauche-avant-droite (jamais arrière complet).'],insight:'20 secondes toutes les 20 minutes préviennent la majorité des tensions cumulatives d\'une journée.',warn:'Programmez un rappel les 3-4 premières semaines — l\'habitude prend du temps à s\'ancrer.'},
+     {num:'2',tag:'Scanner corporel',t:'Le check-in corporel rapide — 30 sec',teaser:'Entendez votre corps avant qu\'il n\'élève la voix.',trigger:'Matin, midi, fin de journée',steps:['Fermez les yeux 10 sec. "Où est la tension en ce moment ?"','Identifiez la zone (nuque, épaules, bas du dos, poignets...).','Expirez lentement en relâchant consciemment cette zone.'],insight:'3 check-ins corporels par jour transforment la prévention en automatisme.',warn:'Si vous trouvez de la tension au même endroit tous les jours depuis plus de 4 semaines : consultez.'}
+   ],
+   conclH:'Votre corps est votre outil de travail — entretenez-le.',
+   conclP:'Prévenir les TMS n\'est pas une question de volonté — c\'est une question de connaissance et d\'habitudes. Vous avez maintenant les deux.'
+  },
+  {num:'05',title:'Hygiène & Sécurité au quotidien',color:'#0891B2',
+   intro:'Ce module vous donne le pouvoir d\'agir avec confiance et autonomie sur des risques invisibles. Pas par peur — par vigilance professionnelle.',
+   tips:['💡 Astuce santé : La vigilance active est plus efficace que la peur — elle génère des rituels durables, pas de l\'anxiété ponctuelle.','🌟 Le saviez-vous ? Vos gestes d\'hygiène visibles renforcent la confiance client et la perception de qualité — c\'est aussi un acte de communication.'],
+   flashcards:[
+     {tag:'Risques biologiques',t:'Les 3 voies de transmission invisibles',teaser:'Trois situations du quotidien, trois risques invisibles, trois gestes simples qui suffisent.',steps:['Contact cutané : monture portée → mains → visage ou yeux sans lavage intermédiaire.','Contact muqueux : se frotter les yeux après manipulation de matériel.','Aérosol : les sprays de nettoyage peuvent atteindre les muqueuses nasales ou oculaires.'],insight:'Ces 3 voies sont toutes évitables avec des gestes simples. Ce module vous les donne.',warn:'Le risque le plus dangereux est celui qu\'on ne perçoit pas. Ce n\'est pas de la paranoïa — c\'est de la vigilance professionnelle.'},
+     {tag:'Santé comportementale',t:'Le biais d\'invisibilité — pourquoi le cerveau minimise',teaser:'Notre cerveau est programmé pour répondre aux menaces visibles. Les risques invisibles sont systématiquement sous-estimés.',steps:['Biais d\'optimisme : "Rien ne s\'est passé jusqu\'ici, donc je suis protégé(e)." C\'est faux.','Effet de normalisation : un geste mal fait 100 fois sans incident est perçu comme "sans risque".','La sortie : des rituels automatiques qui fonctionnent même quand le cerveau ne surveille pas.'],insight:'Ce n\'est pas un problème de volonté — c\'est un mécanisme neurologique universel. Les rituels sont la solution.',warn:''},
+     {tag:'Pratique 🎯',t:'Gel vs lavage des mains — la différence qui compte',teaser:'Le gel hydro-alcoolique ne remplace pas le lavage à l\'eau et au savon — il le complète.',steps:['Gel : efficace contre de nombreux agents bactériens et viraux. Rapide, idéal entre deux clients.','Lavage eau + savon : élimine en plus les spores, certains parasites, les souillures organiques. Obligatoire avant manipulation de lentilles.','Règle d\'or : gel = complément. Lavage = fondation. Les deux ont leur place.'],insight:'Comprendre la différence transforme un geste mécanique en décision professionnelle éclairée.',warn:'Si vous pensez que le gel seul suffit avant de manipuler des lentilles : relisez cette carte.'},
+     {tag:'Esprit d\'équipe 💡',t:'L\'effet miroir — votre hygiène protège toute l\'équipe',teaser:'Vos gestes d\'hygiène influencent inconsciemment vos collègues — dans les deux sens.',steps:['Un geste rigoureux visible renforce la culture d\'hygiène de toute l\'équipe.','Un écart banalisé ("une fois ça passe") normalise progressivement le relâchement.','Le signal bienveillant : "Hé, tu as utilisé une lingette neuve ?" — neutre, sans jugement.'],insight:'La culture d\'hygiène d\'un centre est la somme de chaque geste individuel. Votre participation compte.',warn:''}
+   ],
+   scenario:{sit:'Karim enchaîne les essayages depuis 2 heures. Sous la pression de 4 clients qui attendent, il réutilise une lingette sans y penser. Il ne ressent rien. Et pourtant, la monture précédente contenait des agents biologiques qui viennent d\'être transférés.',q:'Quelle est la lecture comportementale la plus juste ?',opts:['Karim est négligent — après plusieurs années, il devrait automatiquement bien faire.','Karim subit une saturation attentionnelle — sous forte charge, les automatismes se court-circuitent. Ce n\'est pas un défaut de caractère, c\'est un mécanisme humain prévisible.','La situation est acceptable — aucun incident visible ne justifie de s\'alarmer.'],ok:1,
+    fbOk:'Exactement. La saturation attentionnelle n\'est pas de la négligence — c\'est de la neurologie. Ce qui différencie les professionnels les plus fiables est la solidité de leurs automatismes. Ce module vous aide à construire les vôtres.',fbIns:'Mécanisme humain prévisible, solution comportementale concrète : des rituels qui tiennent sous pression.',
+    fbKo:'A confond négligence et saturation attentionnelle. C ignore un risque réel. La bonne réponse B reconnaît le mécanisme et propose une solution.',fbInsKo:'La bonne réponse est B.'},
+   quiz:[
+     {q:'Le gel hydro-alcoolique seul est suffisant avant toute manipulation de lentilles de contact.',c:'false',th:'Hygiène',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'Le lavage à l\'eau et au savon reste irremplaçable avant manipulation de lentilles. Le gel est efficace contre de nombreux agents, mais pas tous — notamment les spores et certains parasites. En matière de contact direct avec la surface oculaire, la tolérance au risque résiduel est nulle.',nu:'Gel = complément. Lavage eau + savon 20 secondes = fondation non négociable.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'Le gel est précieux mais incomplet. Certains agents résistent au gel hydro-alcoolique.',nu:'La bonne réponse est Faux.'}},
+     {q:'Une lingette utilisée sur une monture peut être réutilisée immédiatement pour une autre si elle semble encore humide.',c:'false',th:'Hygiène',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'La charge active d\'une lingette est calibrée pour un usage unique. La réutiliser ne fait pas que la rendre inefficace — elle peut activement transférer les agents biologiques de la première monture vers la seconde. Ce geste devient un vecteur de contamination.',nu:'Une monture = une lingette neuve. Sans exception — c\'est la force de la règle.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'Réutiliser une lingette est pire que de ne pas l\'utiliser — elle transfère ce qu\'elle a capté.',nu:'La bonne réponse est Faux.'}},
+     {q:'Des gestes d\'hygiène visibles renforcent la perception de professionnalisme par les clients.',c:'true',th:'Qualité service',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'Les gestes d\'hygiène visibles augmentent significativement la confiance client et la perception de qualité. Un opticien qui se lave les mains avant de manipuler des lentilles — le client vit ça comme une preuve de soin personnalisé, même implicitement.',nu:'Vos gestes parlent de vous — même en silence. C\'est de la communication professionnelle.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'L\'hygiène visible a une double valeur : sanitaire ET relationnelle.',nu:'La bonne réponse est Vrai.'}},
+     {q:'Signaler à un collègue avec bienveillance qu\'il a oublié un geste d\'hygiène est une ingérence.',c:'false',th:'Esprit d\'équipe',
+      eg:{cl:'ex-g',ic:'✓',lb:'Exact',mn:'Signaler un oubli avec bienveillance est de la solidarité professionnelle active — pas de la surveillance. Dans un espace de travail partagé, un geste omis peut créer une exposition pour plusieurs personnes.',nu:'Un signal donné avec respect renforce la confiance. C\'est ce qui distingue une équipe qui se soutient.'},
+      ei:{cl:'ex-i',ic:'!',lb:'Pas tout à fait',mn:'Le signal bienveillant n\'est pas une critique — c\'est un acte de soutien dans un espace partagé.',nu:'La bonne réponse est Faux.'}}
+   ],
+   rituels:[
+     {num:'1',tag:'Rituel fondateur',t:'Le geste zéro — lavage des mains 20 secondes',teaser:'L\'acte fondateur avant chaque manipulation de lentilles. Simple, irremplaçable.',trigger:'Avant chaque client lentilles',steps:['Eau + savon, paumes, dos, entre les doigts, poignets — 20 secondes minimum.','Rinçage complet — le savon résiduel peut irriter les yeux.','Séchage papier à usage unique.'],insight:'Un client qui voit son opticien se laver les mains le vit comme une preuve de soin — pas une formalité.',warn:'"Je n\'ai pas le temps" = la charge est élevée, pas que le risque a baissé.'},
+     {num:'2',tag:'Clôture',t:'Le nettoyage de fermeture — 2 minutes pour vos collègues',teaser:'Un geste qui protège et dit : "Vous pouvez compter sur moi."',trigger:'Fin de poste',steps:['Plan de travail : lingette neuve, passage complet bords inclus.','Outils partagés : une lingette par outil.','Lavage des mains de clôture — marqueur symbolique de fin de journée.'],insight:'Double valeur : sanitaire (protège votre collègue) et psychologique (aide votre cerveau à "poser" la journée).',warn:'"Je suis pressé(e)" → commencez 5 minutes avant. Ce qui est planifié résiste à la fatigue.'}
+   ],
+   conclH:'Vous venez de compléter votre parcours Physicare.',
+   conclP:'En 5 modules, vous avez développé confiance, autonomie, esprit d\'équipe et outils de santé comportementale durables. Ces compétences vous appartiennent maintenant.'
+  }
+];
+
+/* ══ ANON DATA ══ */
+var anonData=[
+  {code:'OC-001',profile:'vigilance',isc:3.98,reg:3.5,sec:4.8,mod:'M02',prog:85,score:4,color:'#7C3AED',metier:'Directeur régional',
+   drain:'Le volume de sujets techniques et complexes à traiter en simultané. La sensation d\'être constamment testé sur tout, y compris sur des sujets stratégiques en cours de construction.',
+   boost:'L\'accomplissement de tâches finales avec un impact business concret et visible. Le retour positif sur le travail accompli, les petites victoires du quotidien.',
+   open:'Les sujets stratégiques en cours, les décisions importantes à prendre. La liste de mails non lus qui s\'accumule pendant les réunions. Les sujets où je me sens évalué.',
+   success:'Sensation de prise de hauteur plus rapide, meilleure priorisation des sujets, mental plus stable en dehors du boulot, sommeil moins agité le dimanche soir.'},
+  {code:'OC-002',profile:'equilibre',isc:2.65,reg:1.75,sec:4.2,mod:'M05',prog:100,score:3,color:'#DB2777',metier:'Responsable RH',
+   drain:'Sollicitations sur des sujets très différents simultanément — je jongle avec plusieurs casquettes sans pouvoir aller au fond de rien. Sentiment de ne jamais vraiment terminer quoi que ce soit.',
+   boost:'Une vraie sieste. Un moment de détente authentique en famille, sans rien à gérer. Travailler en Work From Home, sans interruptions et avec mes propres rituels.',
+   open:'Après 19h30-20h je décroche totalement. Mais jusqu\'à là : l\'avancée des onboardings en cours, l\'actualité du marché optique, les décisions en attente.',
+   success:'Gain de temps réel sur les tâches récurrentes, meilleure priorisation au quotidien, sérénité renforcée dans l\'équipe, sentiment clair que chacun sait qui fait quoi et dans quel ordre.'},
+  {code:'OC-003',profile:'resilient',isc:2.38,reg:3.75,sec:3.8,mod:'M04',prog:100,score:4,color:'#059669',metier:'Opticien(ne) référent(e)',
+   drain:'Devoir imposer mes idées et ma vision à des personnes qui ne sont pas encore prêtes à les entendre. L\'énergie que ça demande quand les gens ne sont pas dans le même état d\'esprit.',
+   boost:'Sortir prendre un verre le soir avec des gens qui m\'intéressent vraiment. Déconnecter complètement, changer d\'environnement, ne penser à rien de professionnel.',
+   open:'Franchement, aucun sujet en particulier — j\'arrive assez bien à faire le switch entre pro et perso en ce moment. C\'est une période équilibrée.',
+   success:'Le fait même que je repense à ces questions après les avoir posées dans le questionnaire. Ça déclenche déjà une réflexion utile — c\'est en soi un indicateur de succès.'},
+  {code:'OC-004',profile:'equilibre',isc:3.18,reg:2.25,sec:3.0,mod:'M03',prog:67,score:2,color:'#D97706',metier:'Opticien(ne) conseil',
+   drain:'La dispersion — devoir répondre à tout le monde en même temps sans pouvoir aller au fond de quoi que ce soit. Sentiment de zapping permanent et de manque de profondeur.',
+   boost:'Les tâches terminées qui donnent des résultats concrets et visibles. Voir quelque chose aboutir après un effort soutenu. Les petites victoires avec un impact réel.',
+   open:'Les tâches non terminées qui traînent trop longtemps. La rédaction de certains livrables. Les priorités des tickets qui restent floues et mal définies.',
+   success:'Avoir des outils pratiques et actionnables pour gérer les situations qui me dépassent. Une meilleure organisation du quotidien, moins de dispersion, plus de focus.'},
+  {code:'OC-005',profile:'surcharge',isc:3.48,reg:2.0,sec:1.4,mod:'M02',prog:14,score:null,color:'#4F46E5',metier:'Responsable de centre',
+   drain:'Le management et les to-do lists interminables. La sensation permanente de ne jamais être vraiment à jour, de toujours avoir un retard que je ne rattrape pas.',
+   boost:'Le sport, la marche, la musique. Les petites victoires du quotidien, personnelles ou professionnelles. Les moments où je vois que quelque chose avance vraiment.',
+   open:'Le Business Plan, l\'optimisation de la marge, l\'administratif. Les orientations futures de l\'équipe. Beaucoup de sujets ouverts en même temps, difficile de tout poser.',
+   success:'N/A — cette section n\'a pas été remplie lors de la session.'},
+  {code:'OC-006',profile:'vigilance',isc:3.78,reg:3.75,sec:2.8,mod:'M01',prog:100,score:3,color:'#0891B2',metier:'Commercial terrain',
+   drain:'Le sales front et la pression commerciale permanente. Devoir gérer simultanément les attentes clients, les objectifs et l\'image de l\'enseigne.',
+   boost:'Un client gagné, vraiment. Cette sensation d\'avoir fait la différence pour quelqu\'un, d\'avoir apporté une vraie valeur et de l\'avoir vu reconnu.',
+   open:'Le prochain rendez-vous de demain. La météo du lendemain qui impacte le trafic. L\'état d\'esprit de mon binôme opérationnel.',
+   success:'C\'est déjà partiellement le cas car on a verbalisé certaines choses ensemble. Je voudrais que cette dynamique continue et s\'approfondie.'},
+  {code:'OC-007',profile:'vigilance',isc:4.03,reg:3.75,sec:4.2,mod:'M03',prog:43,score:null,color:'#9D174D',metier:'Manager de proximité',
+   drain:'Voir des collaborateurs passifs et non productifs alors que l\'équipe a besoin de tout le monde. Les erreurs humaines répétées. Le manque de team spirit dans les moments difficiles.',
+   boost:'Un client gagné. Le bon humour collectif qui fait que la journée passe différemment. La transversalité et le côté humain des échanges quand ça se passe bien.',
+   open:'La performance de mes équipes. La satisfaction client dans la durée. Mon binôme opérationnel et comment on avance ensemble.',
+   success:'Avoir des outils concrets pour gérer les situations qui génèrent de la frustration — sans la retourner contre l\'équipe ni l\'accumuler jusqu\'à l\'explosion.'}
+];
+var pfL={vigilance:{l:'Vigilance',cls:'pt-v'},equilibre:{l:'Équilibre fragile',cls:'pt-e'},resilient:{l:'Résilient',cls:'pt-r'},surcharge:{l:'Surcharge critique',cls:'pt-s'}};
+
+/* ══ STATE ══ */
+var ans={},curDim=0,uName='',uRole='',uCenter='',curMod=0,curSeq=0,xp=0,qAns={},qScore=0;
+var avBubUp=false;
+
+/* ══ MSGS AVATAR ══ */
+var avMsg={
+  s0:['Bonjour ! Prêt(e) à démarrer votre parcours ?','Bienvenue ! Je suis là pour vous accompagner à chaque étape. 😊'],
+  s1:['Répondez spontanément — votre première impression est toujours la plus juste !','Prenez votre temps, chaque réponse compte.'],
+  s2:['Votre profil est prêt ! C\'est un point de départ, pas un jugement.','Super travail ! Découvrez maintenant votre parcours personnalisé.'],
+  intro:['Super, un nouveau module ! On y va ensemble 💪','Ce module va vous donner des outils vraiment utiles.'],
+  flash:['Retournez les cartes — les mécanismes détaillés sont au dos !','Cliquez pour retourner. Le vrai contenu est de l\'autre côté !'],
+  scenario:['Observez bien la situation — vous y reconnaîtrez peut-être quelque chose de votre quotidien.','Quelle est la lecture la plus juste ? Faites confiance à votre instinct !'],
+  quiz:['Quiz ! Faites confiance à ce que vous venez d\'apprendre 🎯','Même si vous vous trompez, l\'explication vous apprendra quelque chose d\'important.'],
+  rituels:['Retournez les cartes pour voir le détail de chaque rituel !','Un déclencheur précis = un ancrage durable. Quel est le vôtre ?'],
+  eval:['Votre avis améliore le programme pour tout le monde. Merci !','2 minutes pour un retour qui compte vraiment. Je vous lis ! 😊'],
+  ok:['Bonne réponse ! Vous avez bien intégré ce concept 🎉','Exactement ! Ce point est clé — gardez-le en tête.','Super ! Vous progressez vraiment bien.'],
+  ko:['Pas tout à fait — mais l\'explication va vous éclairer !','L\'explication contient une nuance importante. Lisez-la bien.'],
+  done:['Module complété ! Bravo, vous gagnez de l\'XP ! ⚡','Excellent travail ! On passe au module suivant ?'],
+  allDone:['PARCOURS TERMINÉ ! Extraordinaire ! Félicitations ! 🏆🎉']
+};
+function getMsg(k){var a=avMsg[k];return a?a[Math.floor(Math.random()*a.length)]:'Bravo !';}
+
+/* ══ AVATAR ══ */
+function showBub(txt,dur){
+  var b=document.getElementById('avbub');b.textContent=txt;b.classList.remove('show');void b.offsetWidth;b.classList.add('show');avBubUp=true;
+  clearTimeout(window._avT);window._avT=setTimeout(function(){b.classList.remove('show');avBubUp=false;},(dur||5500));
+}
+function avClick(){if(avBubUp){document.getElementById('avbub').classList.remove('show');avBubUp=false;clearTimeout(window._avT);}else showBub('Cliquez sur moi pour un conseil ! 😊',4000);}
+function setFace(t){
+  var m=document.getElementById('avmouth');
+  var cl=document.getElementById('avckL'),cr=document.getElementById('avckR');
+  var av=document.getElementById('avsvg');
+  av.classList.remove('happy','sad','wow');
+  if(t==='happy'){m.setAttribute('d','M32.5 39 Q40 46 47.5 39');cl.setAttribute('opacity','0.7');cr.setAttribute('opacity','0.7');av.classList.add('happy');setTimeout(function(){av.classList.remove('happy');},560);}
+  else if(t==='sad'){m.setAttribute('d','M33 43 Q40 38 47 43');cl.setAttribute('opacity','0.12');cr.setAttribute('opacity','0.12');av.classList.add('sad');setTimeout(function(){av.classList.remove('sad');},560);}
+  else if(t==='wow'){m.setAttribute('d','M32 38 Q40 47 48 38');cl.setAttribute('opacity','0.9');cr.setAttribute('opacity','0.9');av.classList.add('wow');setTimeout(function(){av.classList.remove('wow');},700);}
+  else{m.setAttribute('d','M33.5 40 Q40 46 46.5 40');cl.setAttribute('opacity','0.38');cr.setAttribute('opacity','0.38');}
+}
+function avSay(k,face){setFace(face||'happy');showBub(getMsg(k));}
+
+/* ══ IDENTITY ══ */
+function chkId(){var ok=fv('fFirst')&&fv('fLast')&&fv('fRole');document.getElementById('btnStart').disabled=!ok;}
+function fv(id){return document.getElementById(id).value.trim();}
+
+/* ══ QUESTIONNAIRE ══ */
+function startQ(){
+  uName=fv('fFirst')+' '+fv('fLast');uRole=fv('fRole');uCenter=fv('fCenter');
+  document.getElementById('tuser').textContent=uName;
+  document.getElementById('tpill').textContent='Diagnostic T0';
+  curDim=0;go('s1');renderDim(0);avSay('s1');
+}
+function renderDim(i){
+  var d=dims[i];
+  var off=dims.slice(0,i).reduce(function(s,x){return s+x.qs.length;},0);
+  document.getElementById('qPF').style.width=Math.round((off/33)*100)+'%';
+  document.getElementById('qPL').textContent='Dim '+(i+1)+'/7 · Q'+(off+1)+'–'+(off+d.qs.length)+' sur 33';
+  var pills=dims.map(function(dd,j){
+    var done=dimDone(j),act=j===i;
+    var bg=done?dd.c:act?dd.c:'#E5E7EB';
+    var col=done||act?'#fff':'#9CA3AF';
+    return '<span class="dp" style="background:'+bg+';border-color:'+bg+';color:'+col+';">'+dd.id+(done?' ✓':act?' ●':'')+'</span>';
+  }).join('');
+  document.getElementById('qPills').innerHTML=pills;
+  document.getElementById('dimH').innerHTML='<div class="dh"><div class="dic" style="background:'+d.bg+';border-color:'+d.bd+';">'+d.icon+'</div><div><div class="dname">'+d.name+'</div><div class="dvulga">'+d.vulga+'</div><div class="dref">Réf : '+d.ref+'</div></div></div>';
+  var html=d.qs.map(function(q,qi){
+    var qid=d.id+'_'+qi;var cur=ans[qid]||null;
+    return '<div class="qc'+(cur?' answered':'')+'" id="qc_'+qid+'">'+
+      '<div class="qnum">Question '+(off+qi+1)+' / 33</div>'+
+      '<div class="qtxt">'+q+'</div>'+
+      '<div class="qv">'+d.vg[qi]+'</div>'+
+      '<div class="lik"><span class="ll">Pas du tout</span>'+
+        '<div class="lbtns">'+[1,2,3,4,5].map(function(v){
+          return '<button class="lb'+(cur===v?' sel':'')+'" onclick="doAns(\''+qid+'\','+v+',this)">'+v+'</button>';
+        }).join('')+'</div>'+
+        '<span class="ll" style="text-align:left;">Tout à fait</span></div>'+
+      '<div class="slbl"><span>Jamais</span><span>Rarement</span><span>Parfois</span><span>Souvent</span><span>Toujours</span></div>'+
+    '</div>';
+  }).join('');
+  document.getElementById('qCont').innerHTML=html;
+  document.getElementById('bPrev').style.visibility=i===0?'hidden':'visible';
+  updN();window.scrollTo(0,0);
+}
+function doAns(qid,val,btn){
+  ans[qid]=val;document.getElementById('qc_'+qid).classList.add('answered');
+  document.getElementById('qc_'+qid).querySelectorAll('.lb').forEach(function(b){b.classList.remove('sel');});btn.classList.add('sel');
+  updN();setFace('happy');
+}
+function dimDone(i){return dims[i].qs.every(function(q,qi){return ans[dims[i].id+'_'+qi]!==undefined;});}
+function updN(){var btn=document.getElementById('bNext');var ok=dimDone(curDim);btn.disabled=!ok;btn.textContent=curDim===6?(ok?'Voir mon profil →':'Répondez à toutes les questions'):'Continuer →';}
+function nextD(){if(!dimDone(curDim))return;if(curDim<6){curDim++;renderDim(curDim);}else{computeProfile();}}
+function prevD(){if(curDim>0){curDim--;renderDim(curDim);}else{go('s0');}}
+
+/* ══ PROFILE ══ */
+function computeProfile(){
+  var sc={};dims.forEach(function(d){sc[d.id]=d.qs.map(function(q,i){return ans[d.id+'_'+i]||3;}).reduce(function(s,v){return s+v;},0)/d.qs.length;});
+  var isc=((sc.A*1.2)+(sc.B*0.8))/2;
+  var res=(sc.C+sc.D+sc.E)/3;var ch=(sc.A+sc.B)/2;var resil=ch>0?res/ch:1;
+  var pid=isc>=3.8||resil<0.8?'surcharge':isc>=3.2||resil<1.0?'vigilance':'resilient';
+  sendToSheet(sc,isc,resil,pid);
+  renderProfile(pid,sc,isc,resil);go('s2');avSay('s2','wow');
+}
+
+/* ══ SUPABASE — couche d'accès données ══ */
+var sbReady = SB_URL !== 'VOTRE_SUPABASE_URL' && SB_KEY !== 'VOTRE_ANON_KEY' && SB_URL !== '' && SB_KEY !== '';
+
+function sbHeaders(){
+  return {
+    'Content-Type':'application/json',
+    'apikey': SB_KEY,
+    'Authorization': 'Bearer ' + SB_KEY,
+    'Prefer': 'return=minimal'
+  };
+}
+
+function generateCode(){
+  var now=new Date();
+  return 'OC-'+String(now.getFullYear()).slice(-2)+
+    String(now.getMonth()+1).padStart(2,'0')+
+    String(now.getDate()).padStart(2,'0')+'-'+
+    String(Math.floor(Math.random()*9000)+1000);
+}
+
+/* ── ÉCRITURE : envoyer une réponse T0 vers Supabase ── */
+function sendToSheet(sc,isc,resil,pid){
+  if(!sbReady){
+    console.log('[Physicare] Supabase non configuré — mode démo');
+    addToDemoData(sc,isc,resil,pid);
+    return;
+  }
+  var code=generateCode();
+  var row={
+    code:        code,
+    client_slug: CLIENT_SLUG,
+    prenom:      fv('fFirst'),
+    nom:         fv('fLast'),
+    poste:       fv('fRole'),
+    centre:      fv('fCenter')||'',
+    score_a:     parseFloat(sc.A.toFixed(2)),
+    score_b:     parseFloat(sc.B.toFixed(2)),
+    score_c:     parseFloat(sc.C.toFixed(2)),
+    score_d:     parseFloat(sc.D.toFixed(2)),
+    score_e:     parseFloat(sc.E.toFixed(2)),
+    score_f:     parseFloat(sc.F.toFixed(2)),
+    score_g:     parseFloat(sc.G.toFixed(2)),
+    isc:         parseFloat(isc.toFixed(2)),
+    resilience:  parseFloat(resil.toFixed(2)),
+    profil:      pid,
+    created_at:  new Date().toISOString()
+  };
+  fetch(SB_URL+'/rest/v1/diagnostics', {
+    method:'POST',
+    headers:sbHeaders(),
+    body:JSON.stringify(row)
+  })
+  .then(function(r){
+    if(r.ok||r.status===201){
+      console.log('[Physicare] ✅ Réponse enregistrée en base — code:',code);
+      showBub('Profil transmis à votre manager. Code : '+code+' 🔒',6000);
+    } else {
+      return r.text().then(function(t){throw new Error(t);});
+    }
+  })
+  .catch(function(err){
+    console.warn('[Physicare] ⚠ Supabase write échoué :',err);
+    addToDemoData(sc,isc,resil,pid);
+  });
+}
+
+/* Mode démo local (fallback si Supabase non configuré) */
+function addToDemoData(sc,isc,resil,pid){
+  var colors=['#7C3AED','#DB2777','#059669','#D97706','#4F46E5','#0891B2','#9D174D','#6D28D9','#B45309'];
+  anonData.push({
+    code:generateCode(),profile:pid,
+    isc:parseFloat(isc.toFixed(2)),
+    reg:parseFloat(sc.C.toFixed(2)),
+    sec:parseFloat(sc.E.toFixed(2)),
+    mod:'M01',prog:0,score:null,
+    color:colors[anonData.length%colors.length],
+    metier:fv('fRole')||'Non renseigné',
+    drain:'Réponse récente.',boost:'—',open:'—',success:'—'
+  });
+}
+function renderProfile(pid,sc,isc,resil){
+  var defs={
+    surcharge:{name:'Profil Surcharge Critique',badge:'SURCHARGE CRITIQUE',grad:'linear-gradient(135deg,#7F1D1D,#DC2626)',
+      desc:'Votre indice de surcharge cognitive est élevé et votre capacité de récupération est inférieure à la charge actuelle. Des ajustements comportementaux sont recommandés en priorité.',
+      ins:{cls:'ko',t:'Votre indice de résilience est sous 1,0 — le système consomme plus qu\'il ne récupère. Commencez par les modules 02 (Charge mentale) et 03 (Santé mentale) en priorité.'},
+      mods:[{n:'02',t:'Charge mentale & Relation client',r:'ISC élevé — régulation urgente',p:'p'},{n:'03',t:'Santé mentale & Bien-être',r:'Épuisement corrélé',p:'p'},{n:'01',t:'Responsabilité & Culture sécurité',r:'Ancrage collectif',p:'h'},{n:'04',t:'TMS & Gestes métiers',r:'Parcours standard',p:'s'},{n:'05',t:'Hygiène & Sécurité',r:'Parcours standard',p:'s'}]},
+    vigilance:{name:'Profil Vigilance',badge:'ZONE DE VIGILANCE',grad:'linear-gradient(135deg,#78350F,#D97706)',
+      desc:'Vous êtes dans une zone de tension modérée. Votre charge est perceptible, certains modules sont prioritaires. Le parcours complet vous aidera à renforcer vos ressources.',
+      ins:{cls:'wn',t:'Votre indice de résilience est proche du seuil 1,0. Les modules de régulation renforcent durablement votre équilibre.'},
+      mods:[{n:'02',t:'Charge mentale & Relation client',r:'Score charge élevé — prioritaire',p:'p'},{n:'03',t:'Santé mentale & Bien-être',r:'Recommandé',p:'h'},{n:'01',t:'Responsabilité & Culture sécurité',r:'Ancrage comportemental',p:'h'},{n:'04',t:'TMS & Gestes métiers',r:'Standard',p:'s'},{n:'05',t:'Hygiène & Sécurité',r:'Standard',p:'s'}]},
+    resilient:{name:'Profil Résilient',badge:'RÉSILIENT',grad:'linear-gradient(135deg,#065F46,#059669)',
+      desc:'Votre équilibre charge/ressources est satisfaisant. Vous disposez de bonnes capacités de régulation. Le parcours standard vous permettra de consolider et d\'approfondir.',
+      ins:{cls:'ok',t:'Votre indice de résilience est au-dessus de 1,0. Votre profil vous positionne potentiellement comme pair-formateur.'},
+      mods:[{n:'01',t:'Responsabilité & Culture sécurité',r:'Profil solide — rôle référent possible',p:'s'},{n:'02',t:'Charge mentale & Relation client',r:'Standard',p:'s'},{n:'03',t:'Santé mentale & Bien-être',r:'Standard',p:'s'},{n:'04',t:'TMS & Gestes métiers',r:'Standard',p:'s'},{n:'05',t:'Hygiène & Sécurité',r:'Standard',p:'s'}]}
+  };
+  var p=defs[pid];
+  var iC=isc>=3.8?'#DC2626':isc>=3.2?'#D97706':'#059669';
+  var rC=resil<0.8?'#DC2626':resil<1.0?'#D97706':'#059669';
+  document.getElementById('phHero').innerHTML='<div class="ph-hero" style="background:'+p.grad+';"><div class="ph-badge">'+p.badge+'</div><div class="ph-name">'+uName+' — '+p.name+'</div><div class="ph-desc">'+p.desc+'</div></div>';
+  document.getElementById('stks').innerHTML=['🎯 Diagnostic','📊 Profil','🧠 Prêt(e)'].map(function(s,i){return '<div class="sk on"><span class="sk-ic">'+s.split(' ')[0]+'</span><span class="sk-l">'+s.split(' ')[1]+'</span></div>';}).join('');
+  document.getElementById('phKpi').innerHTML='<div class="kpi2"><div class="kbox"><div class="klbl">ISC — Surcharge cognitive</div><div class="kval" style="color:'+iC+';">'+isc.toFixed(2)+'</div><div class="ksub">/ 5,00 · seuil : 3,5</div><div class="kbart"><div class="kbarf" style="width:'+(isc/5*100)+'%;background:'+iC+';border-radius:999px;transition:width 1.2s ease;"></div></div></div><div class="kbox"><div class="klbl">Indice de résilience</div><div class="kval" style="color:'+rC+';">'+resil.toFixed(2)+'</div><div class="ksub">cible &gt; 1,0</div><div class="kbart"><div class="kbarf" style="width:'+(Math.min(resil/2,1)*100)+'%;background:'+rC+';border-radius:999px;transition:width 1.2s ease;"></div></div></div></div>';
+  var dN={A:'Gestion de la pression',B:'Fatigue émotionnelle',C:'Régulation',D:'Clarté & reconnaissance',E:'Confiance équipe',F:'Comportement pression',G:'Impact efficacité'};
+  var dC={A:'#EF4444',B:'#F59E0B',C:'#10B981',D:'#6366F1',E:'#0891B2',F:'#9B4DCA',G:'#E11D48'};
+  document.getElementById('phBars').innerHTML=Object.keys(dN).map(function(k){return '<div class="dbr"><div class="dbd" style="background:'+dC[k]+';"></div><div class="dbn">'+dN[k]+'</div><div class="dbtr"><div class="dbfi" style="width:'+(sc[k]/5*100)+'%;background:'+dC[k]+';transition:width 1s ease;"></div></div><div class="dbv">'+sc[k].toFixed(1)+'</div></div>';}).join('');
+  var crit=[],supp=[];
+  if(sc.A>=3.5)crit.push('Charge mentale élevée ('+sc.A.toFixed(1)+'/5)');
+  if(sc.B>=3.5)crit.push('Fatigue émotionnelle perçue ('+sc.B.toFixed(1)+'/5)');
+  if(sc.C<2.5)crit.push('Faible capacité de régulation');if(sc.E<2.5)crit.push('Sécurité psychologique fragile');
+  if(!crit.length)crit.push('Aucun point critique identifié');
+  if(sc.C>=3.5)supp.push('Bonne capacité de régulation ('+sc.C.toFixed(1)+'/5)');
+  if(sc.E>=3.5)supp.push('Sécurité psychologique solide');if(sc.D>=3.5)supp.push('Clarté & reconnaissance satisfaisantes');
+  if(!supp.length)supp.push('En cours de consolidation');
+  document.getElementById('phSig').innerHTML='<div class="sig2 mb"><div class="sigc" style="background:var(--kob);border-color:var(--kob2);"><div class="sigl" style="color:var(--kot);">Points à renforcer</div>'+crit.map(function(s){return '<div class="sigi" style="color:var(--kot);">→ '+s+'</div>';}).join('')+'</div><div class="sigc" style="background:var(--okb);border-color:var(--okb2);"><div class="sigl" style="color:var(--okt);">Vos points d\'appui</div>'+supp.map(function(s){return '<div class="sigi" style="color:var(--okt);">✓ '+s+'</div>';}).join('')+'</div></div>';
+  document.getElementById('phIns').innerHTML='<div class="ins '+p.ins.cls+'">'+p.ins.t+'</div>';
+  var labels={p:{cls:'p',txt:'URGENT'},h:{cls:'h',txt:'PRIORITAIRE'},s:{cls:'s',txt:'STANDARD'}};
+  document.getElementById('phRecs').innerHTML='<div class="card mb"><div style="font-size:14px;font-weight:800;color:var(--g9);margin-bottom:4px;">Votre parcours personnalisé</div><div style="font-size:12px;color:var(--g5);margin-bottom:14px;font-weight:600;">Ordre recommandé · Tous les modules sont obligatoires</div>'+p.mods.map(function(m){var lb=labels[m.p];return '<div class="mi '+lb.cls+'"><div class="min '+lb.cls+'">'+m.n+'</div><div style="flex:1;"><div class="mi-tt">Module '+m.n+' — '+m.t+'</div><div class="mi-rs">'+m.r+'</div></div><span style="font-size:10px;font-weight:800;padding:3px 9px;border-radius:999px;background:'+(m.p==='p'?'var(--kob)':m.p==='h'?'var(--wnb)':'var(--pb2)')+';color:'+(m.p==='p'?'var(--kot)':m.p==='h'?'var(--wnt)':'var(--pd)')+';border:2px solid '+(m.p==='p'?'var(--kob2)':m.p==='h'?'var(--wnb2)':'var(--pll)')+';">'+lb.txt+'</span></div>';}).join('')+'</div>';
+  document.getElementById('phCta').innerHTML='<div class="cta"><div class="cta-t">Votre profil est prêt !</div><div class="cta-s">Résultats transmis à l\'équipe Physicare (anonymisés pour votre manager).<br>Démarrez maintenant votre parcours de formation.</div><button class="btn-w" onclick="startMods()">Démarrer mes formations →</button></div>';
+}
+
+/* ══ MODULES ══ */
+function startMods(){curMod=0;curSeq=0;xp=0;qAns={};qScore=0;document.getElementById('tpill').textContent='Formation';loadSeq();go('sMod');}
+function seqs(){return ['intro','flash','scenario','quiz','rituels','eval','concl'];}
+function loadSeq(){
+  var m=MOD[curMod];var sq=seqs();
+  setXP(xp);
+  var steps=sq.map(function(s,i){return '<div class="ms '+(i<curSeq?'done':i===curSeq?'active':'todo')+'"></div>';}).join('');
+  var html='<div class="mh"><div class="mbadge">Module '+m.num+' / 05</div><h1>'+m.title+'</h1><p>'+m.intro+'</p></div>';
+  html+='<div class="msteps">'+steps+'</div>';
+  var s=sq[curSeq];
+  if(s==='intro')html+=buildIntro(m);
+  else if(s==='flash')html+=buildFlash(m);
+  else if(s==='scenario')html+=buildSc(m);
+  else if(s==='quiz')html+=buildQuiz(m);
+  else if(s==='rituels')html+=buildRituels(m);
+  else if(s==='eval')html+=buildEval(m);
+  else if(s==='concl')html+=buildConcl(m);
+  document.getElementById('modC').innerHTML=html;
+  initFlips();
+  var isLast=curMod===MOD.length-1&&curSeq===sq.length-1;
+  document.getElementById('mBN').textContent=isLast?'Terminer ✓':curSeq===sq.length-1?'Module suivant →':'Continuer →';
+  document.getElementById('mBP').style.visibility=(curMod===0&&curSeq===0)?'hidden':'visible';
+  avSay(s);
+  window.scrollTo(0,0);
+}
+
+function buildIntro(m){
+  return '<div class="card mb">'+
+    '<div style="font-size:16px;font-weight:900;color:var(--g9);margin-bottom:13px;letter-spacing:-.2px;">'+m.intro+'</div>'+
+    m.tips.map(function(t){return '<div class="tip"><span class="tip-ic">'+t.split(' ')[0]+'</span><div class="tip-txt">'+t.split(' ').slice(1).join(' ')+'</div></div>';}).join('')+
+    '<div class="g3" style="margin-top:14px;">'+
+    [['🎯','Confiance','Comprendre les mécanismes réels'],['⚡','Autonomie','Détecter ses propres dérives'],['🤝','Équipe','Contribuer au bouclier collectif']].map(function(c,i){
+      return '<div style="background:var(--pb2);border:2px solid var(--pll);border-radius:var(--r);padding:13px;text-align:center;"><div style="font-size:22px;margin-bottom:5px;">'+c[0]+'</div><div style="font-size:12px;font-weight:800;color:var(--pu);margin-bottom:3px;">'+c[1]+'</div><div style="font-size:11px;color:var(--g5);font-weight:600;">'+c[2]+'</div></div>';
+    }).join('')+'</div></div>';
+}
+
+function buildFlash(m){
+  var h='<div class="flip-hint">💡 Cliquez sur chaque carte pour révéler le contenu complet</div>';
+  h+=m.flashcards.map(function(fc,i){
+    var pid=curMod+'_'+i;
+    var bc=
+      '<div class="sbox"><div class="sttl">Mécanisme détaillé</div>'+
+      fc.steps.map(function(s,si){return '<div class="sr"><div class="sn">'+(si+1)+'</div><div class="st">'+s+'</div></div>';}).join('')+
+      '</div>'+
+      (fc.insight?'<div class="idm"><div class="idm-l">À retenir</div><div class="idm-t">'+fc.insight+'</div></div>':'')+
+      (fc.warn?'<div class="wrnm"><div class="wrnm-l">Vigilance</div><div class="wrnm-t">'+fc.warn+'</div></div>':'');
+    return '<div class="fc-wrap"><div class="fc-card" id="fc_'+pid+'" onclick="flipCard(\''+pid+'\')">'+
+      '<div class="fc-front">'+
+        '<div class="fc-top"><div class="fc-num">'+(i+1)+'</div>'+
+        '<div style="flex:1;"><div class="fc-tag">'+fc.tag+'</div><div class="fc-title">'+fc.t+'</div><div class="fc-teaser">'+fc.teaser+'</div></div></div>'+
+        '<div class="fc-cta">↩ Cliquez pour le mécanisme complet</div>'+
+      '</div>'+
+      '<div class="fc-back">'+
+        '<div class="fc-back-head">'+
+          '<div style="display:flex;align-items:center;gap:9px;"><div class="fc-num">'+(i+1)+'</div>'+
+          '<span style="font-size:10px;font-weight:800;color:var(--pu);text-transform:uppercase;">'+fc.tag+'</span></div>'+
+          '<span style="font-size:11px;background:var(--pb);color:var(--pu);padding:3px 10px;border-radius:999px;font-weight:800;">Retourné ✓</span>'+
+        '</div>'+
+        '<div class="fc-back-body">'+bc+'</div>'+
+        '<div class="fc-cta" style="border-top:2px solid var(--pll);background:#fff;color:var(--g5);">↩ Cliquez pour refermer</div>'+
+      '</div></div></div>';
+  }).join('');
+  return h;
+}
+
+function flipCard(pid){
+  var card=document.getElementById('fc_'+pid);
+  if(!card)return;
+  card.classList.toggle('open');
+  addXP(5);setFace('happy');
+}
+
+function initFlips(){
+  // Nothing needed — height is fully automatic (normal flow)
+}
+
+function buildSc(m){
+  var sc=m.scenario;
+  return '<div class="card mb"><div style="font-size:15px;font-weight:800;color:var(--g9);margin-bottom:13px;">Scénario terrain</div>'+
+    '<div class="sc-sit"><span class="sc-lbl">Situation</span><div class="sc-txt">'+sc.sit+'</div></div>'+
+    '<div style="font-size:14px;font-weight:800;color:var(--g9);margin:13px 0 11px;">'+sc.q+'</div>'+
+    '<div id="scChoices">'+sc.opts.map(function(opt,i){return '<button class="sc-btn" onclick="scAns('+i+')"><span class="sc-l">'+['A','B','C'][i]+'</span>'+opt+'</button>';}).join('')+'</div>'+
+    '<div id="scFb"></div></div>';
+}
+function scAns(idx){
+  var sc=MOD[curMod].scenario;
+  document.querySelectorAll('.sc-btn').forEach(function(b){b.disabled=true;b.style.cursor='default';});
+  var isOk=idx===sc.ok;
+  var btns=document.querySelectorAll('.sc-btn');
+  btns[idx].classList.add(isOk?'ok':'ko');
+  if(!isOk)btns[sc.ok].classList.add('rv');
+  var fb=document.getElementById('scFb');
+  fb.className='sc-fb show '+(isOk?'fb-g':'fb-b');
+  fb.innerHTML='<div class="fbh"><div class="fbic">'+(isOk?'✓':'×')+'</div><div class="fbl">'+(isOk?'Bonne analyse !':'Pas tout à fait')+'</div></div><div class="fbb"><div class="fbt">'+(isOk?sc.fbOk:sc.fbKo)+'</div><div class="fbi">'+(isOk?sc.fbIns:sc.fbInsKo)+'</div></div>';
+  if(isOk){setFace('wow');avSay('ok');addXP(10);}else{setFace('sad');avSay('ko');}
+}
+
+function buildQuiz(m){
+  qAns={};qScore=0;
+  return '<div style="font-size:14px;font-weight:800;color:var(--g9);margin-bottom:4px;">Quiz — Vrai ou Faux ?</div>'+
+    '<div style="font-size:12px;color:var(--g5);margin-bottom:16px;font-weight:600;">'+m.quiz.length+' questions · Chaque explication va au-delà de la règle.</div>'+
+    m.quiz.map(function(q,i){
+      return '<div class="qzc" id="qzc'+i+'"><div class="qzh"><div class="qzct">Question '+(i+1)+' / '+m.quiz.length+'</div><div class="qzth">'+q.th+'</div></div><div class="qzb"><div class="qzq">'+q.q+'</div><div class="vfr" id="vfr'+i+'"><button class="vfb" data-a="false" onclick="qzAns(\'false\',this,'+i+')"><div class="vfin">F</div>Faux</button><button class="vfb" data-a="true" onclick="qzAns(\'true\',this,'+i+')"><div class="vfin">V</div>Vrai</button></div><div class="qze" id="qze'+i+'"></div></div></div>';
+    }).join('')+'<div id="qzScore" style="display:none;"></div>';
+}
+function qzAns(val,btn,idx){
+  var q=MOD[curMod].quiz[idx];
+  if(qAns['q'+idx]!==undefined)return;
+  qAns['q'+idx]=val;
+  var isOk=val===q.c;if(isOk){qScore++;addXP(15);}
+  var all=document.getElementById('vfr'+idx).querySelectorAll('.vfb');
+  all.forEach(function(b){b.disabled=true;b.style.cursor='default';});
+  btn.classList.add(isOk?'ok':'ko');
+  if(!isOk)all.forEach(function(b){if(b.getAttribute('data-a')===q.c)b.classList.add('rv');});
+  var ed=isOk?q.eg:q.ei;
+  var exp=document.getElementById('qze'+idx);
+  exp.className='qze show '+ed.cl;
+  exp.innerHTML='<div class="exh"><div class="exic">'+ed.ic+'</div><div class="exl">'+ed.lb+'</div></div><div class="exb"><div class="exm">'+ed.mn+'</div><div class="exn">'+ed.nu+'</div></div>';
+  if(isOk){setFace('happy');avSay('ok');}else{setFace('sad');avSay('ko');}
+  if(Object.keys(qAns).length===MOD[curMod].quiz.length){
+    var sc=document.getElementById('qzScore');sc.style.display='block';
+    var cfgs=['À renforcer 📚','Des bases solides 👍','Bonne maîtrise 🎯','Maîtrise avancée 🌟','Expertise confirmée 🏆'];
+    sc.innerHTML='<div style="background:var(--pb2);border:2px solid var(--pll);border-radius:var(--rl);padding:18px 22px;text-align:center;margin-top:14px;animation:fup .35s ease;"><div style="font-size:38px;font-weight:900;color:var(--pu);letter-spacing:-.04em;">'+qScore+'/'+MOD[curMod].quiz.length+'</div><div style="font-size:14px;color:var(--g5);margin-top:5px;font-weight:700;">'+cfgs[qScore]+'</div></div>';
+    setFace('wow');avSay('done');addXP(20);
+  }
+}
+
+function buildRituels(m){
+  var h='<div class="flip-hint">🎯 Cliquez sur chaque rituel pour voir le détail complet</div>';
+  h+=m.rituels.map(function(r,i){
+    var pid='r'+curMod+'_'+i;
+    var bc=
+      '<div class="sbox"><div class="sttl">Étapes du rituel</div>'+
+      r.steps.map(function(s,si){return '<div class="sr"><div class="sn">'+(si+1)+'</div><div class="st">'+s+'</div></div>';}).join('')+
+      '</div>'+
+      (r.insight?'<div class="idm"><div class="idm-l">Pourquoi ça marche</div><div class="idm-t">'+r.insight+'</div></div>':'')+
+      (r.warn?'<div class="wrnm"><div class="wrnm-l">Résistance prévisible</div><div class="wrnm-t">'+r.warn+'</div></div>':'');
+    return '<div class="fc-wrap"><div class="fc-card" id="fc_'+pid+'" onclick="flipCard(\''+pid+'\')">'+
+      '<div class="fc-front">'+
+        '<div class="fc-top"><div class="fc-num">'+r.num+'</div>'+
+        '<div style="flex:1;"><div class="fc-tag">'+r.tag+'</div><div class="fc-title">'+r.t+'</div><div class="fc-teaser">'+r.teaser+'</div>'+
+        '<div style="display:inline-flex;align-items:center;gap:5px;margin-top:9px;background:var(--pb2);border:2px solid var(--pll);border-radius:999px;padding:4px 11px;font-size:11px;color:var(--pu);font-weight:800;">⏱ '+r.trigger+'</div></div></div>'+
+        '<div class="fc-cta">↩ Cliquez pour le détail</div>'+
+      '</div>'+
+      '<div class="fc-back">'+
+        '<div class="fc-back-head">'+
+          '<div style="display:flex;align-items:center;gap:9px;"><div class="fc-num">'+r.num+'</div>'+
+          '<span style="font-size:10px;font-weight:800;color:var(--pu);text-transform:uppercase;">'+r.tag+'</span></div>'+
+          '<span style="font-size:11px;background:var(--teb);color:var(--te);padding:3px 10px;border-radius:999px;font-weight:800;">⏱ '+r.trigger+'</span>'+
+        '</div>'+
+        '<div class="fc-back-body">'+bc+'</div>'+
+        '<div class="fc-cta" style="border-top:2px solid var(--pll);background:#fff;color:var(--g5);">↩ Cliquez pour refermer</div>'+
+      '</div></div></div>';
+  }).join('');
+  return h;
+}
+
+function buildEval(m){
+  return '<div class="eval-h"><div style="font-size:19px;font-weight:900;color:#fff;margin-bottom:7px;position:relative;z-index:1;">Votre avis compte vraiment.</div><p style="font-size:13px;color:rgba(255,255,255,.82);line-height:1.6;max-width:400px;margin:0 auto;font-weight:600;position:relative;z-index:1;">2 minutes pour améliorer ce module. Votre retour est transmis directement à l\'équipe Physicare.</p></div>'+
+    '<div class="ec"><div class="eq">1. Note globale — Module '+m.num+' : '+m.title+'</div><div class="stars" id="esr1"><span class="star" onclick="rateStar(\'esr1\',1,\'esl1\')">★</span><span class="star" onclick="rateStar(\'esr1\',2,\'esl1\')">★</span><span class="star" onclick="rateStar(\'esr1\',3,\'esl1\')">★</span><span class="star" onclick="rateStar(\'esr1\',4,\'esl1\')">★</span><span class="star" onclick="rateStar(\'esr1\',5,\'esl1\')">★</span></div><div class="slbl" id="esl1"></div></div>'+
+    '<div class="ec"><div class="eq">2. Le contenu était-il clair et immédiatement applicable ?</div><div class="stars" id="esr2"><span class="star" onclick="rateStar(\'esr2\',1,\'esl2\')">★</span><span class="star" onclick="rateStar(\'esr2\',2,\'esl2\')">★</span><span class="star" onclick="rateStar(\'esr2\',3,\'esl2\')">★</span><span class="star" onclick="rateStar(\'esr2\',4,\'esl2\')">★</span><span class="star" onclick="rateStar(\'esr2\',5,\'esl2\')">★</span></div><div class="slbl" id="esl2"></div></div>'+
+    '<div class="ec"><div class="eq">3. Ce module va-t-il changer quelque chose dans votre pratique ?</div><div class="eopts"><button class="eopt" onclick="selOpt(this)">Oui, clairement</button><button class="eopt" onclick="selOpt(this)">Probablement oui</button><button class="eopt" onclick="selOpt(this)">Je verrai sur le terrain</button><button class="eopt" onclick="selOpt(this)">Pas vraiment</button></div></div>'+
+    '<div class="ec"><div class="eq">4. Ce que vous retenez le plus (optionnel)</div><textarea class="eta" rows="3" placeholder="Partagez librement ce qui vous a le plus marqué dans ce module..."></textarea></div>'+
+    '<div id="evTh" class="eth"><div style="font-size:34px;margin-bottom:10px;">🎓</div><h3 style="font-size:17px;font-weight:900;color:var(--okt);margin-bottom:7px;">Merci pour votre retour !</h3><p style="font-size:13px;color:var(--okt);font-weight:600;">Votre évaluation aide l\'équipe Physicare à améliorer le programme.</p></div>'+
+    '<button class="btn bp" onclick="submitEval()" style="width:100%;font-size:14px;padding:13px;">Envoyer mon évaluation →</button>';
+}
+function rateStar(gid,val,lid){
+  document.getElementById(gid).querySelectorAll('.star').forEach(function(s,i){s.classList.toggle('on',i<val);});
+  var lbls=['','Insuffisant','Passable','Bien','Très bien','Excellent'];
+  var l=document.getElementById(lid);if(l)l.textContent=lbls[val];setFace('happy');
+}
+function selOpt(btn){btn.closest('.eopts').querySelectorAll('.eopt').forEach(function(b){b.classList.remove('sel');});btn.classList.add('sel');}
+function submitEval(){var t=document.getElementById('evTh');if(t){t.classList.add('show');addXP(25);}setFace('wow');avSay('eval');}
+
+function buildConcl(m){
+  return '<div class="cta" style="margin-bottom:14px;"><div class="cta-t">Module '+m.num+' complété ! 🎉</div><div class="cta-s">'+m.conclH+'<br>'+m.conclP+'</div></div>'+
+    '<div class="card"><div style="font-size:14px;font-weight:800;color:var(--g9);margin-bottom:13px;">Vos 3 engagements</div>'+
+    ['Je retiens les mécanismes clés et les applique dès demain sur le terrain.','Je repère mes signaux de surcharge <em>avant</em> d\'en être impacté(e).','Je contribue activement à la santé comportementale collective de mon équipe.'].map(function(t,i){
+      return '<div class="cki" onclick="toggleCommit(this)"><div class="ckb">✓</div><div class="ckt">'+t+'</div></div>';
+    }).join('')+'</div>';
+}
+function toggleCommit(el){
+  el.classList.toggle('ck');
+  if(el.classList.contains('ck'))addXP(5);
+}
+
+function modNext(){
+  var sq=seqs();
+  if(curSeq<sq.length-1)curSeq++;
+  else if(curMod<MOD.length-1){curMod++;curSeq=0;qAns={};qScore=0;}
+  else{completeAll();return;}
+  loadSeq();
+}
+function modPrev(){
+  var sq=seqs();
+  if(curSeq>0)curSeq--;
+  else if(curMod>0){curMod--;curSeq=seqs().length-1;}
+  else{go('s2');return;}
+  loadSeq();
+}
+function addXP(n){xp+=n;setXP(xp);}
+function setXP(v){var f=document.getElementById('xpF');var l=document.getElementById('xpL');if(f)f.style.width=Math.min(Math.round((v/500)*100),100)+'%';if(l)l.textContent=v+' XP';}
+function completeAll(){
+  launchConfetti();
+  document.getElementById('modC').innerHTML='<div class="cmpw"><div class="cmpb"><svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><h1 style="font-size:26px;font-weight:900;margin-bottom:12px;letter-spacing:-.3px;">Parcours complété !</h1><p style="font-size:15px;color:var(--g5);line-height:1.75;max-width:430px;margin:0 auto 22px;font-weight:600;">Félicitations '+uName.split(' ')[0]+' ! Vous avez finalisé les 5 modules du parcours Physicare × Optical Center.</p><div style="background:var(--wnb);border:2px solid var(--wnb2);border-radius:999px;padding:8px 20px;font-size:14px;font-weight:800;color:var(--wnt);margin-bottom:18px;display:inline-block;">⚡ '+xp+' XP gagnés</div><div style="font-size:13px;color:var(--g5);font-weight:700;">🏆 Attestation de complétion enregistrée</div></div>';
+  document.getElementById('mBN').style.display='none';document.getElementById('mBP').style.visibility='hidden';
+  document.getElementById('tpill').textContent='Parcours terminé';setFace('wow');avSay('allDone','wow');
+}
+
+/* ══ DASHBOARD ══ */
+function dTab(id,btn){
+  ['dT0','dSuivi','dProf','dVerb'].forEach(function(t){var el=document.getElementById(t);if(el)el.style.display='none';});
+  document.getElementById(id).style.display='block';
+  document.querySelectorAll('.dtab').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');
+  if(id==='dProf')renderProfs();
+  if(id==='dVerb')renderVerbs();
+  if(id==='dT0'){setTimeout(function(){drawGauge();drawTreemap();},80);}
+}
+/* ── FILTRES STATE ── */
+var fState={metier:'all',profil:'all',search:''};
+
+function renderProfs(){
+  /* Construire les pills métier dynamiquement */
+  var metiers=['all'].concat([...new Set(anonData.map(function(l){return l.metier;}))]);
+  var fpM=document.getElementById('fpMetier');
+  if(fpM&&!fpM.querySelector('[data-metier]')){
+    fpM.innerHTML=metiers.map(function(m){
+      var cnt=m==='all'?anonData.length:anonData.filter(function(l){return l.metier===m;}).length;
+      return '<button class="fpill'+(m==='all'?' on':'')+'" data-metier="'+m+'" onclick="toggleFilter(this,\'metier\')">'+
+        (m==='all'?'Tous':m)+' <span class="fcnt">'+cnt+'</span>'+
+      '</button>';
+    }).join('');
+  }
+  applyFilters();
+}
+
+function toggleFilter(btn,type){
+  /* Multi-select pour métier, single pour profil */
+  if(type==='profil'){
+    document.querySelectorAll('#fpProfil .fpill').forEach(function(b){b.classList.remove('on');});
+    btn.classList.add('on');
+    fState.profil=btn.getAttribute('data-profil');
+  } else {
+    /* Métier : si on clique "Tous" → reset ; sinon toggle multi */
+    var val=btn.getAttribute('data-metier');
+    if(val==='all'){
+      document.querySelectorAll('#fpMetier .fpill').forEach(function(b){b.classList.remove('on');});
+      btn.classList.add('on');
+      fState.metier='all';
+    } else {
+      /* Déselectionner "Tous" */
+      var allBtn=document.querySelector('#fpMetier [data-metier="all"]');
+      if(allBtn) allBtn.classList.remove('on');
+      btn.classList.toggle('on');
+      /* Recalculer la liste des métiers actifs */
+      var actifs=Array.from(document.querySelectorAll('#fpMetier .fpill.on')).map(function(b){return b.getAttribute('data-metier');});
+      if(!actifs.length){
+        if(allBtn) allBtn.classList.add('on');
+        fState.metier='all';
+      } else {
+        fState.metier=actifs;
+      }
+    }
+  }
+  applyFilters();
+}
+
+function applyFilters(){
+  var search=(document.getElementById('fsearchInput')||{value:''}).value.toLowerCase().trim();
+  fState.search=search;
+  var filtered=anonData.filter(function(l){
+    var mOk=fState.metier==='all'||(Array.isArray(fState.metier)?fState.metier.includes(l.metier):l.metier===fState.metier);
+    var pOk=fState.profil==='all'||l.profile===fState.profil;
+    var sOk=!search||(l.code.toLowerCase().includes(search)||l.metier.toLowerCase().includes(search));
+    return mOk&&pOk&&sOk;
+  });
+
+  /* Mettre à jour compteur */
+  var cnt=document.getElementById('fcount');
+  if(cnt) cnt.innerHTML='<strong>'+filtered.length+'</strong> / '+anonData.length+' profils';
+
+  /* Table */
+  var tb=document.getElementById('profBody');
+  var noR=document.getElementById('noResults');
+  var tw=document.querySelector('#dProf .tw');
+
+  if(!filtered.length){
+    if(tb) tb.innerHTML='';
+    if(noR) noR.style.display='block';
+    if(tw) tw.style.display='none';
+    return;
+  }
+  if(noR) noR.style.display='none';
+  if(tw) tw.style.display='block';
+
+  if(!tb) return;
+  tb.innerHTML=filtered.map(function(l){
+    var pf=pfL[l.profile];
+    var iC=l.isc>=3.8?'#DC2626':l.isc>=3.2?'#D97706':'#059669';
+    var prog='<div class="mp"><div class="mpt"><div class="mpf" style="width:'+l.prog+'%;background:linear-gradient(90deg,'+l.color+','+l.color+'88);border-radius:999px;"></div></div><div class="mpv">'+l.prog+'%</div></div>';
+    var qs=l.score!==null?'<span style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;background:'+(l.score>=3?'var(--okb)':'var(--wnb)')+';color:'+(l.score>=3?'var(--okt)':'var(--wnt)')+';">'+l.score+'/4</span>':'<span style="color:var(--g4);">—</span>';
+    /* Highlight recherche */
+    var metierDisp=l.metier;
+    if(search&&metierDisp.toLowerCase().includes(search)){
+      var re=new RegExp('('+search.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+      metierDisp=metierDisp.replace(re,'<mark style="background:#FEF9C3;border-radius:3px;padding:0 2px;">$1</mark>');
+    }
+    return '<tr>'+
+      '<td><div class="avc"><div class="avcir" style="background:'+l.color+';">'+l.code.slice(-1)+'</div>'+
+      '<div><span style="font-size:12px;font-weight:800;color:var(--g9);">'+l.code+'</span>'+
+      '<span style="font-size:11px;color:var(--g4);display:block;">Anonymisé</span></div></div></td>'+
+      '<td><span style="font-size:12px;font-weight:700;color:var(--g7);background:var(--g2);padding:3px 10px;border-radius:999px;border:2px solid var(--g3);">'+metierDisp+'</span></td>'+
+      '<td><span class="ptag '+pf.cls+'">'+pf.l+'</span></td>'+
+      '<td><span style="font-weight:800;color:'+iC+';">'+l.isc.toFixed(1)+'</span></td>'+
+      '<td><span style="font-weight:800;color:'+(l.reg>=3?'var(--ok)':l.reg>=2?'var(--wn)':'var(--ko)')+';">'+l.reg.toFixed(1)+'</span></td>'+
+      '<td><span style="font-weight:800;color:'+(l.sec>=3.5?'var(--ok)':l.sec>=2.5?'var(--wn)':'var(--ko)')+';">'+l.sec.toFixed(1)+'</span></td>'+
+      '<td style="color:var(--pu);font-weight:800;">'+l.mod+'</td>'+
+      '<td>'+prog+'</td>'+
+      '<td>'+qs+'</td>'+
+      '<td><button style="padding:5px 11px;border-radius:999px;border:2px solid var(--pll);background:var(--pb2);font-size:11px;font-weight:800;color:var(--pu);cursor:pointer;" onclick="openMod(\''+l.code+'\')">Détail</button></td>'+
+    '</tr>';
+  }).join('');
+}
+
+function resetFilters(){
+  fState={metier:'all',profil:'all',search:''};
+  var si=document.getElementById('fsearchInput');if(si)si.value='';
+  /* Reset pills métier */
+  document.querySelectorAll('#fpMetier .fpill').forEach(function(b){b.classList.remove('on');});
+  var allM=document.querySelector('#fpMetier [data-metier="all"]');if(allM)allM.classList.add('on');
+  /* Reset pills profil */
+  document.querySelectorAll('#fpProfil .fpill').forEach(function(b){b.classList.remove('on');});
+  var allP=document.querySelector('#fpProfil [data-profil="all"]');if(allP)allP.classList.add('on');
+  applyFilters();
+}
+function renderVerbs(){
+  var mk=function(items,id,tag){
+    var el=document.getElementById(id);if(!el)return;
+    el.innerHTML=items.map(function(v){return '<div class="vi"><div class="vc" style="background:'+v.c+';">'+v.code.slice(-1)+'</div><div style="flex:1;"><div class="vtag">'+tag+'</div><div class="vt">'+v.text+'</div><div class="vctx">'+v.ctx+'</div><div class="vcode">'+v.code+'</div></div></div>';}).join('');
+  };
+  mk(anonData.map(function(l){return {code:l.code,text:l.drain,ctx:'Verbatim complet · Question T0',c:l.color};}), 'vDrain','Ce qui vide');
+  mk(anonData.map(function(l){return {code:l.code,text:l.boost,ctx:'Verbatim complet · Question T0',c:l.color};}), 'vBoost','Ce qui redonne');
+  mk(anonData.map(function(l){return {code:l.code,text:l.open,ctx:'Signaux de charge cognitive non résolue',c:l.color};}), 'vOpen','Sujets ouverts');
+  mk(anonData.map(function(l){return {code:l.code,text:l.success,ctx:'Indicateur de succès personnel attendu',c:l.color};}), 'vSuccess','Succès attendu');
+}
+function openMod(code){
+  var l=anonData.find(function(x){return x.code===code;});if(!l)return;
+  var pf=pfL[l.profile];
+  document.getElementById('mContent').innerHTML=
+    '<div class="mhd"><div class="mtit">'+code+' — Profil détaillé</div><button class="mcl" onclick="closeMod()">✕</button></div>'+
+    '<div style="display:flex;align-items:center;gap:9px;margin-bottom:14px;flex-wrap:wrap;"><span class="ptag '+pf.cls+'">'+pf.l+'</span><span style="font-size:13px;color:var(--g5);font-weight:600;">ISC '+l.isc.toFixed(2)+' · Rég. '+l.reg.toFixed(1)+' · Séc. psy. '+l.sec.toFixed(1)+'</span></div>'+
+    '<div class="ins pu" style="margin-bottom:13px;">Résultats anonymisés — Accès nominatif via Digiforma uniquement.</div>'+
+    '<div style="background:var(--pb2);border:2px solid var(--pll);border-radius:var(--r);padding:10px 14px;margin-bottom:13px;display:flex;align-items:center;gap:9px;"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2\" y=\"7\" width=\"20\" height=\"14\" rx=\"2\"/><path d=\"M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16\"/></svg><span style=\"font-size:11px;color:var(--g4);font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-right:5px;\">Métier</span><span style=\"font-size:13px;font-weight:800;color:var(--pd);\">' + l.metier + '</span></div>'+
+    '<div class="g2" style="margin-bottom:13px;">'+
+      '<div style="background:var(--g1);border-radius:var(--r);padding:12px;"><div style="font-size:11px;color:var(--g4);font-weight:800;margin-bottom:4px;">MODULE EN COURS</div><div style="font-size:14px;font-weight:800;color:var(--pu);">'+l.mod+'</div></div>'+
+      '<div style="background:var(--g1);border-radius:var(--r);padding:12px;"><div style="font-size:11px;color:var(--g4);font-weight:800;margin-bottom:4px;">PROGRESSION</div><div style="font-size:19px;font-weight:900;color:var(--g9);">'+l.prog+'%</div></div>'+
+    '</div>'+
+    [['Ce qui vide l\'énergie',l.drain],['Ce qui redonne',l.boost],['Sujets ouverts le soir',l.open],['Indicateur de succès',l.success]].map(function(v){
+      return '<div style="background:var(--g1);border-radius:var(--r);padding:12px;margin-bottom:8px;"><div style="font-size:11px;color:var(--g4);font-weight:800;margin-bottom:4px;">'+v[0].toUpperCase()+'</div><div style="font-size:13px;color:var(--g7);line-height:1.55;font-weight:600;">'+v[1]+'</div></div>';
+    }).join('');
+  document.getElementById('mOv').classList.add('open');
+}
+function closeMod(e){if(!e||e.target.id==='mOv')document.getElementById('mOv').classList.remove('open');}
+
+/* ══ CANVAS ══ */
+function drawGauge(){var c=document.getElementById('gaugeC');if(!c)return;var ctx=c.getContext('2d'),cx=79,cy=80,r=60;ctx.clearRect(0,0,158,88);[{s:Math.PI,e:Math.PI*1.34,col:'#DC2626'},{s:Math.PI*1.34,e:Math.PI*1.67,col:'#D97706'},{s:Math.PI*1.67,e:Math.PI*2,col:'#059669'}].forEach(function(sg){ctx.beginPath();ctx.arc(cx,cy,r,sg.s,sg.e);ctx.lineWidth=12;ctx.strokeStyle=sg.col;ctx.stroke();});var angle=Math.PI+(0.85/2)*Math.PI;var nx=cx+Math.cos(angle)*(r-15),ny=cy+Math.sin(angle)*(r-15);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(nx,ny);ctx.lineWidth=3;ctx.strokeStyle='#374151';ctx.lineCap='round';ctx.stroke();ctx.beginPath();ctx.arc(cx,cy,5,0,Math.PI*2);ctx.fillStyle='#374151';ctx.fill();}
+function drawTreemap(){var c=document.getElementById('treemapC');if(!c)return;var W=c.offsetWidth||400,H=195;c.width=W;c.height=H;var ctx=c.getContext('2d');ctx.clearRect(0,0,W,H);[{l:'Régulation',x:0,y:0,w:.24,h:.52,col:'#EF4444'},{l:'Épuisement',x:0,y:.52,w:.24,h:.48,col:'#F59E0B'},{l:'Posture',x:.24,y:.52,w:.23,h:.48,col:'#FDE68A'},{l:'Clarté',x:.24,y:0,w:.23,h:.52,col:'#6366F1'},{l:'Séc. Psy.',x:.47,y:0,w:.28,h:.48,col:'#10B981'},{l:'Ressources',x:.47,y:.48,w:.28,h:.28,col:'#F59E0B'},{l:'Impact',x:.47,y:.76,w:.28,h:.24,col:'#9B4DCA'}].forEach(function(it){var x=it.x*W,y=it.y*H,w=it.w*W-2,h=it.h*H-2;ctx.fillStyle=it.col;if(ctx.roundRect)ctx.roundRect(x+1,y+1,w,h,5);else ctx.rect(x+1,y+1,w,h);ctx.fill();ctx.fillStyle='rgba(0,0,0,.55)';ctx.font='bold 11px Nunito, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(it.l,x+w/2,y+h/2);});}
+
+/* ══ CONFETTI ══ */
+function launchConfetti(){var c=document.getElementById('confC');c.style.display='block';var ctx=c.getContext('2d');c.width=window.innerWidth;c.height=window.innerHeight;var ps=[],cols=['#8B5CF6','#C4B5FD','#A855F7','#EDE9FE','#4C1D95','#14B8A6','#F59E0B'];for(var i=0;i<150;i++)ps.push({x:Math.random()*c.width,y:-10-Math.random()*70,r:Math.random()*6+3,col:cols[~~(Math.random()*cols.length)],d:Math.random()*4+2,rot:Math.random()*360,rs:Math.random()*8-4,vx:Math.random()*5-2.5});var fr=0;function draw(){ctx.clearRect(0,0,c.width,c.height);ps.forEach(function(p){ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);ctx.fillStyle=p.col;ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r);ctx.restore();p.y+=p.d;p.x+=p.vx;p.rot+=p.rs;if(p.y>c.height){p.y=-10;p.x=Math.random()*c.width;}});fr++;if(fr<270)requestAnimationFrame(draw);else{ctx.clearRect(0,0,c.width,c.height);c.style.display='none';}}draw();}
+
+/* ══ CSV ══ */
+function exportCSV(){var rows=[['Code','Profil','ISC','Régulation','Séc.Psy.','Module','Prog.','Score','Drain','Boost']];anonData.forEach(function(l){rows.push([l.code,pfL[l.profile].l,l.isc,l.reg,l.sec,l.mod,l.prog+'%',l.score!==null?l.score+'/4':'—',l.drain,l.boost]);});var csv=rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n');var blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='physicare_anon.csv';a.click();}
+
+/* ══ NAV ══ */
+/* ── LECTURE SUPABASE (dashboard manager) ── */
+function loadSheetData(cb){
+  if(!sbReady){
+    console.log('[Physicare] Mode démo — Supabase non configuré');
+    cb&&cb();return;
+  }
+  var url=SB_URL+'/rest/v1/diagnostics?client_slug=eq.'+CLIENT_SLUG+'&order=created_at.desc&limit=500';
+  fetch(url,{method:'GET',headers:sbHeaders()})
+    .then(function(r){return r.json();})
+    .then(function(rows){
+      if(rows&&rows.length){
+        var colors=['#7C3AED','#DB2777','#059669','#D97706','#4F46E5','#0891B2','#9D174D','#6D28D9','#B45309','#0E7490','#7C2D12'];
+        anonData=rows.map(function(r,i){
+          /* normaliser le profil : supprimer émojis éventuels */
+          var profRaw=(r.profil||'vigilance').toLowerCase();
+          var prof=profRaw.includes('surcharge')?'surcharge':
+                   profRaw.includes('vigilance')?'vigilance':
+                   profRaw.includes('quilibre')?'equilibre':
+                   profRaw.includes('silient')?'resilient':'vigilance';
+          return {
+            code:    r.code||('OC-'+String(i+1).padStart(3,'0')),
+            profile: prof,
+            isc:     parseFloat(r.isc)||3.0,
+            reg:     parseFloat(r.score_c)||2.5,
+            sec:     parseFloat(r.score_e)||3.0,
+            mod:'M01',prog:0,score:null,
+            color:   colors[i%colors.length],
+            metier:  r.poste||'—',
+            drain:   'Réponse T0 du '+formatDate(r.created_at),
+            boost:   'Voir Digiforma',
+            open:    '—', success:'—'
+          };
+        });
+        console.log('[Physicare] ✅ '+anonData.length+' réponses chargées depuis Supabase');
+        updateDashboardKPIs();
+      }
+      cb&&cb();
+    })
+    .catch(function(err){
+      console.warn('[Physicare] ⚠ Supabase read échoué:',err);
+      cb&&cb();
+    });
+}
+
+function formatDate(iso){
+  if(!iso)return '—';
+  try{return new Date(iso).toLocaleDateString('fr-FR');}catch(e){return iso;}
+}
+
+function updateDashboardKPIs(){
+  if(!anonData.length)return;
+  var avgISC=anonData.reduce(function(s,l){return s+l.isc;},0)/anonData.length;
+  var avgResil=anonData.reduce(function(s,l){return s+(l.isc>0?((l.reg+l.sec)/2)/l.isc:1);},0)/anonData.length;
+  var kISC=document.querySelector('#dT0 .dk.wn .dk-v');
+  var kRes=document.querySelector('#dT0 .dk.dg .dk-v');
+  if(kISC)kISC.textContent=avgISC.toFixed(2).replace('.',',');
+  if(kRes)kRes.textContent=avgResil.toFixed(2).replace('.',',');
+  var counts={surcharge:0,vigilance:0,equilibre:0,resilient:0};
+  anonData.forEach(function(l){if(counts[l.profile]!==undefined)counts[l.profile]++;});
+  Object.keys(counts).forEach(function(k){
+    var el=document.getElementById('cnt_'+k);if(el)el.textContent=counts[k];
+  });
+  var allEl=document.getElementById('cnt_all');if(allEl)allEl.textContent=anonData.length;
+}
+
+/* ── SUPABASE AUTH — login manager via email/password ── */
+var mgLogged=false;
+var mgToken=null;
+
+function openDash(){
+  if(mgLogged){go('sDash');}else{go('sLogin');}
+}
+
+function doLogin(){
+  var u=document.getElementById('lgUser').value.trim();
+  var pw=document.getElementById('lgPass').value;
+  var err=document.getElementById('lgErr');
+  var loginBtn=document.querySelector('#sLogin .btn.bp');
+  if(loginBtn){loginBtn.textContent='Connexion…';loginBtn.disabled=true;}
+
+  if(!sbReady){
+    /* Mode démo : accepter demo/demo ou manager/physicare2026 */
+    var DEMO_CREDS=[{u:'manager@physicare.fr',p:'physicare2026'},{u:'admin',p:'admin123'},{u:'demo',p:'demo'}];
+    var ok=DEMO_CREDS.some(function(cr){return cr.u===u&&cr.p===pw;});
+    if(ok){
+      mgLogged=true;err.style.display='none';
+      document.getElementById('tpill').textContent='Manager';
+      go('sDash');
+      avSay('s0','wow');
+      showBub('Mode démo — Supabase non configuré. Données fictives. 🔒',6000);
+    } else {
+      err.style.display='block';
+    }
+    if(loginBtn){loginBtn.textContent='Se connecter →';loginBtn.disabled=false;}
+    return;
+  }
+
+  /* Auth réelle via Supabase */
+  fetch(SB_URL+'/auth/v1/token?grant_type=password',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','apikey':SB_KEY},
+    body:JSON.stringify({email:u,password:pw})
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(data.access_token){
+      mgLogged=true;
+      mgToken=data.access_token;
+      err.style.display='none';
+      document.getElementById('tpill').textContent='Manager';
+      if(loginBtn){loginBtn.textContent='Se connecter →';loginBtn.disabled=false;}
+      loadSheetData(function(){
+        go('sDash');
+        avSay('s0','wow');
+        showBub('Bienvenue ! '+anonData.length+' réponses chargées ✅',5000);
+      });
+    } else {
+      err.style.display='block';
+      if(loginBtn){loginBtn.textContent='Se connecter →';loginBtn.disabled=false;}
+      setFace('sad');
+    }
+  })
+  .catch(function(){
+    err.style.display='block';
+    if(loginBtn){loginBtn.textContent='Se connecter →';loginBtn.disabled=false;}
+    setFace('sad');
+  });
+}
+
+function refreshDash(){
+  var btn=event.target;btn.textContent='⟳ Chargement…';btn.disabled=true;
+  loadSheetData(function(){
+    btn.textContent='⟳ Actualiser données';btn.disabled=false;
+    drawGauge();drawTreemap();
+    showBub('Actualisé — '+anonData.length+' réponses ✅',4000);
+    if(document.getElementById('dProf').style.display!=='none')renderProfs();
+  });
+}
+
+function togglePwd(){
+  var i=document.getElementById('lgPass');
+  i.type=i.type==='password'?'text':'password';
+  document.getElementById('eyeBtn').textContent=i.type==='password'?'👁':'🙈';
+}
+
+/* ══ BOOT ══ */
+window.addEventListener('load',function(){
+  avSay('s0');
+  new MutationObserver(function(){drawGauge();drawTreemap();}).observe(document.body,{childList:true,subtree:true});
+  window.addEventListener('resize',function(){drawTreemap();});
+});
+</script>
+</body>
+</html>
