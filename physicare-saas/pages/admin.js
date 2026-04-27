@@ -17,8 +17,11 @@ export default function Admin() {
   const [loading, setLoading]   = useState(false)
   const [showForm, setShowForm] = useState(false)
   const [newClient, setNewClient] = useState({ nom:'', slug:'', couleur:'#6D28D9' })
+  const [managerEmail, setManagerEmail] = useState('')
+  const [plan, setPlan]         = useState('starter')
   const [creating, setCreating] = useState(false)
   const [msg, setMsg]           = useState('')
+  const [report, setReport]     = useState(null)
 
   /* Login simple côté client */
   function doLogin(e) {
@@ -42,18 +45,42 @@ export default function Admin() {
     }).catch(() => setLoading(false))
   }, [auth])
 
-  /* Créer un nouveau client */
+  /* Créer un nouveau client + déclencher l'onboarding automatique */
   async function handleCreate(e) {
     e.preventDefault()
     if (!newClient.nom || !newClient.slug) return
     setCreating(true)
+    setReport(null)
     try {
       const created = await createClient(newClient)
       setClients(prev => [...prev, created])
+      setMsg('✅ Client "' + created.nom + '" créé · onboarding en cours…')
+
+      const res = await fetch('/api/onboard', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': pwd || ADMIN_PASSWORD,
+        },
+        body: JSON.stringify({ client: created, managerEmail, plan }),
+      })
+      const body = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        setMsg('⚠️ Client créé mais onboarding partiel : ' + (body.error || res.status))
+      } else {
+        setReport(body)
+        const { ok = [], skipped = [], failed = [] } = body.summary || {}
+        setMsg(
+          `✅ ${created.nom} · activé : ${ok.join(', ') || '—'}` +
+          (skipped.length ? ` · skip : ${skipped.join(', ')}` : '') +
+          (failed.length ? ` · échec : ${failed.join(', ')}` : ''),
+        )
+      }
       setNewClient({ nom:'', slug:'', couleur:'#6D28D9' })
+      setManagerEmail('')
+      setPlan('starter')
       setShowForm(false)
-      setMsg('✅ Client "' + created.nom + '" créé ! URL : /' + created.slug)
-      setTimeout(() => setMsg(''), 5000)
+      setTimeout(() => setMsg(''), 8000)
     } catch(err) {
       setMsg('❌ Erreur : ' + err.message)
     }
@@ -165,9 +192,31 @@ export default function Admin() {
                   />
                 </div>
               </div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginTop:12 }}>
+                <div>
+                  <label style={S.label}>Email du manager (onboarding auto)</label>
+                  <input
+                    style={S.input} type="email" placeholder="manager@client.fr"
+                    value={managerEmail}
+                    onChange={e => setManagerEmail(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label style={S.label}>Plan</label>
+                  <select
+                    style={{...S.input, background:'#fff', cursor:'pointer'}}
+                    value={plan}
+                    onChange={e => setPlan(e.target.value)}
+                  >
+                    <option value="starter">Starter</option>
+                    <option value="pro">Pro</option>
+                    <option value="enterprise">Enterprise</option>
+                  </select>
+                </div>
+              </div>
               <div style={{ marginTop:14, display:'flex', alignItems:'center', gap:12 }}>
                 <button style={S.btn} type="submit" disabled={creating}>
-                  {creating ? 'Création…' : 'Créer le client →'}
+                  {creating ? 'Création + onboarding…' : 'Créer le client →'}
                 </button>
                 {newClient.slug && (
                   <span style={{ fontSize:13, color:'#6B7280', fontWeight:600 }}>
@@ -175,7 +224,37 @@ export default function Admin() {
                   </span>
                 )}
               </div>
+              <div style={{ marginTop:8, fontSize:11, color:'#9CA3AF', fontWeight:600 }}>
+                Connecteurs auto : Supabase · Stripe · Resend · Slack · Vercel
+                (chacun activé si sa clé d'API est configurée)
+              </div>
             </form>
+          </div>
+        )}
+
+        {/* Rapport d'onboarding */}
+        {report && (
+          <div style={S.formBox}>
+            <div style={{ fontSize:14, fontWeight:800, color:'#111827', marginBottom:10 }}>
+              Rapport d'onboarding
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(180px,1fr))', gap:8 }}>
+              {Object.entries(report.report || {}).map(([name, r]) => {
+                const color = r.ok ? '#059669' : r.skipped ? '#9CA3AF' : '#DC2626'
+                const label = r.ok ? 'OK' : r.skipped ? 'SKIP' : 'FAIL'
+                return (
+                  <div key={name} style={{ border:'2px solid #F3F4F6', borderRadius:10, padding:'10px 12px' }}>
+                    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                      <strong style={{ fontSize:13, color:'#111827' }}>{name}</strong>
+                      <span style={{ fontSize:11, fontWeight:800, color }}>{label}</span>
+                    </div>
+                    <div style={{ fontSize:11, color:'#6B7280', marginTop:4, fontWeight:600 }}>
+                      {r.reason || r.error || r.note || (r.data && JSON.stringify(r.data).slice(0, 80)) || '—'}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         )}
 
