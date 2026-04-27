@@ -7,16 +7,21 @@ import { sendWelcomeEmail } from './resend'
 import { notifySlack } from './slack'
 import { provisionVercelDomain } from './vercel'
 import { provisionSupabase } from './supabase-admin'
+import { provisionCalBooking, buildBookingUrl } from './cal'
 
 const CONNECTORS = {
   supabase: provisionSupabase,
   stripe: provisionStripe,
+  cal: provisionCalBooking,
   resend: sendWelcomeEmail,
   slack: notifySlack,
   vercel: provisionVercelDomain,
 }
 
 export async function onboardNewClient(payload) {
+  // Pré-calcule l'URL Cal.com pour qu'email + Slack puissent l'inclure.
+  const bookingUrl = buildBookingUrl(payload)
+  payload = { ...payload, bookingUrl }
   const entries = Object.entries(CONNECTORS)
   const results = await Promise.all(
     entries.map(async ([name, fn]) => {

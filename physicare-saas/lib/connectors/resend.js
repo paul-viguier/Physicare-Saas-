@@ -1,7 +1,7 @@
 // ─── Resend ─────────────────────────────────────
 // Envoie l'email de bienvenue au manager du nouveau client.
 
-export async function sendWelcomeEmail({ client, managerEmail, baseUrl }) {
+export async function sendWelcomeEmail({ client, managerEmail, baseUrl, bookingUrl }) {
   const key = process.env.RESEND_API_KEY
   if (!key) return { ok: false, skipped: true, reason: 'RESEND_API_KEY missing' }
   if (!managerEmail) return { ok: false, skipped: true, reason: 'manager email missing' }
@@ -25,6 +25,16 @@ export async function sendWelcomeEmail({ client, managerEmail, baseUrl }) {
         <div style="font-size:13px;color:#6B7280;margin:12px 0 4px">Dashboard manager</div>
         <a href="${dashboardUrl}" style="color:#6D28D9;font-weight:700">${dashboardUrl}</a>
       </div>
+      ${bookingUrl ? `
+      <div style="background:#ECFDF5;border-radius:12px;padding:16px;margin:16px 0">
+        <div style="font-size:13px;color:#065F46;font-weight:700;margin-bottom:6px">
+          Réservez votre réunion d'onboarding (15 min)
+        </div>
+        <a href="${bookingUrl}" style="display:inline-block;background:#059669;color:#fff;
+          padding:10px 18px;border-radius:8px;font-weight:700;text-decoration:none">
+          Choisir un créneau
+        </a>
+      </div>` : ''}
       <p style="color:#6B7280;font-size:13px">
         Vous recevrez un lien magique séparé pour activer votre compte manager.
       </p>

@@ -2,11 +2,30 @@
 // Crée un customer Stripe et (option) un abonnement
 // Skip silencieusement si STRIPE_SECRET_KEY absent.
 
-export async function provisionStripe({ client, managerEmail, plan }) {
+export async function provisionStripe({ client, managerEmail, plan, existingCustomerId, existingSubscriptionId }) {
   const key = process.env.STRIPE_SECRET_KEY
   if (!key) return { ok: false, skipped: true, reason: 'STRIPE_SECRET_KEY missing' }
 
   const auth = { Authorization: `Bearer ${key}`, 'Content-Type': 'application/x-www-form-urlencoded' }
+
+  // Cas webhook : customer + subscription créés par Checkout, on attache juste les métadonnées.
+  if (existingCustomerId) {
+    const updateBody = new URLSearchParams({
+      'metadata[client_slug]': client.slug,
+      'metadata[platform]': 'physicare',
+    })
+    const updRes = await fetch(`https://api.stripe.com/v1/customers/${existingCustomerId}`, {
+      method: 'POST', headers: auth, body: updateBody,
+    })
+    if (!updRes.ok) {
+      const e = await updRes.json().catch(() => ({}))
+      return { ok: false, error: e.error?.message || 'stripe metadata update failed' }
+    }
+    return {
+      ok: true,
+      data: { customerId: existingCustomerId, subscriptionId: existingSubscriptionId || null, source: 'checkout' },
+    }
+  }
 
   const customerBody = new URLSearchParams({
     name: client.nom,

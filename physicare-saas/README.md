@@ -29,12 +29,36 @@ les connecteurs configurés :
 |------------|--------|
 | Supabase   | Invitation magic-link au manager + ligne `client_settings` |
 | Stripe     | Création customer + abonnement (essai `STRIPE_TRIAL_DAYS`) |
-| Resend     | Email de bienvenue avec liens espace + dashboard |
+| Cal.com    | URL de réservation pré-remplie pour la réu d'onboarding |
+| Resend     | Email de bienvenue (liens espace + dashboard + Cal.com) |
 | Slack      | Notification équipe Physicare via webhook |
 | Vercel     | Provisioning du sous-domaine `<slug>.physicare.fr` |
 
 Les variables d'environnement sont décrites dans `.env.example`. Le rapport
 par connecteur s'affiche dans le back-office après la création.
+
+## Mode "zéro touche" — webhook Stripe
+
+`/api/stripe/webhook` reçoit `checkout.session.completed`, crée la ligne
+client dans Supabase et lance l'orchestrateur. Aucune action manuelle requise.
+
+**Configuration Stripe Checkout** — pousser ces métadonnées sur la session :
+
+```js
+metadata: {
+  client_slug: 'optical-center-lyon',
+  client_name: 'Optical Center Lyon',
+  couleur: '#6D28D9',     // optionnel
+  plan: 'pro',            // optionnel
+  manager_email: 'xxx',   // optionnel, sinon customer_details.email
+}
+```
+
+**Configuration Stripe Dashboard** : Developers → Webhooks → Add endpoint
+`https://<domaine>/api/stripe/webhook`, écouter `checkout.session.completed`,
+copier le signing secret dans `STRIPE_WEBHOOK_SECRET`.
+
+Le webhook est idempotent (upsert sur `clients.slug`) — Stripe peut retry sans risque.
 
 ## URLs
 
