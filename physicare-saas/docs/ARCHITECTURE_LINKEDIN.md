@@ -1,0 +1,78 @@
+# Module Prospection LinkedIn — Architecture
+
+> PHYSICARE® v1.0 — Mai 2026
+
+## Vue d'ensemble
+
+Module SaaS B2B de génération de leads qualifiés intégré au dashboard PHYSICARE®.
+Il s'appuie sur des **APIs officielles** (jamais de scraping LinkedIn direct).
+
+## Stack
+
+| Couche | Techno |
+|---|---|
+| Frontend | Next.js 14 (mix Pages/App Router) + React 18 |
+| Style | CSS-in-JS inline + globals.css (palette PHYSICARE®) |
+| Backend | Supabase Postgres + RLS + Edge Functions |
+| Enrichissement | Dropcontact (prio), Apollo, Hunter, Pappers |
+| LinkedIn | Unipile (OAuth officiel) |
+| Email | Resend (envoi) + Postmark (tracking) |
+| Queue | pg_cron + Edge Functions |
+| Observabilité | Sentry + Vercel Analytics |
+
+## Modèle de données
+
+Six tables principales (cf. `supabase/migrations/20260512000000_prospection_linkedin.sql`) :
+
+1. `prospect_companies` — référentiel entreprises cibles
+2. `prospect_leads` — contacts, scoring LSP, ownership multi-tenant
+3. `prospect_sequences` — séquences multi-étapes (JSONB steps)
+4. `prospect_messages` — messages envoyés (LI + email), tracking
+5. `prospect_intent_signals` — signaux d'achat détectés (5 types)
+6. `prospect_deals` — pipeline commercial
+
+RLS activée partout : un utilisateur ne voit que ses propres leads, messages,
+signaux et deals. Le référentiel entreprises est partagé (lecture authentifiée).
+
+## Lead Score PHYSICARE® (LSP)
+
+Algorithme propriétaire 0-100, implémenté dans `lib/leadScoring.js`.
+
+| Composante | Max | Source |
+|---|---|---|
+| Persona | 30 | `prospect_leads.persona_type` |
+| Taille entreprise | 20 | `prospect_companies.employee_count` |
+| Secteur prioritaire | 15 | `prospect_companies.industry` |
+| Signaux d'intention | 25 | `prospect_intent_signals` |
+| Pénalité email | -15 | `prospect_leads.email_status='INVALID'` |
+
+Tiers : HOT ≥ 80, WARM ≥ 60, NURTURE ≥ 40, COLD < 40.
+Score forcé à 0 si `unsubscribed_at` est renseigné.
+
+## Flux Phase 1 (MVP)
+
+```
+Recherche critères ICP
+   └─> appel Dropcontact / Pappers
+        └─> upsert prospect_companies
+             └─> upsert prospect_leads (owner_id = auth.uid())
+                  └─> computeLeadScore(lead, company, signals)
+                       └─> persist lead_score
+                            └─> rendu LeadCard (Kanban)
+```
+
+## Sécurité
+
+- Tokens LinkedIn chiffrés via Supabase Vault (Phase 2).
+- Aucun mot de passe utilisateur stocké en clair.
+- Rate limit LinkedIn : 80 actions/jour/compte (Phase 2).
+- Toutes les écritures côté client sont protégées par RLS.
+
+## Phases
+
+| Phase | Périmètre | Statut |
+|---|---|---|
+| 1 — MVP | Schéma DB, scoring, dashboard, import CSV, Dropcontact | ⏳ En cours |
+| 2 — Engagement | Unipile, séquences, Resend, inbox unifiée | ⏸ À venir |
+| 3 — Intelligence | Signaux auto, IA Claude, A/B testing | ⏸ À venir |
+| 4 — Industrialisation | CRM complet, HubSpot/Salesforce, équipes | ⏸ À venir |
