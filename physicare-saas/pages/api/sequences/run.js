@@ -66,8 +66,16 @@ async function processOne(admin, enrol) {
   const step = steps[stepIdx]
   if (!step) return await complete(admin, enrol, 'no_more_steps')
 
+  // A/B: choisir une variante si elle existe pour ce step
+  const { data: variants } = await admin.from('prospect_step_variants')
+    .select('*').eq('sequence_id', sequence.id).eq('step_index', stepIdx)
+  const chosen = variants && variants.length ? pickWeighted(variants) : null
+  const effectiveStep = chosen
+    ? { ...step, subject: chosen.subject ?? step.subject, body: chosen.body }
+    : step
+
   const unsubscribeUrl = `${baseUrl()}/api/email/unsubscribe?lead=${lead.id}&token=${signOptOut(lead.id)}`
-  const rendered = renderStep(step, lead, lead.company || {}, { unsubscribeUrl })
+  const rendered = renderStep(effectiveStep, lead, lead.company || {}, { unsubscribeUrl })
 
   let externalId = null
   if (rendered.channel === 'EMAIL') {
@@ -94,6 +102,8 @@ async function processOne(admin, enrol) {
     sent_at: new Date().toISOString(),
     status: 'SENT',
     external_message_id: externalId,
+    step_index: stepIdx,
+    variant_label: chosen?.variant_label || null,
   })
   await admin.from('prospect_leads').update({
     last_contacted_at: new Date().toISOString(),
@@ -120,6 +130,16 @@ async function complete(admin, enrol, reason) {
 }
 
 function nextRetry() { return new Date(Date.now() + 6 * 3600 * 1000).toISOString() }
+
+function pickWeighted(variants) {
+  const total = variants.reduce((s, v) => s + Math.max(1, v.weight || 1), 0)
+  let r = Math.random() * total
+  for (const v of variants) {
+    r -= Math.max(1, v.weight || 1)
+    if (r <= 0) return v
+  }
+  return variants[0]
+}
 function baseUrl()   { return process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000' }
 
 import crypto from 'crypto'

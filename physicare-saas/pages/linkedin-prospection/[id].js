@@ -15,6 +15,8 @@ export default function LeadDetail() {
   const [signals, setSignals] = useState([])
   const [error, setError] = useState(null)
   const [busy, setBusy] = useState(false)
+  const [aiBody, setAiBody] = useState(null)
+  const [lookalikes, setLookalikes] = useState([])
 
   useEffect(() => {
     if (!id) return
@@ -53,6 +55,31 @@ export default function LeadDetail() {
       })
       if (!r.ok) throw new Error((await r.json()).error)
       await refresh()
+    } catch (e) { setError(e.message) }
+    finally { setBusy(false) }
+  }
+
+  async function personalize(channel) {
+    setBusy(true); setAiBody(null)
+    try {
+      const r = await fetch('/api/ai/personalize', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leadId: id, channel }),
+      })
+      const j = await r.json()
+      if (!r.ok) throw new Error(j.error)
+      setAiBody({ channel, body: j.body })
+      await refresh()
+    } catch (e) { setError(e.message) }
+    finally { setBusy(false) }
+  }
+
+  async function loadLookalikes() {
+    setBusy(true)
+    try {
+      const { data, error } = await supabase.rpc('lookalike_leads', { source_id: id, limit_n: 5 })
+      if (error) throw error
+      setLookalikes(data || [])
     } catch (e) { setError(e.message) }
     finally { setBusy(false) }
   }
@@ -131,7 +158,30 @@ export default function LeadDetail() {
           <aside style={{ background: '#fff', border: '1px solid #E5E7EB', borderRadius: 16, padding: 18, height: 'fit-content' }}>
             <h3 style={{ fontWeight: 900, color: '#4C1D95', marginBottom: 12 }}>Actions</h3>
             <button onClick={enrich} disabled={busy} style={btnPrimary}>📧 Enrichir email (Dropcontact)</button>
+            <button onClick={() => personalize('EMAIL')} disabled={busy} style={{ ...btnGhost, marginTop: 8 }}>🤖 Générer email IA</button>
+            <button onClick={() => personalize('LINKEDIN_INVITE')} disabled={busy} style={{ ...btnGhost, marginTop: 8 }}>🤖 Générer invite LinkedIn</button>
+            <button onClick={loadLookalikes} disabled={busy} style={{ ...btnGhost, marginTop: 8 }}>👯 Trouver des look-alike</button>
             <button onClick={rescore} disabled={busy} style={{ ...btnGhost, marginTop: 8 }}>↻ Recalculer LSP</button>
+
+            {aiBody && (
+              <div style={{ marginTop: 12, padding: 10, background: '#F5F3FF', border: '1px solid #DDD6FE', borderRadius: 10, fontSize: 12, whiteSpace: 'pre-wrap', color: '#4C1D95' }}>
+                <div style={{ fontWeight: 800, marginBottom: 4 }}>IA · {aiBody.channel}</div>
+                {aiBody.body}
+              </div>
+            )}
+
+            {lookalikes.length > 0 && (
+              <div style={{ marginTop: 14 }}>
+                <div style={{ fontSize: 12, fontWeight: 800, color: '#4C1D95', marginBottom: 6 }}>Profils similaires</div>
+                {lookalikes.map(l => (
+                  <a key={l.id} href={`/linkedin-prospection/${l.id}`}
+                    style={{ display: 'block', padding: 8, fontSize: 12, color: '#374151', textDecoration: 'none', borderBottom: '1px solid #F3F4F6' }}>
+                    <b>{l.full_name}</b> — {l.job_title}
+                    <span style={{ float: 'right', color: '#7C3AED', fontWeight: 800 }}>{(l.similarity * 100).toFixed(0)}%</span>
+                  </a>
+                ))}
+              </div>
+            )}
 
             <h3 style={{ fontWeight: 900, color: '#4C1D95', margin: '20px 0 8px' }}>Statut</h3>
             <select value={lead.status} onChange={e => changeStatus(e.target.value)} disabled={busy}

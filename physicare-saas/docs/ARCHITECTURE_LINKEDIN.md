@@ -68,6 +68,27 @@ Score forcé à 0 si `unsubscribed_at` est renseigné.
 | `/api/email/unsubscribe` | GET — opt-out one-click signé HMAC |
 | `/api/webhooks/resend` | POST — open/delivered/bounced/complained |
 | `/api/webhooks/unipile` | POST — réponses LinkedIn / acceptations |
+| `/api/ai/personalize` | POST — Claude Sonnet 4.6 + prompt caching |
+| `/api/signals/run` | GET — cron quotidien 06h UTC (POST_KEYWORD/JOB_POSTING/JOB_CHANGE/FUNDING) |
+| `/api/leads/embed` | GET\|POST — calcule embeddings (cron quotidien 04h UTC) |
+| `/linkedin-prospection/analytics` | Funnel + taux de conversion + perf A/B |
+
+## Phase 3 — IA & Look-alike
+
+- **Personnalisation** : `lib/ai.js` appelle Claude Sonnet 4.6 avec un système prompt
+  cache_control:'ephemeral' (~1.5k tokens) → coût réduit ~90% sur volume.
+- **Embeddings** : `lib/embeddings.js` (Jina v2 384-d, mock déterministe en dev).
+  Stockés dans `prospect_leads.embedding` (vector(384), index ivfflat cosine).
+- **Look-alike** : RPC Postgres `lookalike_leads(source_id)` + `lookalike_from_customers()`
+  qui calcule un centroïde des clients existants et trouve les NEW les plus proches.
+- **A/B testing** : table `prospect_step_variants` (label, weight). Le cron
+  `/api/sequences/run` tire une variante pondérée et la journalise dans
+  `prospect_messages.variant_label`. Vue `v_prospect_variant_stats` agrège.
+- **Signaux d'achat** : cron 06h UTC scanne les leads actifs, détecte 4 types
+  (POST_KEYWORD, JOB_POSTING, JOB_CHANGE, FUNDING), insère dans
+  `prospect_intent_signals`, recompute le LSP. Trace dans `prospect_signal_runs`.
+- **Analytics** : vues SQL `v_prospect_funnel` + `v_prospect_variant_stats`
+  consommées par `/analytics` (rendu SVG vanilla, pas de dep Recharts).
 
 ## Phase 2 — Boucle d'envoi
 
@@ -111,5 +132,5 @@ Recherche critères ICP
 |---|---|---|
 | 1 — MVP | Schéma DB, scoring, dashboard, import CSV, Dropcontact | ✅ Livré |
 | 2 — Engagement | Unipile, séquences, Resend, inbox, opt-out, cron | ✅ Livré |
-| 3 — Intelligence | Signaux auto, IA Claude, A/B testing | ⏸ À venir |
+| 3 — Intelligence | Signaux auto, IA Claude, look-alike pgvector, A/B, analytics | ✅ Livré |
 | 4 — Industrialisation | CRM complet, HubSpot/Salesforce, équipes | ⏸ À venir |
