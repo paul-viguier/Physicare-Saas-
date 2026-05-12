@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>PHYSICARE® — Pipeline commercial (preview v2)</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Barlow+Condensed:ital,wght@1,800&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --pu:#6D28D9; --pl:#8B5CF6; --pll:#C4B5FD; --pd:#4C1D95;
+    --pb:#EDE9FE; --pb2:#F5F3FF;
+    --ok:#059669; --okb:#ECFDF5; --okt:#065F46;
+    --wn:#D97706; --wnb:#FFFBEB; --wnt:#78350F;
+    --ko:#DC2626; --kob:#FEF2F2; --kot:#7F1D1D;
+    --g2:#F3F4F6; --g3:#E5E7EB; --g5:#9CA3AF; --g7:#374151; --g9:#111827;
+    --sh:0 2px 12px rgba(109,40,217,.10);
+    --shm:0 6px 24px rgba(109,40,217,.14);
+    --r:10px; --rl:18px;
+  }
+  body { font-family:'Nunito',sans-serif; background:#F5F3FF; color:#1E1B4B; min-height:100vh; }
+  .btn-primary {
+    background:linear-gradient(135deg,var(--pu),var(--pl)); color:#fff; border:none;
+    padding:12px 28px; border-radius:var(--rl); font-size:15px; font-weight:800;
+    cursor:pointer; font-family:inherit; transition:all .22s;
+    box-shadow:0 4px 18px rgba(109,40,217,.3);
+  }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 7px 26px rgba(109,40,217,.42); }
+  .btn-ghost {
+    background:#fff; border:2px solid var(--pll); color:var(--pu);
+    padding:10px 20px; border-radius:var(--rl); font-size:13px; font-weight:800;
+    cursor:pointer; font-family:inherit; transition:all .2s;
+  }
+  .btn-ghost:hover { background:var(--pb); }
+  .nav a { color:#9CA3AF; text-decoration:none; font-weight:800; font-size:13px; padding:8px 14px; border-radius:10px; transition:all .15s; }
+  .nav a:hover { background:#F5F3FF; color:#6D28D9; }
+  .nav a.active { background:#EDE9FE; color:#6D28D9; }
+
+  .column {
+    background:#F9FAFB; border:2px solid #EDE9FE; border-radius:16px;
+    padding:14px; min-width:300px; max-width:300px; flex:0 0 300px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .col-head { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:4px; padding:2px 4px; gap:8px; }
+  .col-title { font-size:12px; font-weight:900; text-transform:uppercase; letter-spacing:.07em; }
+  .col-count { font-size:11px; font-weight:800; padding:2px 8px; border-radius:999px; background:#fff; flex-shrink:0; }
+  .col-sum { font-size:11px; color:#9CA3AF; font-weight:700; }
+
+  .deal {
+    background:#fff; border:2px solid #E5E7EB; border-radius:14px;
+    padding:12px 14px; cursor:grab; transition:all .18s;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  .deal:hover { transform:translateY(-2px); box-shadow:var(--shm); border-color:#C4B5FD; }
+  .deal-head { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .logo { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:900; color:#fff; flex-shrink:0; }
+  .deal-name { font-size:13px; font-weight:800; color:#111827; line-height:1.25; }
+  .deal-contact { font-size:11px; color:#9CA3AF; font-weight:700; margin-top:2px; }
+  .deal-value { font-size:16px; font-weight:900; color:#111827; letter-spacing:-.02em; }
+  .dates { display:flex; justify-content:space-between; font-size:10px; font-weight:800; color:#9CA3AF; text-transform:uppercase; letter-spacing:.05em; padding:8px 0; border-top:1px dashed #E5E7EB; border-bottom:1px dashed #E5E7EB; margin:8px 0; }
+  .dates b { color:#374151; font-weight:900; text-transform:none; letter-spacing:0; font-size:11px; display:block; margin-top:2px; }
+
+  .deal-meta { display:flex; align-items:center; justify-content:space-between; font-size:11px; font-weight:700; }
+  .tag { font-size:10px; font-weight:800; padding:2px 8px; border-radius:999px; text-transform:uppercase; letter-spacing:.05em; }
+  .owner { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:900; color:#fff; }
+
+  /* NEXT ACTION (à faire) — bandeau violet bien distinct */
+  .next-action {
+    margin-top:10px; padding:9px 11px; background:linear-gradient(135deg,#FAF5FF,#EDE9FE);
+    border:2px solid #C4B5FD; border-radius:10px;
+    font-size:11px; font-weight:800; color:#4C1D95;
+    display:flex; align-items:center; gap:7px;
+  }
+  .next-action .due { margin-left:auto; background:#6D28D9; color:#fff; padding:2px 8px; border-radius:999px; font-size:10px; font-weight:900; }
+  .next-action .overdue { background:#DC2626; }
+
+  /* HISTORY (journal d'activités) */
+  details.history { margin-top:8px; }
+  details.history summary {
+    list-style:none; cursor:pointer; font-size:10px; font-weight:800; color:#9CA3AF;
+    text-transform:uppercase; letter-spacing:.06em; padding:4px 0;
+    display:flex; align-items:center; gap:6px;
+  }
+  details.history summary::-webkit-details-marker { display:none; }
+  details.history summary::after { content:'▼'; font-size:8px; margin-left:auto; transition:transform .2s; }
+  details.history[open] summary::after { transform:rotate(180deg); }
+  details.history summary:hover { color:#6D28D9; }
+  .timeline { margin-top:6px; padding-left:10px; border-left:2px solid #EDE9FE; display:flex; flex-direction:column; gap:6px; }
+  .timeline li {
+    list-style:none; font-size:11px; color:#374151; font-weight:700; position:relative;
+    padding-left:8px;
+  }
+  .timeline li::before {
+    content:''; position:absolute; left:-15px; top:5px;
+    width:8px; height:8px; border-radius:50%; background:#8B5CF6; border:2px solid #fff;
+  }
+  .timeline .date { color:#9CA3AF; font-weight:800; font-size:10px; margin-right:6px; }
+
+  /* STAND-BY OBJECTIVE */
+  .standby {
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    background:linear-gradient(135deg,#FFF7ED,#FFEDD5);
+    border:2px solid #FDBA74; border-radius:16px; padding:14px 20px; margin-bottom:18px;
+  }
+  .standby-icon { width:42px; height:42px; border-radius:12px; background:#F97316; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+  .standby h3 { font-size:13px; font-weight:900; color:#7C2D12; margin-bottom:2px; }
+  .standby p { font-size:11px; color:#9A3412; font-weight:700; }
+  .standby-counter { display:flex; align-items:center; gap:10px; }
+  .standby-progress {
+    width:120px; height:8px; background:#FED7AA; border-radius:999px; overflow:hidden;
+  }
+  .standby-progress > div { height:100%; background:linear-gradient(90deg,#F97316,#EA580C); border-radius:999px; }
+  .standby-num { font-size:22px; font-weight:900; color:#7C2D12; letter-spacing:-.03em; }
+
+  /* PIVOT TABLE */
+  .pivot { background:#fff; border:2px solid var(--g3); border-radius:18px; padding:22px; margin-top:28px; box-shadow:var(--sh); }
+  .pivot h2 { font-size:16px; font-weight:900; margin-bottom:4px; }
+  .pivot p.sub { font-size:12px; color:#9CA3AF; font-weight:700; margin-bottom:18px; }
+  table.pv { width:100%; border-collapse:collapse; }
+  table.pv th, table.pv td { text-align:left; padding:10px 12px; border-bottom:1px solid #F3F4F6; font-size:12px; font-weight:700; }
+  table.pv th { font-size:10px; text-transform:uppercase; letter-spacing:.07em; color:#9CA3AF; font-weight:900; background:#FAFAFA; }
+  table.pv td.num { font-weight:900; font-variant-numeric:tabular-nums; }
+  .bar { height:6px; background:#EDE9FE; border-radius:999px; overflow:hidden; margin-top:4px; }
+  .bar > div { height:100%; background:linear-gradient(90deg,#8B5CF6,#6D28D9); border-radius:999px; }
+  .conv { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:900; }
+  .conv.ok { background:#D1FAE5; color:#065F46; }
+  .conv.warn { background:#FEF3C7; color:#92400E; }
+  .conv.ko { background:#FEE2E2; color:#991B1B; }
+
+  .ribbon {
+    position:fixed; bottom:14px; right:14px; z-index:9999;
+    background:#111827; color:#fff; font-size:11px; font-weight:800;
+    padding:8px 14px; border-radius:999px; letter-spacing:.04em;
+    box-shadow:0 4px 16px rgba(0,0,0,.25); opacity:.85;
+  }
+
+  .board { display:flex; gap:14px; overflow-x:auto; padding-bottom:20px; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div style="background:#fff;border-bottom:2px solid #EDE9FE;padding:0 28px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(109,40,217,.08);">
+  <div style="display:flex;align-items:center;gap:24px;">
+    <span style="font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:800;font-size:26px;background:linear-gradient(135deg,#4C1D95,#7C3AED,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">PHYSICARE®</span>
+    <nav class="nav" style="display:flex;gap:4px;">
+      <a href="./dashboard.html">Clients</a>
+      <a href="#" class="active">Pipeline</a>
+      <a href="#">Contacts</a>
+      <a href="#">Activités</a>
+    </nav>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span style="font-size:12px;color:#9CA3AF;font-weight:600;">paul@physicare.fr</span>
+    <button class="btn-ghost" style="font-size:12px;padding:8px 16px;">🔓 Déconnexion</button>
+  </div>
+</div>
+
+<div style="max-width:1400px;margin:0 auto;padding:24px 20px;">
+
+  <!-- Titre + actions -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+    <div>
+      <h1 style="font-size:22px;font-weight:900;letter-spacing:-.02em;margin-bottom:4px;">Pipeline commercial</h1>
+      <p style="font-size:13px;color:#9CA3AF;font-weight:700;">Q2 2026 · Enseignes d'optique · 18 deals</p>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-ghost" style="font-size:12px;padding:9px 16px;">Filtres</button>
+      <button class="btn-ghost" style="font-size:12px;padding:9px 16px;">Exporter</button>
+      <button class="btn-primary" style="font-size:13px;padding:10px 20px;">+ Nouveau deal</button>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;">
+    <div style="background:linear-gradient(135deg,#6D28D9dd,#6D28D9);border-radius:18px;padding:16px 20px;color:#fff;">
+      <div style="font-size:11px;font-weight:800;opacity:.75;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Pipeline pondéré</div>
+      <div style="font-size:26px;font-weight:900;letter-spacing:-.04em;line-height:1;">187 k€</div>
+      <div style="font-size:11px;opacity:.65;margin-top:5px;font-weight:600;">Sur 412 k€ total</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#059669dd,#059669);border-radius:18px;padding:16px 20px;color:#fff;">
+      <div style="font-size:11px;font-weight:800;opacity:.75;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Gagné ce trimestre</div>
+      <div style="font-size:26px;font-weight:900;letter-spacing:-.04em;line-height:1;">68 k€</div>
+      <div style="font-size:11px;opacity:.65;margin-top:5px;font-weight:600;">3 deals · +24 % vs Q1</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#D97706dd,#D97706);border-radius:18px;padding:16px 20px;color:#fff;">
+      <div style="font-size:11px;font-weight:800;opacity:.75;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Taux conversion</div>
+      <div style="font-size:26px;font-weight:900;letter-spacing:-.04em;line-height:1;">22 %</div>
+      <div style="font-size:11px;opacity:.65;margin-top:5px;font-weight:600;">Lead → Gagné</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#0891B2dd,#0891B2);border-radius:18px;padding:16px 20px;color:#fff;">
+      <div style="font-size:11px;font-weight:800;opacity:.75;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Cycle moyen</div>
+      <div style="font-size:26px;font-weight:900;letter-spacing:-.04em;line-height:1;">47 j</div>
+      <div style="font-size:11px;opacity:.65;margin-top:5px;font-weight:600;">Lead → signature</div>
+    </div>
+  </div>
+
+  <!-- STAND-BY OBJECTIVE BANNER -->
+  <div class="standby">
+    <div style="display:flex;align-items:center;gap:14px;flex:1;min-width:0;">
+      <div class="standby-icon">🎯</div>
+      <div>
+        <h3>Objectif acquisition · 2 nouveaux prospects / semaine</h3>
+        <p>Semaine 17 · 3 deals en stand-by depuis +21 j → relancer ou archiver</p>
+      </div>
+    </div>
+    <div class="standby-counter">
+      <span class="standby-num">1<span style="opacity:.5;font-size:14px;">/2</span></span>
+      <div class="standby-progress"><div style="width:50%;"></div></div>
+    </div>
+  </div>
+
+  <!-- Kanban board -->
+  <div class="board">
+
+    <!-- COL 1: Nouveau lead -->
+    <div class="column">
+      <div class="col-head">
+        <div>
+          <div class="col-title" style="color:#6366F1;">● Nouveau lead</div>
+          <div class="col-sum">84 k€ · 4 deals</div>
+        </div>
+        <span class="col-count" style="color:#6366F1;border:2px solid #C7D2FE;">4</span>
+      </div>
+
+      <div class="deal">
+        <div class="deal-head">
+          <div class="logo" style="background:#DC2626;">A</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Alain Afflelou</div>
+            <div class="deal-contact">M. Dupont · Dir. RH</div>
+          </div>
+        </div>
+        <div class="deal-value">32 000 €</div>
+        <div class="dates">
+          <div>Début<b>20/04/2026</b></div>
+          <div style="text-align:right;">Stade<b>J+2</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#EDE9FE;color:#6D28D9;">100 pts vente</span>
+          <div class="owner" style="background:#6D28D9;">PV</div>
+        </div>
+        <div class="next-action">
+          <span>📞</span><span>Prendre RDV découverte</span>
+          <span class="due">Dû J+3</span>
+        </div>
+        <details class="history">
+          <summary>Historique · 1 action</summary>
+          <ul class="timeline">
+            <li><span class="date">20/04</span>Lead créé via formulaire site</li>
+          </ul>
+        </details>
+      </div>
+
+      <div class="deal">
+        <div class="deal-head">
+          <div class="logo" style="background:#0EA5E9;">O</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Optic 2000 Nord-Est</div>
+            <div class="deal-contact">Mme Lefèvre</div>
+          </div>
+        </div>
+        <div class="deal-value">24 000 €</div>
+        <div class="dates">
+          <div>Début<b>10/04/2026</b></div>
+          <div style="text-align:right;">Stade<b>J+12</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#EDE9FE;color:#6D28D9;">70 pts vente</span>
+          <div class="owner" style="background:#059669;">MG</div>
+        </div>
+        <div class="next-action">
+          <span>✉️</span><span>Envoyer présentation</span>
+          <span class="due">Dû demain</span>
+        </div>
+        <details class="history">
+          <summary>Historique · 2 actions</summary>
+          <ul class="timeline">
+            <li><span class="date">15/04</span>Email d'intro envoyé</li>
+            <li><span class="date">10/04</span>Lead reçu salon SILMO</li>
+          </ul>
+        </details>
+      </div>
+
+      <div class="deal">
+        <div class="deal-head">
+          <div class="logo" style="background:#F59E0B;">L</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Les Opticiens Mobiles</div>
+            <div class="deal-contact">A. Robert</div>
+          </div>
+        </div>
+        <div class="deal-value">16 000 €</div>
+        <div class="dates">
+          <div>Début<b>02/04/2026</b></div>
+          <div style="text-align:right;">Stade<b>J+20</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#FEF3C7;color:#92400E;">Inbound</span>
+          <div class="owner" style="background:#6D28D9;">PV</div>
+        </div>
+        <div class="next-action">
+          <span>📞</span><span>Appel de qualification</span>
+          <span class="due overdue">En retard 2 j</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COL 2: Qualifié -->
+    <div class="column">
+      <div class="col-head">
+        <div>
+          <div class="col-title" style="color:#8B5CF6;">● Qualifié</div>
+          <div class="col-sum">96 k€ · 3 deals</div>
+        </div>
+        <span class="col-count" style="color:#8B5CF6;border:2px solid #DDD6FE;">3</span>
+      </div>
+
+      <!-- ⚠️ Cas SPM-Rémy : action ≠ dernière action -->
+      <div class="deal" style="border-color:#C4B5FD;">
+        <div class="deal-head">
+          <div class="logo" style="background:#6D28D9;">S</div>
+          <div style="min-width:0;">
+            <div class="deal-name">SPM Rémy</div>
+            <div class="deal-contact">Rémy Lambert · Gérant</div>
+          </div>
+        </div>
+        <div class="deal-value">14 000 €</div>
+        <div class="dates">
+          <div>Début<b>05/03/2026</b></div>
+          <div style="text-align:right;">Stade<b>J+48</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#FEF3C7;color:#92400E;">En attente 10/04</span>
+          <div class="owner" style="background:#6D28D9;">PV</div>
+        </div>
+        <!-- LA correction : la prochaine action est une RELANCE, pas l'envoi déjà fait -->
+        <div class="next-action">
+          <span>🔄</span><span>Relancer suite proposition</span>
+          <span class="due overdue">En retard 12 j</span>
+        </div>
+        <details class="history" open>
+          <summary>Historique · 4 actions</summary>
+          <ul class="timeline">
+            <li><span class="date">28/03</span><b>Proposition / devis envoyés</b></li>
+            <li><span class="date">22/03</span>Démo réalisée (45 min)</li>
+            <li><span class="date">14/03</span>Appel découverte</li>
+            <li><span class="date">05/03</span>Lead créé</li>
+          </ul>
+        </details>
+      </div>
+
+      <div class="deal">
+        <div class="deal-head">
+          <div class="logo" style="background:#F59E0B;">K</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Krys Groupe</div>
+            <div class="deal-contact">S. Martin · DRH</div>
+          </div>
+        </div>
+        <div class="deal-value">48 000 €</div>
+        <div class="dates">
+          <div>Début<b>01/04/2026</b></div>
+          <div style="text-align:right;">Stade<b>J+21</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#EDE9FE;color:#6D28D9;">150 pts vente</span>
+          <div class="owner" style="background:#6D28D9;">PV</div>
+        </div>
+        <div class="next-action">
+          <span>📞</span><span>Appel découverte approfondi</span>
+          <span class="due">Dû jeu 14h</span>
+        </div>
+        <details class="history">
+          <summary>Historique · 2 actions</summary>
+          <ul class="timeline">
+            <li><span class="date">12/04</span>Email d'intro + plaquette</li>
+            <li><span class="date">01/04</span>Lead reçu via LinkedIn</li>
+          </ul>
+        </details>
+      </div>
+
+      <div class="deal">
+        <div class="deal-head">
+          <div class="logo" style="background:#0891B2;">A</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Acuitis Réseau</div>
+            <div class="deal-contact">J. Bertrand</div>
+          </div>
+        </div>
+        <div class="deal-value">28 000 €</div>
+        <div class="dates">
+          <div>Début<b>20/03/2026</b></div>
+          <div style="text-align:right;">Stade<b>J+33</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#EDE9FE;color:#6D28D9;">90 pts vente</span>
+          <div class="owner" style="background:#059669;">MG</div>
+        </div>
+        <div class="next-action">
+          <span>✉️</span><span>Relancer sur retour devis</span>
+          <span class="due">Dû demain</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- COL 3: Démo -->
+    <div class="column">
+      <div class="col-head">
+        <div>
+          <div class="col-title" style="color:#D97706;">● Démo planifiée</div>
+          <div class="col-sum">72 k€ · 3 deals</div>
+        </div>
+        <span class="col-count" style="color:#D97706;border:2px solid #FDE68A;">3</span>
+      </div>
+
+      <div class="deal" style="border-color:#FDE68A;">
+        <div class="deal-head">
+          <div class="logo" style="background:#6D28D9;">O</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Optical Center HQ</div>
+            <div class="deal-contact">I. Mercier · Dir. opé.</div>
+          </div>
+        </div>
+        <div class="deal-value">42 000 €</div>
+        <div class="dates">
+          <div>Début<b>02/03/2026</b></div>
+          <div style="text-align:right;">Stade<b>J+51</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#FEF3C7;color:#92400E;">Démo 22/04</span>
+          <div class="owner" style="background:#6D28D9;">PV</div>
+        </div>
+        <div class="next-action">
+          <span>🎥</span><span>Animer démo produit</span>
+          <span class="due">Mar 10h30</span>
+        </div>
+        <details class="history">
+          <summary>Historique · 5 actions</summary>
+          <ul class="timeline">
+            <li><span class="date">15/04</span>Démo confirmée par mail</li>
+            <li><span class="date">08/04</span>Appel cadrage besoin</li>
+            <li><span class="date">25/03</span>Réponse questionnaire envoyée</li>
+            <li><span class="date">10/03</span>Email d'intro</li>
+            <li><span class="date">02/03</span>Lead créé · contact salon</li>
+          </ul>
+        </details>
+      </div>
+
+      <div class="deal">
+        <div class="deal-head">
+          <div class="logo" style="background:#10B981;">G</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Générale d'Optique</div>
+            <div class="deal-contact">R. Fontaine</div>
+          </div>
+        </div>
+        <div class="deal-value">18 000 €</div>
+        <div class="dates">
+          <div>Début<b>18/03/2026</b></div>
+          <div style="text-align:right;">Stade<b>J+35</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#FEF3C7;color:#92400E;">Démo 25/04</span>
+          <div class="owner" style="background:#059669;">MG</div>
+        </div>
+        <div class="next-action">
+          <span>📅</span><span>Confirmer agenda démo</span>
+          <span class="due">Dû ven</span>
+        </div>
+      </div>
+
+      <div class="deal">
+        <div class="deal-head">
+          <div class="logo" style="background:#3B82F6;">L</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Lynx Optique</div>
+            <div class="deal-contact">M. Chen</div>
+          </div>
+        </div>
+        <div class="deal-value">12 000 €</div>
+        <div class="dates">
+          <div>Début<b>06/04/2026</b></div>
+          <div style="text-align:right;">Stade<b>J+16</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#FEF3C7;color:#92400E;">Démo 28/04</span>
+          <div class="owner" style="background:#6D28D9;">PV</div>
+        </div>
+        <div class="next-action">
+          <span>🎥</span><span>Préparer démo personnalisée</span>
+          <span class="due">Dû lun</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- COL 4: Proposition -->
+    <div class="column">
+      <div class="col-head">
+        <div>
+          <div class="col-title" style="color:#0891B2;">● Proposition</div>
+          <div class="col-sum">88 k€ · 3 deals</div>
+        </div>
+        <span class="col-count" style="color:#0891B2;border:2px solid #A5F3FC;">3</span>
+      </div>
+
+      <div class="deal" style="border-color:#A5F3FC;">
+        <div class="deal-head">
+          <div class="logo" style="background:#DC2626;">A</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Afflelou Pilote</div>
+            <div class="deal-contact">L. Dubois</div>
+          </div>
+        </div>
+        <div class="deal-value">38 000 €</div>
+        <div class="dates">
+          <div>Début<b>20/02/2026</b></div>
+          <div style="text-align:right;">Stade<b>J+62</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#CFFAFE;color:#155E75;">Envoyée 18/04</span>
+          <div class="owner" style="background:#6D28D9;">PV</div>
+        </div>
+        <div class="next-action">
+          <span>🔄</span><span>Relance J+7 sur proposition</span>
+          <span class="due">25/04</span>
+        </div>
+      </div>
+
+      <div class="deal">
+        <div class="deal-head">
+          <div class="logo" style="background:#6D28D9;">O</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Optical Discount</div>
+            <div class="deal-contact">F. Girard</div>
+          </div>
+        </div>
+        <div class="deal-value">28 000 €</div>
+        <div class="dates">
+          <div>Début<b>10/02/2026</b></div>
+          <div style="text-align:right;">Stade<b>J+72</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#CFFAFE;color:#155E75;">Envoyée 15/04</span>
+          <div class="owner" style="background:#059669;">MG</div>
+        </div>
+        <div class="next-action">
+          <span>📞</span><span>Appeler pour retour devis</span>
+          <span class="due">Dû demain</span>
+        </div>
+      </div>
+
+      <div class="deal">
+        <div class="deal-head">
+          <div class="logo" style="background:#7C3AED;">A</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Atol les Opticiens</div>
+            <div class="deal-contact">V. Renard</div>
+          </div>
+        </div>
+        <div class="deal-value">22 000 €</div>
+        <div class="dates">
+          <div>Début<b>15/03/2026</b></div>
+          <div style="text-align:right;">Stade<b>J+38</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#CFFAFE;color:#155E75;">Envoyée 20/04</span>
+          <div class="owner" style="background:#6D28D9;">PV</div>
+        </div>
+        <div class="next-action">
+          <span>🔄</span><span>Première relance proposition</span>
+          <span class="due">27/04</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- COL 5: Négociation -->
+    <div class="column">
+      <div class="col-head">
+        <div>
+          <div class="col-title" style="color:#BE185D;">● Négociation</div>
+          <div class="col-sum">64 k€ · 2 deals</div>
+        </div>
+        <span class="col-count" style="color:#BE185D;border:2px solid #FBCFE8;">2</span>
+      </div>
+
+      <div class="deal" style="border-color:#FBCFE8;background:linear-gradient(180deg,#fff 0%,#FDF2F8 100%);">
+        <div class="deal-head">
+          <div class="logo" style="background:#F59E0B;">K</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Krys Pilote Paris</div>
+            <div class="deal-contact">S. Martin · DRH</div>
+          </div>
+        </div>
+        <div class="deal-value">44 000 €</div>
+        <div class="dates">
+          <div>Début<b>12/01/2026</b></div>
+          <div style="text-align:right;">Stade<b>J+101</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#FCE7F3;color:#9D174D;">Signature H2</span>
+          <div class="owner" style="background:#6D28D9;">PV</div>
+        </div>
+        <div class="next-action">
+          <span>📝</span><span>Recevoir retour juridique</span>
+          <span class="due">23/04</span>
+        </div>
+        <details class="history">
+          <summary>Historique · 7 actions</summary>
+          <ul class="timeline">
+            <li><span class="date">19/04</span>Envoi v2 contrat (CGV ajustées)</li>
+            <li><span class="date">10/04</span>Réunion juridique côté Krys</li>
+            <li><span class="date">02/04</span>Négociation tarif (-8 %)</li>
+            <li><span class="date">25/03</span>Présentation COMEX</li>
+            <li><span class="date">10/03</span>Démo produit</li>
+            <li><span class="date">22/02</span>Appel découverte</li>
+            <li><span class="date">12/01</span>Lead créé</li>
+          </ul>
+        </details>
+      </div>
+
+      <div class="deal">
+        <div class="deal-head">
+          <div class="logo" style="background:#14B8A6;">Y</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Yoptical Group</div>
+            <div class="deal-contact">T. Bernard</div>
+          </div>
+        </div>
+        <div class="deal-value">20 000 €</div>
+        <div class="dates">
+          <div>Début<b>22/02/2026</b></div>
+          <div style="text-align:right;">Stade<b>J+59</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#FCE7F3;color:#9D174D;">Remise -10 %</span>
+          <div class="owner" style="background:#059669;">MG</div>
+        </div>
+        <div class="next-action">
+          <span>✉️</span><span>Envoyer contrat ajusté</span>
+          <span class="due">Dû ven</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- COL 6: Gagné -->
+    <div class="column" style="border-color:#A7F3D0;background:#ECFDF5;">
+      <div class="col-head">
+        <div>
+          <div class="col-title" style="color:#059669;">✓ Gagné</div>
+          <div class="col-sum">68 k€ · 3 deals</div>
+        </div>
+        <span class="col-count" style="color:#059669;border:2px solid #A7F3D0;">3</span>
+      </div>
+
+      <div class="deal" style="border-color:#A7F3D0;">
+        <div class="deal-head">
+          <div class="logo" style="background:#6D28D9;">O</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Optical Center Lyon</div>
+            <div class="deal-contact">Client actif</div>
+          </div>
+        </div>
+        <div class="deal-value" style="color:#059669;">32 000 €</div>
+        <div class="dates">
+          <div>Début<b>04/12/2025</b></div>
+          <div style="text-align:right;">Fin<b>12/03/2026</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#D1FAE5;color:#065F46;">Cycle 98 j</span>
+          <div class="owner" style="background:#6D28D9;">PV</div>
+        </div>
+        <details class="history">
+          <summary>Historique complet · 9 actions</summary>
+          <ul class="timeline">
+            <li><span class="date">12/03</span><b>Contrat signé</b></li>
+            <li><span class="date">05/03</span>Validation finale tarifs</li>
+            <li><span class="date">20/02</span>Présentation comité</li>
+            <li><span class="date">10/02</span>Devis v2 envoyé</li>
+            <li><span class="date">01/02</span>Démo équipe terrain</li>
+            <li><span class="date">15/01</span>Démo direction</li>
+            <li><span class="date">02/01</span>Appel découverte</li>
+            <li><span class="date">15/12</span>Email d'intro</li>
+            <li><span class="date">04/12</span>Lead salon SILMO</li>
+          </ul>
+        </details>
+      </div>
+
+      <div class="deal" style="border-color:#A7F3D0;">
+        <div class="deal-head">
+          <div class="logo" style="background:#0891B2;">A</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Acuitis Bordeaux</div>
+            <div class="deal-contact">Client actif</div>
+          </div>
+        </div>
+        <div class="deal-value" style="color:#059669;">22 000 €</div>
+        <div class="dates">
+          <div>Début<b>14/11/2025</b></div>
+          <div style="text-align:right;">Fin<b>28/02/2026</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#D1FAE5;color:#065F46;">Cycle 106 j</span>
+          <div class="owner" style="background:#059669;">MG</div>
+        </div>
+      </div>
+
+      <div class="deal" style="border-color:#A7F3D0;">
+        <div class="deal-head">
+          <div class="logo" style="background:#F59E0B;">K</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Krys Paris Rép.</div>
+            <div class="deal-contact">Client actif</div>
+          </div>
+        </div>
+        <div class="deal-value" style="color:#059669;">14 000 €</div>
+        <div class="dates">
+          <div>Début<b>20/11/2025</b></div>
+          <div style="text-align:right;">Fin<b>05/02/2026</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#D1FAE5;color:#065F46;">Cycle 77 j</span>
+          <div class="owner" style="background:#6D28D9;">PV</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COL 7: Perdu -->
+    <div class="column" style="border-color:#FECACA;background:#FEF2F2;">
+      <div class="col-head">
+        <div>
+          <div class="col-title" style="color:#DC2626;">✕ Perdu</div>
+          <div class="col-sum">36 k€ · 2 deals</div>
+        </div>
+        <span class="col-count" style="color:#DC2626;border:2px solid #FECACA;">2</span>
+      </div>
+
+      <div class="deal" style="border-color:#FECACA;opacity:.85;">
+        <div class="deal-head">
+          <div class="logo" style="background:#9CA3AF;">M</div>
+          <div style="min-width:0;">
+            <div class="deal-name">MonOpticien.com</div>
+            <div class="deal-contact">Motif : budget</div>
+          </div>
+        </div>
+        <div class="deal-value" style="color:#9CA3AF;text-decoration:line-through;">24 000 €</div>
+        <div class="dates">
+          <div>Début<b>05/01/2026</b></div>
+          <div style="text-align:right;">Fin<b>02/04/2026</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#FEE2E2;color:#991B1B;">Cycle 87 j</span>
+          <div class="owner" style="background:#6D28D9;">PV</div>
+        </div>
+      </div>
+
+      <div class="deal" style="border-color:#FECACA;opacity:.85;">
+        <div class="deal-head">
+          <div class="logo" style="background:#9CA3AF;">V</div>
+          <div style="min-width:0;">
+            <div class="deal-name">Visuel Optic</div>
+            <div class="deal-contact">Motif : concurrent</div>
+          </div>
+        </div>
+        <div class="deal-value" style="color:#9CA3AF;text-decoration:line-through;">12 000 €</div>
+        <div class="dates">
+          <div>Début<b>02/02/2026</b></div>
+          <div style="text-align:right;">Fin<b>18/03/2026</b></div>
+        </div>
+        <div class="deal-meta">
+          <span class="tag" style="background:#FEE2E2;color:#991B1B;">Cycle 44 j</span>
+          <div class="owner" style="background:#059669;">MG</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PIVOT / TABLEAU CROISÉ DYNAMIQUE -->
+  <div class="pivot">
+    <h2>Analyse parcours · temps moyen et conversion par étape</h2>
+    <p class="sub">Tableau croisé alimenté par l'historique daté de chaque deal · sur 23 deals clos (Q4 2025 + Q1 2026)</p>
+
+    <table class="pv">
+      <thead>
+        <tr>
+          <th style="width:20%;">Étape</th>
+          <th style="width:18%;">Temps moyen</th>
+          <th style="width:30%;">Distribution</th>
+          <th style="width:16%;">Conversion étape ➜ suivante</th>
+          <th style="width:16%;">Goulot</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Lead → Qualifié</b></td>
+          <td class="num">8 j</td>
+          <td><div class="bar"><div style="width:17%;"></div></div></td>
+          <td><span class="conv ok">82 %</span></td>
+          <td style="color:#9CA3AF;">—</td>
+        </tr>
+        <tr>
+          <td><b>Qualifié → Démo</b></td>
+          <td class="num">12 j</td>
+          <td><div class="bar"><div style="width:25%;"></div></div></td>
+          <td><span class="conv ok">68 %</span></td>
+          <td style="color:#9CA3AF;">—</td>
+        </tr>
+        <tr style="background:#FFFBEB;">
+          <td><b>Démo → Proposition</b></td>
+          <td class="num" style="color:#D97706;">18 j</td>
+          <td><div class="bar"><div style="width:38%;background:linear-gradient(90deg,#F59E0B,#D97706);"></div></div></td>
+          <td><span class="conv warn">54 %</span></td>
+          <td style="color:#D97706;font-weight:900;">⚠ délai long</td>
+        </tr>
+        <tr style="background:#FEF2F2;">
+          <td><b>Proposition → Négo</b></td>
+          <td class="num" style="color:#DC2626;">21 j</td>
+          <td><div class="bar"><div style="width:44%;background:linear-gradient(90deg,#EF4444,#DC2626);"></div></div></td>
+          <td><span class="conv ko">41 %</span></td>
+          <td style="color:#DC2626;font-weight:900;">⚠ chute conv</td>
+        </tr>
+        <tr>
+          <td><b>Négo → Gagné</b></td>
+          <td class="num">9 j</td>
+          <td><div class="bar"><div style="width:19%;"></div></div></td>
+          <td><span class="conv ok">73 %</span></td>
+          <td style="color:#9CA3AF;">—</td>
+        </tr>
+        <tr style="border-top:2px solid #E5E7EB;">
+          <td><b>Total Lead → Gagné</b></td>
+          <td class="num" style="color:#6D28D9;">47 j</td>
+          <td colspan="2"></td>
+          <td><span class="conv warn">22 %</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+      <div style="background:#F5F3FF;border:2px solid #C4B5FD;border-radius:12px;padding:14px;">
+        <div style="font-size:10px;color:#6D28D9;font-weight:900;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;">Insight #1</div>
+        <p style="font-size:12px;font-weight:700;color:#374151;line-height:1.45;">L'étape <b>Démo → Proposition</b> est le 1<sup>er</sup> goulot : 18 j en moyenne, à raccourcir avec une trame de devis pré-faite.</p>
+      </div>
+      <div style="background:#FEF2F2;border:2px solid #FECACA;border-radius:12px;padding:14px;">
+        <div style="font-size:10px;color:#DC2626;font-weight:900;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;">Insight #2</div>
+        <p style="font-size:12px;font-weight:700;color:#374151;line-height:1.45;"><b>41 % de conversion</b> Proposition → Négo : c'est là qu'on perd le plus. Mettre en place une relance J+7 + J+14 systématique.</p>
+      </div>
+      <div style="background:#ECFDF5;border:2px solid #A7F3D0;border-radius:12px;padding:14px;">
+        <div style="font-size:10px;color:#059669;font-weight:900;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;">Insight #3</div>
+        <p style="font-size:12px;font-weight:700;color:#374151;line-height:1.45;">Une fois en <b>Négociation</b>, on signe à 73 % en 9 j : la qualification fait son travail, garder la rigueur amont.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="ribbon">APERÇU STATIQUE v2 · données fictives</div>
+
+</body>
+</html>
