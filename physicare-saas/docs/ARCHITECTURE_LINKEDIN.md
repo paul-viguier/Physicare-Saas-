@@ -57,8 +57,34 @@ Score forcé à 0 si `unsubscribed_at` est renseigné.
 | `/linkedin-prospection/search` | Recherche ICP → prévisualisation LSP → "Ajouter" |
 | `/linkedin-prospection/import` | Import CSV |
 | `/linkedin-prospection/[id]` | Vue 360° lead + timeline + actions |
+| `/linkedin-prospection/sequences` | Liste + création de séquences |
+| `/linkedin-prospection/sequences/[id]` | Éditeur d'étapes + aperçu rendu |
+| `/linkedin-prospection/inbox` | Inbox unifiée (LI + email, filtrée par statut) |
+| `/linkedin-prospection/settings` | Connexion Unipile (account_id + token) |
 | `/api/prospects/search` | POST — Apollo.io (mock si pas de clé) |
 | `/api/prospects/enrich` | POST — Dropcontact (mock heuristique si pas de clé) |
+| `/api/sequences/enroll` | POST — enrôler des leads dans une séquence |
+| `/api/sequences/run` | GET — cron (Vercel `*/15 * * * *`, protégé par CRON_SECRET) |
+| `/api/email/unsubscribe` | GET — opt-out one-click signé HMAC |
+| `/api/webhooks/resend` | POST — open/delivered/bounced/complained |
+| `/api/webhooks/unipile` | POST — réponses LinkedIn / acceptations |
+
+## Phase 2 — Boucle d'envoi
+
+```
+Vercel Cron (15 min) ──▶ /api/sequences/run
+                          │
+                          ├─ select enrolments ACTIVE & due
+                          ├─ skip si unsubscribed / DNC / opt-out global (hash email)
+                          ├─ render step (templates + opt-out injecté pour EMAIL)
+                          ├─ EMAIL  → Resend
+                          ├─ LINKEDIN_*  → Unipile (quota 80/j vérifié atomiquement)
+                          ├─ insert prospect_messages
+                          └─ avance current_step OR complete
+
+Webhooks Resend / Unipile ──▶ MAJ opened_at / replied_at / status
+                              ──▶ pause séquences si REPLIED
+```
 
 ## Flux Phase 1 (MVP)
 
@@ -84,6 +110,6 @@ Recherche critères ICP
 | Phase | Périmètre | Statut |
 |---|---|---|
 | 1 — MVP | Schéma DB, scoring, dashboard, import CSV, Dropcontact | ✅ Livré |
-| 2 — Engagement | Unipile, séquences, Resend, inbox unifiée | ⏸ À venir |
+| 2 — Engagement | Unipile, séquences, Resend, inbox, opt-out, cron | ✅ Livré |
 | 3 — Intelligence | Signaux auto, IA Claude, A/B testing | ⏸ À venir |
 | 4 — Industrialisation | CRM complet, HubSpot/Salesforce, équipes | ⏸ À venir |

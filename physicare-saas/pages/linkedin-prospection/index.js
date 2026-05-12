@@ -94,9 +94,12 @@ export default function LinkedInProspection() {
           <h1 style={{ fontWeight: 900, fontSize: 28, color: '#4C1D95' }}>Prospection LinkedIn</h1>
           <p style={{ color: '#6B7280', fontSize: 14 }}>Pipeline qualifié — Lead Score PHYSICARE® (LSP)</p>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <a href="/linkedin-prospection/search" style={{ ...ghostBtn, textDecoration: 'none' }}>🔎 Rechercher</a>
           <a href="/linkedin-prospection/import" style={{ ...ghostBtn, textDecoration: 'none' }}>📥 Importer CSV</a>
+          <a href="/linkedin-prospection/sequences" style={{ ...ghostBtn, textDecoration: 'none' }}>🔁 Séquences</a>
+          <a href="/linkedin-prospection/inbox" style={{ ...ghostBtn, textDecoration: 'none' }}>💬 Inbox</a>
+          <a href="/linkedin-prospection/settings" style={{ ...ghostBtn, textDecoration: 'none' }}>⚙️ Intégrations</a>
           <button onClick={() => supabase.auth.signOut()} style={ghostBtn}>Se déconnecter</button>
         </div>
       </header>
