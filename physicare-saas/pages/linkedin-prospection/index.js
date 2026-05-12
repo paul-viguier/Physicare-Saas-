@@ -94,7 +94,11 @@ export default function LinkedInProspection() {
           <h1 style={{ fontWeight: 900, fontSize: 28, color: '#4C1D95' }}>Prospection LinkedIn</h1>
           <p style={{ color: '#6B7280', fontSize: 14 }}>Pipeline qualifié — Lead Score PHYSICARE® (LSP)</p>
         </div>
-        <button onClick={() => supabase.auth.signOut()} style={ghostBtn}>Se déconnecter</button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <a href="/linkedin-prospection/search" style={{ ...ghostBtn, textDecoration: 'none' }}>🔎 Rechercher</a>
+          <a href="/linkedin-prospection/import" style={{ ...ghostBtn, textDecoration: 'none' }}>📥 Importer CSV</a>
+          <button onClick={() => supabase.auth.signOut()} style={ghostBtn}>Se déconnecter</button>
+        </div>
       </header>
 
       <section style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 24 }}>
@@ -126,7 +130,8 @@ export default function LinkedInProspection() {
               </div>
               <div style={{ display: 'grid', gap: 10 }}>
                 {(grouped[s.id] || []).map(l => (
-                  <LeadCard key={l.id} lead={l} company={l.company} />
+                  <LeadCard key={l.id} lead={l} company={l.company}
+                    onClick={() => { window.location.href = `/linkedin-prospection/${l.id}` }} />
                 ))}
               </div>
             </div>

@@ -49,6 +49,17 @@ Algorithme propriétaire 0-100, implémenté dans `lib/leadScoring.js`.
 Tiers : HOT ≥ 80, WARM ≥ 60, NURTURE ≥ 40, COLD < 40.
 Score forcé à 0 si `unsubscribed_at` est renseigné.
 
+## Routes (Pages Router)
+
+| URL | Rôle |
+|---|---|
+| `/linkedin-prospection` | Dashboard pipeline (Kanban + KPIs + auth magic-link) |
+| `/linkedin-prospection/search` | Recherche ICP → prévisualisation LSP → "Ajouter" |
+| `/linkedin-prospection/import` | Import CSV |
+| `/linkedin-prospection/[id]` | Vue 360° lead + timeline + actions |
+| `/api/prospects/search` | POST — Apollo.io (mock si pas de clé) |
+| `/api/prospects/enrich` | POST — Dropcontact (mock heuristique si pas de clé) |
+
 ## Flux Phase 1 (MVP)
 
 ```
@@ -72,7 +83,7 @@ Recherche critères ICP
 
 | Phase | Périmètre | Statut |
 |---|---|---|
-| 1 — MVP | Schéma DB, scoring, dashboard, import CSV, Dropcontact | ⏳ En cours |
+| 1 — MVP | Schéma DB, scoring, dashboard, import CSV, Dropcontact | ✅ Livré |
 | 2 — Engagement | Unipile, séquences, Resend, inbox unifiée | ⏸ À venir |
 | 3 — Intelligence | Signaux auto, IA Claude, A/B testing | ⏸ À venir |
 | 4 — Industrialisation | CRM complet, HubSpot/Salesforce, équipes | ⏸ À venir |
