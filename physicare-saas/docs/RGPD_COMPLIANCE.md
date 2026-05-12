@@ -35,9 +35,15 @@ Toute prospection nécessite :
 
 1. **Chiffrement** : tokens LinkedIn stockés dans Supabase Vault (KMS-backed).
 2. **Cloisonnement** : RLS Postgres par `owner_id`.
-3. **Suppression automatique** : cron mensuel supprimant les leads inactifs > 3 ans.
-4. **Registre des traitements (art. 30)** : généré automatiquement à partir
-   des écritures `prospect_messages` et `prospect_intent_signals`.
+3. **Suppression automatique** : fonction Postgres `purge_stale_leads()`
+   (à appeler par cron mensuel) supprimant les leads dont
+   `last_contacted_at < now() - 3 ans` ou créés il y a > 3 ans sans contact.
+   Logge l'opération dans `prospect_audit_log` (action `PURGE`).
+4. **Registre des traitements (art. 30)** : généré automatiquement via
+   la table `prospect_audit_log` et la vue `v_prospect_rgpd_register`.
+   Consultable dans `/linkedin-prospection/audit`. Logge toute action
+   READ / EXPORT / DELETE / ENRICH / SEND / OPTOUT / AI_GENERATE / PURGE
+   avec IP, user-agent et timestamp.
 5. **Hébergement UE** : Supabase région `eu-west-3`, Resend région EU,
    Dropcontact et Pappers hébergés en France.
 6. **Sous-traitants** : DPA signés avec Supabase, Resend, Dropcontact,

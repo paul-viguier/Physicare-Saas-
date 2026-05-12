@@ -72,6 +72,12 @@ Score forcé à 0 si `unsubscribed_at` est renseigné.
 | `/api/signals/run` | GET — cron quotidien 06h UTC (POST_KEYWORD/JOB_POSTING/JOB_CHANGE/FUNDING) |
 | `/api/leads/embed` | GET\|POST — calcule embeddings (cron quotidien 04h UTC) |
 | `/linkedin-prospection/analytics` | Funnel + taux de conversion + perf A/B |
+| `/linkedin-prospection/deals` | Kanban deals + forecast pondéré |
+| `/linkedin-prospection/team` | Classement équipe + quotas |
+| `/linkedin-prospection/audit` | Registre RGPD art. 30 + actions utilisateur |
+| `/api/integrations/hubspot/sync` | POST — push contact + deal HubSpot |
+| `/api/integrations/physicare/export` | POST — bascule un lead vers le SaaS principal |
+| `/api/reports/weekly` | GET — cron lundi 8h, résumé par email |
 
 ## Phase 3 — IA & Look-alike
 
@@ -133,4 +139,5 @@ Recherche critères ICP
 | 1 — MVP | Schéma DB, scoring, dashboard, import CSV, Dropcontact | ✅ Livré |
 | 2 — Engagement | Unipile, séquences, Resend, inbox, opt-out, cron | ✅ Livré |
 | 3 — Intelligence | Signaux auto, IA Claude, look-alike pgvector, A/B, analytics | ✅ Livré |
+| 4 — Industrialisation | Deals, HubSpot, export PHYSICARE®, rapport hebdo, équipes, audit RGPD | ✅ Livré |
 | 4 — Industrialisation | CRM complet, HubSpot/Salesforce, équipes | ⏸ À venir |

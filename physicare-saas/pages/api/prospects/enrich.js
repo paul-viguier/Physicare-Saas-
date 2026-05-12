@@ -5,6 +5,7 @@
 // 3) met à jour email_verified + email_status, puis recompute le LSP
 import { createClient } from '@supabase/supabase-js'
 import { computeLeadScore } from '../../../lib/leadScoring'
+import { audit } from '../../../lib/audit'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
@@ -60,6 +61,8 @@ export default async function handler(req, res) {
     .eq('id', leadId)
   if (e2) return res.status(500).json({ error: e2.message })
 
+  await audit({ userId: lead.owner_id, action: 'ENRICH', resourceType: 'lead',
+                resourceId: leadId, metadata: { status, provider: 'DROPCONTACT' }, req })
   return res.status(200).json({ email, status, score })
 }
 

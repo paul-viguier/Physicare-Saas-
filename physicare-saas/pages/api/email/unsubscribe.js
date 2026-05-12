@@ -3,6 +3,7 @@
 // Effets: marque le lead unsubscribed_at + insert dans prospect_optouts (hash email)
 import { adminClient, sha256 } from '../../../lib/serverSupabase'
 import { signOptOut } from '../sequences/run'
+import { audit } from '../../../lib/audit'
 
 export default async function handler(req, res) {
   const { lead, token } = req.query
@@ -30,6 +31,9 @@ export default async function handler(req, res) {
   await admin.from('prospect_lead_sequences')
     .update({ status: 'STOPPED' })
     .eq('lead_id', row.id).eq('status', 'ACTIVE')
+
+  await audit({ action: 'OPTOUT', resourceType: 'lead', resourceId: row.id,
+                metadata: { source: 'EMAIL_LINK' }, req })
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8')
   return res.status(200).send(`<!doctype html><meta charset="utf-8">

@@ -99,7 +99,10 @@ export default function LinkedInProspection() {
           <a href="/linkedin-prospection/import" style={{ ...ghostBtn, textDecoration: 'none' }}>📥 Importer CSV</a>
           <a href="/linkedin-prospection/sequences" style={{ ...ghostBtn, textDecoration: 'none' }}>🔁 Séquences</a>
           <a href="/linkedin-prospection/inbox" style={{ ...ghostBtn, textDecoration: 'none' }}>💬 Inbox</a>
+          <a href="/linkedin-prospection/deals" style={{ ...ghostBtn, textDecoration: 'none' }}>💼 Deals</a>
           <a href="/linkedin-prospection/analytics" style={{ ...ghostBtn, textDecoration: 'none' }}>📊 Analytics</a>
+          <a href="/linkedin-prospection/team" style={{ ...ghostBtn, textDecoration: 'none' }}>👥 Équipe</a>
+          <a href="/linkedin-prospection/audit" style={{ ...ghostBtn, textDecoration: 'none' }}>📜 Audit</a>
           <a href="/linkedin-prospection/settings" style={{ ...ghostBtn, textDecoration: 'none' }}>⚙️ Intégrations</a>
           <button onClick={() => supabase.auth.signOut()} style={ghostBtn}>Se déconnecter</button>
         </div>
