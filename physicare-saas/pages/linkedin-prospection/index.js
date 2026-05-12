@@ -5,6 +5,7 @@ import { supabase } from '../../lib/supabase'
 import LeadCard from '../../components/LeadCard'
 import ConsentBanner from '../../components/ConsentBanner'
 import { listLeads } from '../../lib/leadsApi'
+import { isDemo, DEMO_LEADS, DEMO_USER } from '../../lib/demo'
 
 const STATUSES = [
   { id: 'NEW',            label: 'Nouveaux' },
@@ -16,14 +17,16 @@ const STATUSES = [
 ]
 
 export default function LinkedInProspection() {
-  const [session, setSession] = useState(null)
+  const demo = isDemo()
+  const [session, setSession] = useState(demo ? { user: DEMO_USER } : null)
   const [email, setEmail] = useState('')
   const [magicSent, setMagicSent] = useState(false)
-  const [leads, setLeads] = useState([])
+  const [leads, setLeads] = useState(demo ? DEMO_LEADS : [])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    if (isDemo()) { setSession({ user: DEMO_USER }); return }
     supabase.auth.getSession().then(({ data }) => setSession(data.session))
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s))
     return () => sub.subscription.unsubscribe()
@@ -31,6 +34,7 @@ export default function LinkedInProspection() {
 
   useEffect(() => {
     if (!session) return
+    if (isDemo()) { setLeads(DEMO_LEADS); return }
     setLoading(true)
     listLeads()
       .then(setLeads)
@@ -93,7 +97,10 @@ export default function LinkedInProspection() {
       <ConsentBanner />
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <div>
-          <h1 style={{ fontWeight: 900, fontSize: 28, color: '#4C1D95' }}>Prospection LinkedIn</h1>
+          <h1 style={{ fontWeight: 900, fontSize: 28, color: '#4C1D95' }}>
+            Prospection LinkedIn
+            {isDemo() && <span style={{ marginLeft: 10, background: '#FFFBEB', color: '#92400E', fontSize: 12, padding: '4px 10px', borderRadius: 999, fontWeight: 800 }}>🎭 MODE DÉMO</span>}
+          </h1>
           <p style={{ color: '#6B7280', fontSize: 14 }}>Pipeline qualifié — Lead Score PHYSICARE® (LSP)</p>
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>

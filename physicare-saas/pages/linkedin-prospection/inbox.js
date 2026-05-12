@@ -1,6 +1,7 @@
 // PHYSICARE® — Inbox unifiée (LinkedIn + Email)
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '../../lib/supabase'
+import { isDemo, DEMO_MESSAGES } from '../../lib/demo'
 
 export default function Inbox() {
   const [rows, setRows] = useState([])
@@ -8,6 +9,12 @@ export default function Inbox() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    if (isDemo()) {
+      let f = DEMO_MESSAGES
+      if (filter === 'REPLIED') f = f.filter(m => m.replied_at)
+      else if (filter === 'OPENED') f = f.filter(m => m.opened_at && !m.replied_at)
+      setRows(f); return
+    }
     let q = supabase.from('v_prospect_inbox').select('*').order('replied_at', { ascending: false, nullsFirst: false })
     if (filter === 'REPLIED') q = q.not('replied_at', 'is', null)
     if (filter === 'OPENED')  q = q.not('opened_at', 'is', null).is('replied_at', null)

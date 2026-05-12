@@ -2,6 +2,7 @@
 // Pas de dépendance Recharts (allège l'install) : SVG vanilla, palette PHYSICARE®.
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
+import { isDemo, DEMO_FUNNEL, DEMO_VARIANTS } from '../../lib/demo'
 
 const STAGES = [
   { key: 'total_leads',    label: 'Leads',         color: '#7C3AED' },
@@ -18,6 +19,7 @@ export default function Analytics() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    if (isDemo()) { setFunnel(DEMO_FUNNEL); setVariants(DEMO_VARIANTS); return }
     (async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { setError('Non authentifié'); return }

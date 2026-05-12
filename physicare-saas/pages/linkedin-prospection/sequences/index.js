@@ -1,6 +1,7 @@
 // PHYSICARE® — Liste des séquences
 import { useEffect, useState } from 'react'
 import { supabase } from '../../../lib/supabase'
+import { isDemo, DEMO_SEQUENCES } from '../../../lib/demo'
 
 export default function SequencesList() {
   const [items, setItems] = useState([])
@@ -8,6 +9,7 @@ export default function SequencesList() {
   const [error, setError] = useState(null)
 
   async function load() {
+    if (isDemo()) { setItems(DEMO_SEQUENCES); return }
     const { data, error } = await supabase.from('prospect_sequences').select('*').order('created_at', { ascending: false })
     if (error) setError(error.message); else setItems(data || [])
   }

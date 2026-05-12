@@ -2,12 +2,14 @@
 // Affichée tant que l'utilisateur n'a pas acquitté les obligations RGPD.
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { isDemo } from '../lib/demo'
 
 const STORAGE_KEY = 'physicare_rgpd_ack_v1'
 
 export default function ConsentBanner() {
   const [acked, setAcked] = useState(true) // hide by default until we know
   useEffect(() => {
+    if (isDemo()) { setAcked(true); return }
     try {
       const local = localStorage.getItem(STORAGE_KEY)
       setAcked(Boolean(local))

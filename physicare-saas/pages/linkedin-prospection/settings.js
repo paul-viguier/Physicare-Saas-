@@ -3,6 +3,7 @@
 // TODO Phase 2.1 : flow OAuth complet via /api/integrations/unipile/{connect,callback}
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
+import { isDemo } from '../../lib/demo'
 
 export default function Settings() {
   const [integ, setInteg] = useState(null)
@@ -11,6 +12,10 @@ export default function Settings() {
   const [error, setError] = useState(null)
 
   async function load() {
+    if (isDemo()) {
+      const demoInteg = { id: 'demo', account_id: '4d1a-demo-account', status: 'CONNECTED', daily_count: 12, daily_quota: 80 }
+      setInteg(demoInteg); setAccountId(demoInteg.account_id); setToken('••••••••'); return
+    }
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
     const { data } = await supabase.from('prospect_user_integrations')

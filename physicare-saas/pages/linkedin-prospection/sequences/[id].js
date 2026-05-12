@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { supabase } from '../../../lib/supabase'
 import { validateSequence, STARTER_TEMPLATES, renderStep, buildContext } from '../../../lib/templates'
+import { isDemo, DEMO_SEQUENCES } from '../../../lib/demo'
 
 const CHANNELS = ['LINKEDIN_INVITE','LINKEDIN_MESSAGE','EMAIL']
 
@@ -16,6 +17,10 @@ export default function SequenceEditor() {
 
   useEffect(() => {
     if (!id) return
+    if (isDemo()) {
+      const found = DEMO_SEQUENCES.find(s => s.id === id) || DEMO_SEQUENCES[0]
+      setSeq(found); setSteps(found.steps || []); return
+    }
     supabase.from('prospect_sequences').select('*').eq('id', id).single()
       .then(({ data, error }) => {
         if (error) setError(error.message)

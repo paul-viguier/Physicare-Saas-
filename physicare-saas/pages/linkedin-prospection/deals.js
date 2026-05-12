@@ -1,6 +1,7 @@
 // PHYSICARE® — Pipeline deals : Kanban + forecast pondéré
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '../../lib/supabase'
+import { isDemo, DEMO_DEALS } from '../../lib/demo'
 
 const STAGES = [
   { id: 'DISCOVERY',   label: 'Découverte',   color: '#7C3AED', prob: 10 },
@@ -18,6 +19,10 @@ export default function Deals() {
   const [error, setError] = useState(null)
 
   async function load() {
+    if (isDemo()) {
+      setDeals(DEMO_DEALS.map(d => ({ ...d, lead: { full_name: d.lead.full_name, job_title: d.lead.job_title, company: { name: d.lead.company.name } } })))
+      return
+    }
     const { data, error } = await supabase
       .from('prospect_deals')
       .select('*, lead:prospect_leads(full_name, job_title, company:prospect_companies(name))')

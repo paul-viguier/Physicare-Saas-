@@ -2,6 +2,7 @@
 // Visualisation des actions de l'utilisateur courant.
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
+import { isDemo, DEMO_AUDIT, DEMO_RGPD_REGISTER } from '../../lib/demo'
 
 const ACTION_LABEL = {
   READ: '👁 Consultation',
@@ -21,6 +22,10 @@ export default function Audit() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    if (isDemo()) {
+      setRows(filter ? DEMO_AUDIT.filter(a => a.action === filter) : DEMO_AUDIT)
+      setRegister(DEMO_RGPD_REGISTER); return
+    }
     let q = supabase.from('prospect_audit_log').select('*').order('created_at', { ascending: false }).limit(200)
     if (filter) q = q.eq('action', filter)
     q.then(({ data, error }) => { error ? setError(error.message) : setRows(data || []) })

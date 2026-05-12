@@ -1,6 +1,7 @@
 // PHYSICARE® — Gestion d'équipe : classement, quotas, assignation
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
+import { isDemo, DEMO_TEAM } from '../../lib/demo'
 
 export default function Team() {
   const [members, setMembers] = useState([])
@@ -8,6 +9,11 @@ export default function Team() {
   const [error, setError] = useState(null)
 
   async function load() {
+    if (isDemo()) {
+      setMembers(DEMO_TEAM)
+      setStats(Object.fromEntries(DEMO_TEAM.map(m => [m.user_id, m.s])))
+      return
+    }
     // Récupère l'équipe de l'utilisateur courant
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return

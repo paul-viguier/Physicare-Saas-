@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../../lib/supabase'
 import { classifyLead } from '../../lib/leadScoring'
 import { recomputeLeadScore, updateLeadStatus } from '../../lib/leadsApi'
+import { isDemo, DEMO_LEADS, DEMO_MESSAGES, DEMO_SIGNALS } from '../../lib/demo'
 
 const STATUS_OPTIONS = ['NEW','CONTACTED','REPLIED','MEETING_BOOKED','OPPORTUNITY','CUSTOMER','LOST','DNC']
 
@@ -24,6 +25,13 @@ export default function LeadDetail() {
   }, [id])
 
   async function refresh() {
+    if (isDemo()) {
+      const found = DEMO_LEADS.find(l => l.id === id) || DEMO_LEADS[0]
+      setLead(found)
+      setMessages(DEMO_MESSAGES.filter(m => m.lead_id === found.id))
+      setSignals(DEMO_SIGNALS.filter(s => s.lead_id === found.id))
+      return
+    }
     const { data, error } = await supabase
       .from('prospect_leads')
       .select('*, company:prospect_companies(*)')
