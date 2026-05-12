@@ -11,6 +11,7 @@ import { adminClient, sha256 } from '../../../lib/serverSupabase'
 import { renderStep } from '../../../lib/templates'
 import { sendEmail } from '../../../lib/channels/email'
 import { sendLinkedInInvite, sendLinkedInMessage, reserveQuota } from '../../../lib/channels/unipile'
+import { getIntegration } from '../../../lib/integrations/store'
 
 export default async function handler(req, res) {
   if (process.env.CRON_SECRET) {
@@ -84,8 +85,7 @@ async function processOne(admin, enrol) {
     externalId = r.id
   } else {
     // LinkedIn — vérifier l'intégration de l'utilisateur propriétaire du lead
-    const { data: integ } = await admin.from('prospect_user_integrations')
-      .select('account_id').eq('user_id', lead.owner_id).eq('provider', 'UNIPILE').single()
+    const integ = await getIntegration(lead.owner_id, 'UNIPILE')
     if (!integ?.account_id) throw new Error('Unipile non connecté pour cet utilisateur')
     await reserveQuota(admin, lead.owner_id)
     const fn = rendered.channel === 'LINKEDIN_INVITE' ? sendLinkedInInvite : sendLinkedInMessage

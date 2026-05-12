@@ -3,6 +3,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { adminClient } from '../../../../lib/serverSupabase'
 import { upsertHubspotContact, upsertHubspotDeal } from '../../../../lib/integrations/hubspot'
+import { getIntegration } from '../../../../lib/integrations/store'
 import { audit } from '../../../../lib/audit'
 
 export default async function handler(req, res) {
@@ -19,8 +20,7 @@ export default async function handler(req, res) {
   if (!user) return res.status(401).json({ error: 'invalid token' })
 
   const admin = adminClient()
-  const { data: integ } = await admin.from('prospect_user_integrations')
-    .select('access_token').eq('user_id', user.id).eq('provider', 'HUBSPOT').maybeSingle()
+  const integ = await getIntegration(user.id, 'HUBSPOT')
   if (!integ?.access_token) return res.status(400).json({ error: 'HubSpot non connecté' })
 
   const { data: lead, error } = await admin.from('prospect_leads')

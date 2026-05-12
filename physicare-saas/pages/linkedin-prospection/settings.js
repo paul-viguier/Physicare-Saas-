@@ -22,20 +22,35 @@ export default function Settings() {
 
   async function save() {
     setError(null)
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
-    const payload = { user_id: user.id, provider: 'UNIPILE', account_id: accountId,
-                      access_token: token && token !== '••••••••' ? token : (integ?.access_token || ''),
-                      status: 'CONNECTED', updated_at: new Date().toISOString() }
-    const { error } = await supabase.from('prospect_user_integrations')
-      .upsert(payload, { onConflict: 'user_id,provider' })
-    if (error) setError(error.message); else load()
+    const sess = (await supabase.auth.getSession()).data.session
+    if (!sess) return
+    const accessToken = token && token !== '••••••••' ? token : null
+    const r = await fetch('/api/integrations/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sess.access_token}` },
+      body: JSON.stringify({ provider: 'UNIPILE', accountId, accessToken }),
+    })
+    const j = await r.json()
+    if (!r.ok) setError(j.error); else load()
   }
 
   async function disconnect() {
     if (!integ) return
     await supabase.from('prospect_user_integrations').delete().eq('id', integ.id)
     setInteg(null); setAccountId(''); setToken('')
+  }
+
+  async function connectOAuth() {
+    setError(null)
+    const sess = (await supabase.auth.getSession()).data.session
+    if (!sess) { setError('Non authentifié'); return }
+    const r = await fetch('/api/integrations/unipile/connect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sess.access_token}` },
+    })
+    const j = await r.json()
+    if (!r.ok) { setError(j.error); return }
+    if (j.url) window.location.href = j.url
   }
 
   return (
@@ -55,6 +70,12 @@ export default function Settings() {
             compte de l'utilisateur authentifié.
           </div>
 
+          <button onClick={connectOAuth} style={{ ...primary, marginTop: 14, background: '#0A66C2' }}>
+            🔗 Connecter LinkedIn via Unipile (OAuth)
+          </button>
+          <details style={{ marginTop: 14 }}>
+            <summary style={{ cursor: 'pointer', fontSize: 12, color: '#6B7280' }}>Saisie manuelle (avancée)</summary>
+
           <label style={{ display: 'block', marginTop: 16 }}>
             <div style={{ fontSize: 12, fontWeight: 800, marginBottom: 6 }}>Account ID Unipile</div>
             <input value={accountId} onChange={e => setAccountId(e.target.value)} placeholder="ex: 4d1a..."
@@ -70,6 +91,7 @@ export default function Settings() {
             <button onClick={save} style={primary}>{integ ? 'Mettre à jour' : 'Connecter'}</button>
             {integ && <button onClick={disconnect} style={ghost}>Déconnecter</button>}
           </div>
+          </details>
           {integ && (
             <div style={{ marginTop: 12, fontSize: 12, color: '#6B7280' }}>
               Statut : <b style={{ color: '#058C42' }}>{integ.status}</b> ·

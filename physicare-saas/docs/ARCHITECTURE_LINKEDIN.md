@@ -140,4 +140,5 @@ Recherche critères ICP
 | 2 — Engagement | Unipile, séquences, Resend, inbox, opt-out, cron | ✅ Livré |
 | 3 — Intelligence | Signaux auto, IA Claude, look-alike pgvector, A/B, analytics | ✅ Livré |
 | 4 — Industrialisation | Deals, HubSpot, export PHYSICARE®, rapport hebdo, équipes, audit RGPD | ✅ Livré |
+| 5 — Hardening prod | OAuth Unipile, HMAC webhooks, AES-GCM tokens, CSP, DPIA, /privacy | ✅ Livré |
 | 4 — Industrialisation | CRM complet, HubSpot/Salesforce, équipes | ⏸ À venir |

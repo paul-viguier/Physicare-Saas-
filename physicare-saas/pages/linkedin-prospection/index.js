@@ -1,9 +1,10 @@
 // PHYSICARE® — Dashboard prospection LinkedIn (squelette)
 // Authentifié via Supabase magic link.
 import { useEffect, useMemo, useState } from 'react'
-import { supabase } from '../lib/supabase'
-import LeadCard from '../components/LeadCard'
-import { listLeads } from '../lib/leadsApi'
+import { supabase } from '../../lib/supabase'
+import LeadCard from '../../components/LeadCard'
+import ConsentBanner from '../../components/ConsentBanner'
+import { listLeads } from '../../lib/leadsApi'
 
 const STATUSES = [
   { id: 'NEW',            label: 'Nouveaux' },
@@ -89,6 +90,7 @@ export default function LinkedInProspection() {
 
   return (
     <Shell>
+      <ConsentBanner />
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <div>
           <h1 style={{ fontWeight: 900, fontSize: 28, color: '#4C1D95' }}>Prospection LinkedIn</h1>
