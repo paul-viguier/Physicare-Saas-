@@ -120,18 +120,17 @@ export default function Dashboard() {
         position: 'sticky', top: 0, zIndex: 100,
         boxShadow: '0 2px 8px rgba(109,40,217,.08)'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
           <span style={{
             fontFamily: "'Barlow Condensed', sans-serif",
             fontStyle: 'italic', fontWeight: 800, fontSize: 26,
             background: 'linear-gradient(135deg,#4C1D95,#7C3AED,#A855F7)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
           }}>PHYSICARE®</span>
-          <span style={{
-            background: '#EDE9FE', color: '#6D28D9', fontSize: 11,
-            fontWeight: 800, padding: '4px 12px', borderRadius: 999,
-            border: '2px solid #C4B5FD'
-          }}>Back-office</span>
+          <nav className="nav" style={{ display: 'flex', gap: 4 }}>
+            <a href="/dashboard" className="active">Clients</a>
+            <a href="/pipeline">Pipeline</a>
+          </nav>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ fontSize: 12, color: '#9CA3AF', fontWeight: 600 }}>
