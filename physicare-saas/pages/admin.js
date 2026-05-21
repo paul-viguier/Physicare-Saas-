@@ -104,7 +104,14 @@ export default function Admin() {
       <div style={S.header}>
         <div style={S.logo2}>PHYSICARE<sup style={{fontSize:13}}>®</sup></div>
         <div style={{ fontSize:13, color:'#6B7280', fontWeight:700 }}>Back-office · {clients.length} client(s)</div>
-        <button style={S.btnSm} onClick={() => setAuth(false)}>Déconnexion</button>
+        <div style={{ display:'flex', gap:8 }}>
+          <a href="/prospection" style={{
+            background:'linear-gradient(135deg,#6D28D9,#8B5CF6)', color:'#fff',
+            border:'none', borderRadius:8, padding:'7px 16px', fontSize:12, fontWeight:800,
+            cursor:'pointer', fontFamily:'Nunito,sans-serif', textDecoration:'none'
+          }}>🎯 Prospection</a>
+          <button style={S.btnSm} onClick={() => setAuth(false)}>Déconnexion</button>
+        </div>
       </div>
 
       <div style={{ maxWidth:1100, margin:'0 auto', padding:'28px 20px' }}>
