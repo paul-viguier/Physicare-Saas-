@@ -3,6 +3,7 @@
 //  Après connexion, redirige selon le rôle (ROLE_HOME).
 // ═══════════════════════════════════════════════
 import { useState } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { supabase } from '@/lib/supabase'
 import { getSessionProfile, ROLE_HOME } from '@/core/auth'
@@ -55,6 +56,11 @@ export default function Login() {
               {loading ? 'Connexion…' : 'Se connecter →'}
             </button>
           </form>
+          <p style={{ textAlign:'center', marginTop:16 }}>
+            <Link href="/forgot-password" style={{ fontSize:12, color:COLORS.purple, fontWeight:800, textDecoration:'none' }}>
+              Mot de passe oublié ?
+            </Link>
+          </p>
         </div>
       </div>
     </div>
