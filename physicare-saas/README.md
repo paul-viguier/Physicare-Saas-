@@ -1,6 +1,9 @@
-# PHYSICARE® — SaaS Next.js
+# PHYSICARE® — Plateforme SaaS (Next.js)
 
-## Installation (5 minutes)
+Front-end de la plateforme Physicare, branché sur la base **Supabase `physicare-prod`**.
+Architecture détaillée : voir [`ARCHITECTURE.md`](./ARCHITECTURE.md).
+
+## Installation
 
 ```bash
 npm install
@@ -11,26 +14,37 @@ Puis ouvrez http://localhost:3000
 
 ## Configuration
 
-Créez `.env.local` avec vos clés Supabase :
+Créez `.env.local` à la racine :
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://qthhcykougfclamrzlfx.supabase.co
-NEXT_PUBLIC_SUPABASE_KEY=sb_publishable_98gNEoUgNYCR7l6LTSvaMw_mGq1ntDr
+NEXT_PUBLIC_SUPABASE_KEY=<clé publishable Supabase>
 ```
 
-## URLs
+## Connexion & espaces
 
-| URL | Description |
-|-----|-------------|
-| /admin | Back-office Physicare (tous vos clients) |
-| /optical-center | Espace collaborateur Optical Center |
-| /optical-center/dashboard | Dashboard manager Optical Center |
-| /krys | Espace collaborateur Krys (si créé dans admin) |
+La connexion est unique (Supabase Auth, page `/login`). Après authentification,
+l'utilisateur est redirigé vers son espace **selon son rôle** (`users.role`) :
 
-## Déploiement sur Vercel (gratuit)
+| Rôle | Espace | URL |
+|------|--------|-----|
+| `employee` | Espace apprenant | `/app` |
+| `manager` | Dashboard équipe | `/manager` |
+| `org_admin` | Dashboard organisation | `/org` |
+| `super_admin` | Back-office Physicare | `/admin` |
 
-1. Poussez ce dossier sur GitHub
-2. Connectez GitHub à vercel.com
-3. Vercel déploie automatiquement
+> L'accès aux données est protégé par le **Row Level Security (RLS)** de Supabase :
+> il faut être connecté pour lire quoi que ce soit.
 
-Mot de passe back-office : physicare2026
+## État d'avancement
+
+- ✅ **Phase 1** — Connexion au réel : auth Supabase, redirection par rôle,
+  back-office listant les vraies organisations.
+- ⏳ Phases suivantes (espace apprenant, dashboards, back-office complet) :
+  voir la feuille de route dans `ARCHITECTURE.md` §7.
+
+## Déploiement (Vercel)
+
+1. Connecter ce repo à Vercel
+2. Définir les variables d'environnement ci-dessus
+3. Déploiement automatique à chaque push

@@ -1,21 +1,19 @@
 // ═══════════════════════════════════════════════
-//  PHYSICARE® — Page d'accueil
-//  Redirige vers /admin (back-office Physicare)
-//  ou vers /:client (espace collaborateur)
+//  PHYSICARE® — Point d'entrée
+//  Redirige vers /login ou vers l'espace du rôle.
 // ═══════════════════════════════════════════════
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { getSessionProfile, ROLE_HOME } from '@/core/auth'
+import { Loader } from '@/core/ui'
 
 export default function Home() {
   const router = useRouter()
-  useEffect(() => { router.replace('/admin') }, [])
-  return (
-    <div style={{
-      display:'flex', alignItems:'center', justifyContent:'center',
-      height:'100vh', background:'#F5F3FF',
-      fontFamily:'sans-serif', color:'#6D28D9', fontSize:18, fontWeight:700
-    }}>
-      Chargement PHYSICARE®…
-    </div>
-  )
+  useEffect(() => {
+    getSessionProfile().then((res) => {
+      if (!res || !res.profile) { router.replace('/login'); return }
+      router.replace(ROLE_HOME[res.profile.role] || '/login')
+    })
+  }, [])
+  return <Loader />
 }
