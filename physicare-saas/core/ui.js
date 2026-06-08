@@ -1,6 +1,7 @@
 // ═══════════════════════════════════════════════
 //  PHYSICARE® — Styles & composants partagés
 // ═══════════════════════════════════════════════
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { logout, ROLE_LABEL } from '@/core/auth'
 
@@ -28,6 +29,48 @@ export function Loader({ label = 'Chargement…' }) {
         <p style={{ color:COLORS.purple, fontWeight:700 }}>{label}</p>
         <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}`}</style>
       </div>
+    </div>
+  )
+}
+
+// Barre d'onglets de navigation dans un espace
+// items: [{ href, label }]
+export function SpaceNav({ items = [] }) {
+  const router = useRouter()
+  return (
+    <div style={{ background:'#fff', borderBottom:`1px solid ${COLORS.border}`, padding:'0 28px',
+      display:'flex', gap:6, position:'sticky', top:62, zIndex:90 }}>
+      {items.map(it => {
+        const active = router.asPath === it.href || router.asPath.startsWith(it.href + '/')
+        return (
+          <Link key={it.href} href={it.href} style={{
+            padding:'13px 14px', fontSize:13, fontWeight:800, textDecoration:'none',
+            color: active ? COLORS.purple : COLORS.muted,
+            borderBottom: `3px solid ${active ? COLORS.purple : 'transparent'}`,
+          }}>{it.label}</Link>
+        )
+      })}
+    </div>
+  )
+}
+
+// Petite carte de statistique réutilisable
+export function StatCard({ label, value, color }) {
+  return (
+    <div style={{ ...styles.card, padding:'16px 18px' }}>
+      <div style={{ fontSize:11, fontWeight:800, color:COLORS.muted, textTransform:'uppercase', letterSpacing:'.06em', marginBottom:8 }}>{label}</div>
+      <div style={{ fontSize:30, fontWeight:900, color: color || COLORS.text, lineHeight:1 }}>{value}</div>
+    </div>
+  )
+}
+
+// Bloc « aucune donnée »
+export function EmptyState({ icon = '📭', title, children }) {
+  return (
+    <div style={{ ...styles.card, textAlign:'center', padding:'40px 24px' }}>
+      <div style={{ fontSize:36, marginBottom:12 }}>{icon}</div>
+      <div style={{ fontSize:15, fontWeight:800, color:COLORS.text, marginBottom:6 }}>{title}</div>
+      <div style={{ fontSize:13, color:COLORS.muted, fontWeight:600 }}>{children}</div>
     </div>
   )
 }

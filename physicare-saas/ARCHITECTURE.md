@@ -164,15 +164,16 @@ physicare-saas/
 
 ## 7. Chemin de migration (maquette → vrai front-end, par étapes livrables)
 
-- [x] **Phase 0 — Réparer le build** *(fait)*.
-- [ ] **Phase 1 — Connexion au réel** : auth Supabase + `lib/db/` branché sur les vraies
-      tables. Premier écran réel : le back-office `super_admin` liste les vraies
-      `organizations`. *(remplace l'ancienne « Phase 1 » devenue caduque)*
-- [ ] **Phase 2 — Rôles & squelette des 4 espaces** : login → redirection par rôle,
-      pages vides protégées.
-- [ ] **Phase 3 — Espace apprenant** : parcours `training_axes` → modules → leçons (les 705).
-- [ ] **Phase 4 — Dashboards** : équipe (`team_aggregates`) et organisation (`org_aggregates`) + diagnostic.
-- [ ] **Phase 5 — Back-office** : catalogue, business/facturation, conformité Qualiopi.
+- [x] **Phase 0 — Réparer le build**.
+- [x] **Phase 1 — Connexion au réel** : auth Supabase + `lib/db/` + back-office listant
+      les vraies `organizations`. Librairie `@supabase/supabase-js` mise à jour (compat. clé publishable).
+- [x] **Phase 2 — Rôles & navigation** : `useAuthGuard`, redirection par rôle, barre d'onglets (`SpaceNav`).
+- [x] **Phase 3 — Espace apprenant** : `training_axes` (par catégorie) → modules → leçons (705 / 4233).
+- [x] **Phase 4 — Dashboards** : équipe (`team_aggregates`), organisation (`org_aggregates`),
+      diagnostic personnel (`responses`). *(les agrégats sont vides en base → états « pas encore de données »)*
+- [ ] **Phase 5 — Back-office complet** : catalogue, business/facturation, conformité Qualiopi.
+- [ ] **À prévoir — Génération des agrégats** : remplir `org_aggregates` / `team_aggregates`
+      (cron / edge function) pour que les dashboards affichent des chiffres.
 - [ ] **Transversal — Audit RLS** (cf. §6) avant toute mise en production.
 
 Chaque phase est indépendante et testable ; on garde toujours une app qui démarre.
