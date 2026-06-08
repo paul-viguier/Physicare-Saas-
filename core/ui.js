@@ -113,6 +113,7 @@ export function AppHeader({ profile, badge }) {
         <span style={{ fontSize:12, color:COLORS.muted, fontWeight:600 }}>
           {profile?.email} · {ROLE_LABEL[profile?.role] || profile?.role}
         </span>
+        <Link href="/account" style={{ ...styles.btnSm, textDecoration:'none' }}>Mon compte</Link>
         <button style={styles.btnSm} onClick={doLogout}>Déconnexion</button>
       </div>
     </div>
