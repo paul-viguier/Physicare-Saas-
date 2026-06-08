@@ -1,196 +1,187 @@
 # 🏛️ Architecture Physicare — Document de référence
 
-> Objectif : une architecture **multi-produits**, **multi-clients**, qui dure
-> dans le temps et qu'on peut faire évoluer sans tout casser.
->
+> ⚠️ **Note de version.** Une première version de ce document supposait une base
+> simple (`clients`, `diagnostics`). C'était faux. Après inspection de la vraie base
+> de production `physicare-prod`, ce document décrit désormais le **système réel**.
+
 > Décisions fondatrices (validées) :
-> 1. **Plusieurs produits** Physicare (santé comportementale aujourd'hui, d'autres à venir)
-> 2. **Un seul accès par client** → il se connecte une fois et voit tous ses produits
-> 3. **Site vitrine physicare.fr séparé** → projet indépendant, on n'y touche pas ici
+> 1. **Plusieurs produits / parcours** (la base en gère déjà 26 répartis en 8 catégories)
+> 2. **Un seul accès par utilisateur** → connexion unique, contenu selon le rôle et l'organisation
+> 3. **Site vitrine physicare.fr séparé** → projet indépendant
+> 4. **`physicare-saas` devient le vrai front-end**, branché sur la vraie base (pas sur des tables inventées)
 
 ---
 
-## 1. Vue d'ensemble : 3 mondes indépendants
+## 0. Constat de départ (très important)
 
-```
-┌─────────────────────┐   ┌──────────────────────────┐   ┌────────────────────┐
-│   SITE VITRINE      │   │   PLATEFORME SAAS        │   │   DONNÉES          │
-│   physicare.fr      │   │   app.physicare.fr       │   │   Supabase         │
-│                     │   │                          │   │                    │
-│ • Marketing         │   │ • Le produit            │   │ • Base de données  │
-│ • Blog / contact    │──▶│ • Multi-produits         │──▶│ • Auth             │
-│ • 100% séparé       │   │ • Multi-clients          │   │ • Sécurité (RLS)   │
-│                     │   │ • Ce repo                │   │                    │
-└─────────────────────┘   └──────────────────────────┘   └────────────────────┘
-   Repo séparé              CE REPO (physicare-saas)        Service géré
-   Évolue seul              Le cœur du produit              Source de vérité
-```
+La base `physicare-prod` n'est **pas** un prototype : c'est un SaaS d'entreprise déjà
+riche et peuplé (4 organisations, 20 utilisateurs, **705 modules de formation**,
+facturation, conformité Qualiopi, audit, RGPD, 2FA…).
 
-**Règle d'or :** ces trois mondes n'ont **aucune dépendance technique** entre eux.
-Le site vitrine peut être refait, la base peut migrer, sans casser la plateforme.
-Le seul lien : le site vitrine contient des liens vers `app.physicare.fr`.
+Le repo `physicare-saas` était, lui, une **maquette** qui interrogeait des tables
+**inexistantes** (`clients`, `diagnostics`, `dashboard_stats`). Le vrai travail n'est
+donc pas de « créer un socle » — **le socle existe déjà** — mais de **construire le
+front-end sur ce socle réel.**
 
 ---
 
-## 2. Les 3 concepts qui rendent tout évolutif
+## 1. Les 3 mondes indépendants
 
-Tout repose sur 4 notions simples. Bien les séparer = pouvoir grandir sans douleur.
-
-| Concept | C'est quoi | Exemple |
-|---------|-----------|---------|
-| **Client** (tenant) | Une entreprise cliente | Optical Center, Krys, Acuitis |
-| **Produit** | Un service Physicare | Santé comportementale, Ergonomie… |
-| **Abonnement** | Quel client a quel produit | Optical Center → Santé comportementale + Ergonomie |
-| **Utilisateur** | Une personne avec un rôle | un collaborateur, un manager, toi (admin) |
-
-👉 **L'abonnement est la clé du « un seul accès → tous ses produits ».**
-Quand un client se connecte, on regarde ses abonnements et on lui affiche
-uniquement les produits auxquels il a droit. Ajouter un produit à un client =
-une ligne en base, zéro développement.
+```
+SITE VITRINE          PLATEFORME SAAS              DONNÉES
+physicare.fr   ──▶     app.physicare.fr     ──▶    Supabase « physicare-prod »
+(repo séparé)         (ce repo, à construire)      (déjà en place, ~40 tables)
+```
 
 ---
 
-## 3. Les 3 espaces et leur relation (le « dashboard relié au dashboard »)
+## 2. Le modèle de données RÉEL (déjà en base)
 
-C'est **une seule chaîne de données, vue à 3 niveaux de zoom** :
-
+### Socle multi-clients / multi-utilisateurs
 ```
-   COLLABORATEUR              MANAGER (client)            PHYSICARE (toi)
-   produit la donnée   ───▶   agrège son équipe   ───▶   agrège TOUS les clients
-   /:client/:produit          /:client/dashboard          /admin
+organizations   (id, name, access_code, sector, lifecycle_stage, contract dates,
+                 logo_url, theme_color, admin_id→users)          -- LE CLIENT (tenant)
+teams           (id, org_id→organizations, manager_id→users)     -- équipes du client
+users           (id = auth.uid, email, full_name, role, org_id, team_id, access_code)
+                 role ∈ { employee, manager, org_admin, super_admin }
+```
+- **Auth = Supabase Auth.** Les 20 `users` sont liés 1-pour-1 à `auth.users`.
+- L'**isolation** se fait par `org_id` (chaque utilisateur appartient à une organisation).
 
-   ex: fait le diagnostic     ex: voit l'ISC moyen        ex: voit tous les
-       santé comportementale      de ses 40 salariés          clients & produits
+### Catalogue de formation (= « les produits / parcours »)
+```
+training_axes      (26 axes, 8 catégories : sante_mentale, addictions, performance,
+                    management_relations, corps_sommeil, care_chronique, sens_engagement, vie_perso)
+  └─ training_chapters (axis_id→training_axes, level)
+       └─ training_modules (705)  (axis_id, chapter_id, durée, xp, statut, Qualiopi…)
+            └─ module_lessons     (contenu jsonb, durée)
+```
+Progression apprenant :
+```
+lesson_completions, module_completions, module_completions_track
+emargements           -- feuilles d'émargement (preuve Qualiopi)
+satisfaction_responses-- évaluations à chaud / à froid
 ```
 
-- **Espace collaborateur** `/:client/:produit` → la personne *utilise* le produit (formation, diagnostic). **Elle crée la donnée.**
-- **Dashboard manager** `/:client/dashboard` → le manager du client *lit* la donnée de ses équipes (par produit).
-- **Back-office Physicare** `/admin` → tu vois **tout** : tous les clients, tous les produits, agrégé.
+### Diagnostic / questionnaires (santé comportementale)
+```
+questionnaire_questions (par type, pilier, module)
+  └─ responses          (user_id, scores : regulation, appropriation, continuite, capacite)
+       └─ question_responses (réponse par question)
+daily_moods             -- humeur/énergie quotidienne
+```
 
-Les dashboards ne sont pas des bases séparées : ils lisent **la même source**,
-filtrée par périmètre et par permissions. C'est ça, la « relation » entre eux.
+### Données des dashboards (déjà agrégées)
+```
+org_aggregates   (par organisation : moyennes régulation/appropriation/continuité, participation…)
+team_aggregates  (par équipe : idem)
+org_settings, team_settings  -- seuils d'alerte, branding, règles d'intervention
+```
+
+### Business / facturation / conformité (back-office Physicare)
+```
+business_documents (devis, conventions, factures…), invoices, billing_plans,
+recurring_billing_plans, cycles, dirigeants, transcripts, restitutions,
+financeurs_master, signature_requests
+audit_logs, consent_logs, api_keys, webhooks, integrations,
+user_totp (2FA), user_sessions, user_preferences, onboarding_steps, lifecycle_events
+```
 
 ---
 
-## 4. Structure des URLs (avec accès unique)
+## 3. Les rôles → les espaces (la « relation entre dashboards »)
 
-```
-app.physicare.fr/login                      → connexion unique (tous rôles)
+Le système de rôles existant cartographie **exactement** les espaces du produit :
 
-  selon le rôle, après connexion :
-  ├─ collaborateur  → /:client                    accueil : choix du produit
-  │                   /:client/:produit            l'espace du produit
-  ├─ manager        → /:client/dashboard           vue d'ensemble (tous ses produits)
-  │                   /:client/dashboard/:produit  détail d'un produit
-  └─ admin Physicare→ /admin                       back-office global
-                      /admin/:client               zoom sur un client
-```
+| Rôle (`users.role`) | Espace | Voit… | Source des données |
+|---|---|---|---|
+| `employee` | **Espace apprenant** | ses formations, son diagnostic, son humeur | training_*, responses, lesson_completions |
+| `manager` | **Dashboard équipe** | les indicateurs agrégés de SON équipe | `team_aggregates` |
+| `org_admin` | **Dashboard organisation** | toute son organisation + gestion users/équipes | `org_aggregates`, users, teams |
+| `super_admin` | **Back-office Physicare** | TOUTES les organisations + catalogue + business | tout |
 
-Exemple concret :
-- `app.physicare.fr/optical-center` → Optical Center voit ses produits
-- `app.physicare.fr/optical-center/sante-comportementale` → l'espace du produit
-- `app.physicare.fr/optical-center/dashboard` → le manager voit tout
-- `app.physicare.fr/admin` → toi, tu vois tous les clients
-
-👉 Ajouter un produit n'ajoute **jamais** une nouvelle URL racine : c'est toujours
-un `:produit` sous le client. L'architecture ne grossit pas en largeur.
+C'est **une seule chaîne de données vue à plusieurs niveaux** : l'apprenant produit
+(complétions, réponses) → agrégé par équipe (`team_aggregates`) → par organisation
+(`org_aggregates`) → consolidé pour Physicare. Voilà le lien entre les dashboards.
 
 ---
 
-## 5. Organisation du code (un repo, des produits en modules)
+## 4. Structure des URLs cible
 
-> **Décision clé : UNE plateforme, chaque produit est un module autonome.**
-> PAS une application séparée par produit (= cauchemar de maintenance : 3 logins,
-> 3 déploiements, 3 fois le même code d'auth…).
+```
+app.physicare.fr/login                          connexion unique (Supabase Auth)
+
+  routage selon users.role après connexion :
+  ├─ employee   → /app                          espace apprenant
+  │               /app/formation/:axisId         un parcours / ses modules
+  │               /app/diagnostic                 questionnaire
+  ├─ manager    → /manager                       dashboard de son équipe
+  ├─ org_admin  → /org                           dashboard de son organisation
+  └─ super_admin→ /admin                         back-office global Physicare
+```
+Plus besoin d'`/:client` dans l'URL : l'organisation est déduite de l'utilisateur connecté
+(`users.org_id`). C'est plus simple et plus sûr.
+
+---
+
+## 5. Organisation du code (à construire)
 
 ```
 physicare-saas/
-├── pages/  (ou app/)            ROUTAGE uniquement, le plus fin possible
+├── pages/ (ou app/)         routage minimal, redirection selon le rôle
 │   ├── login.js
-│   ├── admin/                   back-office (tous clients / tous produits)
-│   └── [client]/
-│       ├── index.js             accueil collaborateur (choix du produit)
-│       ├── [product]/           espace collaborateur d'un produit
-│       └── dashboard/
-│           ├── index.js         dashboard manager (vue tous produits)
-│           └── [product].js     dashboard manager d'UN produit
-│
-├── products/                    ⭐ LE CŒUR ÉVOLUTIF
-│   ├── _registry.js             liste des produits → alimente menus & routes
-│   ├── sante-comportementale/
-│   │   ├── config.js            nom, couleur, icône, libellés
-│   │   ├── collaborator.jsx     UI : utiliser le produit
-│   │   ├── dashboard.jsx        UI : dashboard manager de ce produit
-│   │   └── queries.js           accès Supabase propre à ce produit
-│   └── (futur-produit)/         même structure → branché automatiquement
-│
-├── core/                        PARTAGÉ entre tous les produits
-│   ├── auth/                    connexion, rôles, protection des pages
-│   ├── tenant/                  résolution du client + ses abonnements
-│   ├── layout/                  en-tête, navigation, sélecteur de produit
-│   └── ui/                      composants communs (cartes, KPI, tableaux, export CSV)
-│
+│   ├── app/                 espace apprenant (employee)
+│   ├── manager/             dashboard équipe (manager)
+│   ├── org/                 dashboard organisation (org_admin)
+│   └── admin/               back-office Physicare (super_admin)
+├── core/
+│   ├── auth/                Supabase Auth + récupération du profil/rôle + gardes de route
+│   ├── layout/             en-tête, navigation par rôle
+│   └── ui/                  composants partagés (KPI, tableaux, graphes, export)
 ├── lib/
-│   ├── supabase.js              client Supabase
-│   └── ...
-└── ARCHITECTURE.md              ce document
-```
-
-**La magie = `products/_registry.js`.** Pour lancer un nouveau produit :
-1. créer un dossier `products/mon-produit/` (config + 2 écrans + queries)
-2. l'ajouter au registre
-→ il apparaît **automatiquement** dans les menus, le choix de produit, le back-office.
-Aucune autre partie du code à modifier.
-
----
-
-## 6. Modèle de données (Supabase)
-
-```sql
--- ── SOCLE (commun à tous les produits) ───────────────────────
-clients          (id, slug, nom, couleur, actif, created_at)
-products         (id, slug, nom, couleur, icon, actif)
-client_products  (client_id, product_id, actif)      -- les abonnements
-profiles         (id = auth.uid, client_id, role)    -- role: collaborator | manager | physicare_admin
-
--- ── PAR PRODUIT (une table par produit, isolée) ──────────────
-diagnostics      (id, client_slug, product_slug, ...) -- santé comportementale
--- futur_produit_data (...)                            -- chaque produit = ses tables
-```
-
-**Sécurité — Row Level Security (RLS) :** à activer pour que chaque client ne
-puisse lire QUE ses propres données, directement au niveau de la base. C'est la
-garantie d'isolation pour un SaaS qui grandit (aujourd'hui l'isolation repose sur
-le code applicatif, ce qui est plus fragile).
-
----
-
-## 7. Déploiement
-
-| Élément | Hébergement | Domaine |
-|---------|-------------|---------|
-| Plateforme SaaS | Vercel (ce repo) | `app.physicare.fr` |
-| Site vitrine | Vercel/Webflow (repo séparé) | `physicare.fr` |
-| Données / Auth | Supabase | — |
-
-Variables d'environnement de la plateforme (jamais en dur dans le code) :
-```
-NEXT_PUBLIC_SUPABASE_URL=...
-NEXT_PUBLIC_SUPABASE_KEY=...
+│   ├── supabase.js          client (clé publishable + RLS)
+│   └── db/                  accès données par domaine :
+│       ├── organizations.js, users.js, teams.js
+│       ├── training.js      axes / modules / leçons / complétions
+│       ├── diagnostics.js   questionnaires / responses / scores
+│       └── aggregates.js    org_aggregates / team_aggregates
+└── ARCHITECTURE.md
 ```
 
 ---
 
-## 8. Chemin de migration (de l'existant vers cette cible, sans rien casser)
+## 6. Sécurité — à vérifier en priorité
 
-L'app actuelle marche déjà (back-office + espace + dashboard mono-produit).
-On y va par étapes, chacune livrable et testable :
+- Le front utilise la **clé publishable** (publique). La sécurité repose donc
+  **entièrement sur le Row Level Security (RLS)** de Supabase.
+- ✅ À auditer : chaque table doit avoir des policies RLS garantissant qu'un
+  utilisateur ne lit/écrit QUE les données de SON organisation (et un `super_admin`
+  l'ensemble). Sans cela, n'importe qui avec la clé publique pourrait tout lire.
+- Le mot de passe back-office en dur (`physicare2026`) de la maquette est à
+  **abandonner** au profit de l'auth Supabase + rôle `super_admin`.
 
-- [x] **Phase 0 — Réparer le build** *(fait)* : suppression des routes en conflit.
-- [ ] **Phase 1 — Le socle multi-produits** : tables `products`, `client_products`,
-      `profiles` + `products/_registry.js`. La santé comportementale continue de marcher.
-- [ ] **Phase 2 — Modulariser** : déplacer le produit actuel dans `products/sante-comportementale/`.
-- [ ] **Phase 3 — Accès unique + rôles + RLS** : un seul login, routage par rôle, sécurité base.
-- [ ] **Phase 4 — Valider** : brancher un 2ᵉ produit (même minimal) pour prouver que le modèle tient.
+---
 
-Chaque phase est indépendante : on peut s'arrêter à tout moment avec un produit qui fonctionne.
+## 7. Chemin de migration (maquette → vrai front-end, par étapes livrables)
+
+- [x] **Phase 0 — Réparer le build** *(fait)*.
+- [ ] **Phase 1 — Connexion au réel** : auth Supabase + `lib/db/` branché sur les vraies
+      tables. Premier écran réel : le back-office `super_admin` liste les vraies
+      `organizations`. *(remplace l'ancienne « Phase 1 » devenue caduque)*
+- [ ] **Phase 2 — Rôles & squelette des 4 espaces** : login → redirection par rôle,
+      pages vides protégées.
+- [ ] **Phase 3 — Espace apprenant** : parcours `training_axes` → modules → leçons (les 705).
+- [ ] **Phase 4 — Dashboards** : équipe (`team_aggregates`) et organisation (`org_aggregates`) + diagnostic.
+- [ ] **Phase 5 — Back-office** : catalogue, business/facturation, conformité Qualiopi.
+- [ ] **Transversal — Audit RLS** (cf. §6) avant toute mise en production.
+
+Chaque phase est indépendante et testable ; on garde toujours une app qui démarre.
+
+---
+
+## ⚠️ Question ouverte à clarifier
+
+Un backend aussi complet (705 modules, facturation, Qualiopi) a presque sûrement
+**déjà un front-end** quelque part (autre repo, ou outil type no-code). Avant de
+reconstruire, il faut savoir si on **repart de zéro** ou si on **récupère / consolide**
+l'existant, pour ne pas refaire un travail déjà fait.
