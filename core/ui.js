@@ -10,6 +10,18 @@ export const COLORS = {
   text: '#111827', muted: '#9CA3AF', border: '#E5E7EB',
 }
 
+// Navigation du back-office super_admin
+export const ADMIN_NAV = [
+  { href: '/admin', label: 'Organisations' },
+  { href: '/admin/catalogue', label: 'Catalogue' },
+]
+
+// Couleurs par étape du cycle de vie d'une organisation
+export const STAGE_COLOR = {
+  cadrage:'#9CA3AF', sprints:'#6366F1', diagnostic:'#D97706',
+  backlog:'#0891B2', actif:'#059669', archive:'#DC2626',
+}
+
 export const styles = {
   pageCenter: { display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh', background:COLORS.bg, fontFamily:'Nunito, system-ui, sans-serif' },
   page:       { minHeight:'100vh', background:COLORS.bg, fontFamily:'Nunito, system-ui, sans-serif' },
