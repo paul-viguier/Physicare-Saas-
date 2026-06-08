@@ -3,6 +3,7 @@
 //  Affiche les scores des questionnaires de l'utilisateur.
 // ═══════════════════════════════════════════════
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { useAuthGuard } from '@/core/auth'
 import { AppHeader, SpaceNav, Loader, EmptyState, StatCard, styles, COLORS } from '@/core/ui'
 import { getMyResponses } from '@/lib/db/diagnostics'
@@ -40,10 +41,17 @@ export default function DiagnosticPage() {
       <AppHeader profile={profile} badge="Apprenant" />
       <SpaceNav items={NAV} />
       <div style={{ maxWidth:900, margin:'0 auto', padding:'28px 20px' }}>
-        <h1 style={{ fontSize:22, fontWeight:900, color:COLORS.text, marginBottom:4 }}>Mon diagnostic</h1>
-        <p style={{ fontSize:13, color:COLORS.muted, fontWeight:600, marginBottom:24 }}>
-          Vos scores de santé comportementale, par questionnaire.
-        </p>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:12, marginBottom:24 }}>
+          <div>
+            <h1 style={{ fontSize:22, fontWeight:900, color:COLORS.text, marginBottom:4 }}>Mon diagnostic</h1>
+            <p style={{ fontSize:13, color:COLORS.muted, fontWeight:600 }}>
+              Vos scores de santé comportementale, par questionnaire.
+            </p>
+          </div>
+          <Link href="/app/diagnostic/questionnaire" style={{ ...styles.btn, width:'auto', textDecoration:'none' }}>
+            {responses && responses.length > 0 ? 'Refaire le diagnostic' : 'Commencer le diagnostic →'}
+          </Link>
+        </div>
 
         {error && <div style={styles.err}>❌ {error}</div>}
         {!responses && !error && <p style={{ color:COLORS.muted, fontWeight:700 }}>Chargement…</p>}
